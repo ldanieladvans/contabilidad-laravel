@@ -6,12 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=7.0.0",
-        "bican/roles": "2.1.*",
         "cviebrock/eloquent-sluggable": "^4.2",
         "ddeboer/imap": "^0.5.2",
         "fideloper/proxy": "~3.3",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.5.*",
+        "bican/roles": "2.1.*",
         "laravel/passport": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
