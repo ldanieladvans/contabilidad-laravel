@@ -2,6 +2,19 @@
 
 return [
 
+'advans_apps_url' => ['control'=>'https://appcontrol.advans.mx','cont'=>'https://appcont.advans.mx','bov'=>'https://appbov.advans.mx','nom'=>'https://lab1.advans.mx/control/login#','pld'=>'https://pld-beta.advans.mx/app/usuarios/login#','cc'=>'https://ecacc.selfip.org/cc_beta/index.php/usuarios/login','not'=>'https://lab1.advans.mx/control/login#','fact'=>'https://app.advans.mx/','cuenta'=>'https://appcuenta.advans.mx'],
+
+
+    'advans_apps_security' => ['cuenta'=> [
+                                    'grant_type' => 'password',
+                                    'client_id' => '8',
+                                    'client_secret' => 'NMiNCTOwruKzQrQPD0eZnuk8JWjlSCXC0WaHxPmt',
+                                    'username' => 'mabel@gmail.com',
+                                    'password' => 'Daniel123',
+                                    'scope' => '*',
+                                    ],
+                          ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
