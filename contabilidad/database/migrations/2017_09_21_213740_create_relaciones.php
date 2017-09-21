@@ -20,9 +20,6 @@ class CreateRelaciones extends Migration
                 $table->integer('comprel_comp_id')->unsigned();
                 $table->foreign('comprel_comp_id')->references('id')->on('comp')->onDelete('cascade');
 
-                $table->integer('comprel_comp_rel_id')->unsigned();
-                $table->foreign('comprel_comp_rel_id')->references('id')->on('comp')->onDelete('cascade');
-
             });
 
         

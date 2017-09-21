@@ -17,6 +17,7 @@ class CreateComprel extends Migration
             $table->increments('id');
             $table->string('comprel_tiporel_cod');
             $table->string('comprel_tiporel_nom');
+            $table->string('comprel_comp_rel_uuid');
             $table->timestamps();
         });
     }
