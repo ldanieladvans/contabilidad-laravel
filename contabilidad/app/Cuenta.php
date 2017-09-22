@@ -41,6 +41,11 @@ class Cuenta extends Model
         return $this->hasMany('App\IngresosProducto','prodingr_cta_ingr_id');
     }
 
+    public function formasPago()
+    {
+        return $this->hasMany('App\FormaPago','formpago_ctacont_id');
+    }
+
 
     
 }

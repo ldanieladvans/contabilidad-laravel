@@ -27,7 +27,7 @@ class CreateRelaciones extends Migration
         Schema::table('asiento', function($table)
             {
                 $table->integer('asiento_ctacont_id')->unsigned();
-                $table->foreign('asiento_ctacont_id')->references('id')->on('ctacont');
+                $table->foreign('asiento_ctacont_id')->references('id')->on('ctacont')->onDelete('cascade');
 
                 $table->integer('asiento_polz_id')->unsigned();
                 $table->foreign('asiento_polz_id')->references('id')->on('polz')->onDelete('cascade');
