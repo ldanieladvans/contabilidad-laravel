@@ -16,7 +16,7 @@ class Comprobante extends Model
         $this->connection = \Session::get('selected_database','mysql');
     }
 
-    public function comprobantesrel()
+    public function comprobantesRel()
     {
         return $this->hasMany('App\ComprobanteRel','comprel_comp_id');
     }
@@ -29,6 +29,11 @@ class Comprobante extends Model
     public function pagos()
     {
         return $this->hasMany('App\Pago','pago_comp_id');
+    }
+
+    public function polizas(){
+
+        return $this->belongsToMany('App\Poliza','polzcomp','polzcomp_comp_id','polzcomp_polz_id');
     }
 
 

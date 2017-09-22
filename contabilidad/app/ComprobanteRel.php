@@ -22,5 +22,7 @@ class ComprobanteRel extends Model
     {
     	return $this->belongsTo('App\Comprobante','comprel_comp_id');
     }
+
+    
     
 }

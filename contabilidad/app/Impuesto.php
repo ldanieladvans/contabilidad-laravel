@@ -23,7 +23,7 @@ class Impuesto extends Model
     }
 
   
-     public function detalleimpuestos()
+     public function detalleImpuestos()
     {
         return $this->hasMany('App\DetalleImpuesto','impdet_pagoimp_id');
     }

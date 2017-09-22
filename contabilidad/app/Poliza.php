@@ -21,7 +21,7 @@ class Poliza extends Model
         return $this->hasMany('App\Pago','pago_polz_id');
     }
 
-    public function comprobante()
+    public function periodo()
     {
     	return $this->belongsTo('App\Periodo','polz_period_id');
     }
@@ -29,5 +29,10 @@ class Poliza extends Model
     public function asientos()
     {
         return $this->hasMany('App\Asiento','asiento_polz_id');
+    }
+
+    public function comprobantes(){
+
+        return $this->belongsToMany('App\Comprobante','polzcomp','polzcomp_polz_id','polzcomp_comp_id');
     }
 }

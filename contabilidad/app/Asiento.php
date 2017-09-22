@@ -27,7 +27,7 @@ class Asiento extends Model
     	return $this->belongsTo('App\Cuenta','asiento_ctacont_id');
     }
 
-     public function comprobanterel()
+     public function comprobanteRel()
     {
         return $this->hasMany('App\Pagorel','pagorel_asiento_id');
     }

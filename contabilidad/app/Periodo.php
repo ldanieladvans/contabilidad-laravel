@@ -25,4 +25,9 @@ class Periodo extends Model
     {
     	return $this->belongsTo('App\Ejercicio','period_ejerc_id');
     }
+
+    public function balanzas()
+    {
+        return $this->hasMany('App\Balanza','blnza_period_id');
+    }
 }

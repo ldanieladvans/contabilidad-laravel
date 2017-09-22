@@ -26,4 +26,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function bitacoras()
+    {
+        return $this->hasMany('App\Bitacora','bitac_user_id');
+    }
 }
