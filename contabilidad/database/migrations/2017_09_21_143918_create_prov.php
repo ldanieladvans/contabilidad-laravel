@@ -19,6 +19,8 @@ class CreateProv extends Migration
             $table->string('provis_moneda_cod');
             $table->string('provis_moneda_nom');
             $table->float('provis_tipo_cambio');
+            $table->string('provis_metpago_cod');
+            $table->string('provis_formpago_cod');
             $table->timestamps();
         });
     }

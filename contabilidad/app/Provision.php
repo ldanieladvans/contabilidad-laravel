@@ -8,7 +8,7 @@ class Provision extends Model
 {
     protected $table = "provis";
 
-    protected $fillable = ['provis_monto','provis_moneda_cod','provis_moneda_nom','provis_tipo_cambio','provis_comp_id'];
+    protected $fillable = ['provis_monto','provis_moneda_cod','provis_moneda_nom','provis_tipo_cambio','provis_comp_id','provis_metpago_cod','provis_formpago_cod'];
 
     public function __construct(array $attributes = [])
     {
