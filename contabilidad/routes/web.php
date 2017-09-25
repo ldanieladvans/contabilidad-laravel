@@ -11,6 +11,32 @@
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+/* mmabel routes section */
+
+/* end mmabel*/
+
+
+
+
+
+/* ldaniel routes section */
+
+/* end ldaniel*/
+
+
+
+
+/* ppedro routes section */
+
+/* end ppedro*/
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
