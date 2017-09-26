@@ -1130,8 +1130,7 @@
         <!--[if lte IE 8]>
           <script src="assets/js/excanvas.min.js"></script>
         <![endif]-->
-        <script src="{{ asset('ac_theme/assets/js/jquery-ui.custom.min.js') }}"></script>
-        <script src="{{ asset('ac_theme/assets/js/jquery.ui.touch-punch.min.js') }}"></script>
+        
         <script src="{{ asset('ac_theme/assets/js/jquery.easypiechart.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/jquery.sparkline.index.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/jquery.flot.min.js') }}"></script>
@@ -1144,6 +1143,11 @@
 
         <!-- inline scripts related to this page -->
         <script type="text/javascript">
+            $.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
+              value.classList.remove("active");
+            });
+
+            $("#menuinicio").addClass('active');
             jQuery(function($) {
                 $('.easy-pie-chart.percentage').each(function(){
                     var $box = $(this).closest('.infobox');

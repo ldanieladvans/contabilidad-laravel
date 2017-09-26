@@ -27,7 +27,7 @@ Route::get('/', function () {
 
 
 /* ldaniel routes section */
-
+Route::resource('clientes', 'ClienteController');
 /* end ldaniel*/
 
 
