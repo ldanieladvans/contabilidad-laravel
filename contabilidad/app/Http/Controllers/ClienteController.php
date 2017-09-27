@@ -23,11 +23,6 @@ class ClienteController extends Controller
         $clientes = Cliente::all();
         $clientes_list = array();
         $clientes_contador = 0;
-        /*$clientes[0] = ['ID'=>1,'CompanyName'=>'Super Mart of the West','Address'=>'702 SW 8th Street','City'=>'Bentonville','State'=>'Arkansas','Zipcode'=>72716,'Phone'=>'(612) 304-6073','Fax'=>'(612) 304-6074','Website'=>'http://www.nowebsitemusic.com'];
-        $clientes[1] = ['ID'=>2,'CompanyName'=>'K&S Music','Address'=>'702 SW 8th Street','City'=>'Bentonville','State'=>'Arkansas','Zipcode'=>72716,'Phone'=>'(612) 304-6073','Fax'=>'(612) 304-6074','Website'=>'http://www.nowebsitemusic.com'];
-        $clientes[2] = ['ID'=>3,'CompanyName'=>'Toms Club','Address'=>'702 SW 8th Street','City'=>'Bentonville','State'=>'Arkansas','Zipcode'=>72716,'Phone'=>'(612) 304-6073','Fax'=>'(612) 304-6074','Website'=>'http://www.nowebsitemusic.com'];
-        $clientes[3] = ['ID'=>4,'CompanyName'=>'E-Mart','Address'=>'702 SW 8th Street','City'=>'Bentonville','State'=>'Arkansas','Zipcode'=>72716,'Phone'=>'(612) 304-6073','Fax'=>'(612) 304-6074','Website'=>'http://www.nowebsitemusic.com'];
-        $clientes[4] = ['ID'=>5,'CompanyName'=>'Walters','Address'=>'702 SW 8th Street','City'=>'Bentonville','State'=>'Arkansas','Zipcode'=>72716,'Phone'=>'(612) 304-6073','Fax'=>'(612) 304-6074','Website'=>'http://www.nowebsitemusic.com'];*/
         foreach ($clientes as $cl) {
             $clientes_list[$clientes_contador] = ['ID'=>$cl->id,'cliente_nom'=>$cl->cliente_nom,'cliente_rfc'=>$cl->cliente_rfc,'cliente_email'=>$cl->cliente_email,'cliente_concepto_pol'=>$cl->cliente_concepto_pol];
             $clientes_contador ++;
@@ -42,7 +37,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        //
+        return view('appviews.editacliente',[]);
     }
 
     /**

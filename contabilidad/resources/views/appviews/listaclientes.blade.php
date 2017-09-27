@@ -30,12 +30,19 @@
 
 @section('page_header_content')
 	<div class="page-header">
-	    <div id="crearcliente"></div>
+	    @if (Session::has('message'))
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <strong>{{ Session::get('message') }}</strong>
+            </div>
+        @endif
 	</div>
 @endsection
 
 @section('variable_content')
 	<div class="row">
+		<div id="crearcliente"></div>
 		<!-- Input para guardar datos del grid -->
 			<input type="hidden" value="{{$clientes}}" id="clientes"/>
 		
@@ -159,7 +166,8 @@
 				        text: "Crear",
 				        type: "default",
 				        onClick: function(e) { 
-				        	DevExpress.ui.notify("The Apply button was clicked");
+				        	//DevExpress.ui.notify("The Apply button was clicked");
+				        	window.location.href = window.location.href + '/create';
 				        }
 				    });
 
