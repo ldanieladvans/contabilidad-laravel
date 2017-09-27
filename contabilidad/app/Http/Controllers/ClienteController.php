@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
+use App\Direccion;
 
 class ClienteController extends Controller
 {
@@ -37,7 +38,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return view('appviews.editacliente',[]);
+        $domicilios = Direccion::all();
+        return view('appviews.editacliente',['domicilios'=>$domicilios]);
     }
 
     /**
