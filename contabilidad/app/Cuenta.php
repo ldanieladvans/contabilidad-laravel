@@ -46,6 +46,11 @@ class Cuenta extends Model
         return $this->hasMany('App\FormaPago','formpago_ctacont_id');
     }
 
+    public function configsNomina()
+    {
+        return $this->hasMany('App\ConfNomina','nomconf_gast_cta_id');
+    }
+
 
     
 }

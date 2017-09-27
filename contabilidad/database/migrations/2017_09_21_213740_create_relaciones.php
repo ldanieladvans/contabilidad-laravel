@@ -22,7 +22,6 @@ class CreateRelaciones extends Migration
 
             });
 
-        
 
         Schema::table('asiento', function($table)
             {
