@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cliente;
 use App\Direccion;
+use App\Munic;
+use App\Cpmex;
+use App\Country;
+use App\TipoCliente;
+use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
 {
@@ -39,7 +44,7 @@ class ClienteController extends Controller
     public function create()
     {
         $domicilios = Direccion::all();
-        return view('appviews.editacliente',['domicilios'=>$domicilios]);
+        return view('appviews.editacliente',['domicilios'=>$domicilios,'countries'=>Country::all(),'tipocliente'=>TipoCliente::all()]);
     }
 
     /**

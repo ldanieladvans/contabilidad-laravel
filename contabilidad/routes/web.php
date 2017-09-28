@@ -28,6 +28,9 @@ Route::get('/', function () {
 
 /* ldaniel routes section */
 Route::resource('clientes', 'ClienteController');
+
+/*Ajax*/
+Route::post('/getcpdata', 'Controller@getCpData');
 /* end ldaniel*/
 
 

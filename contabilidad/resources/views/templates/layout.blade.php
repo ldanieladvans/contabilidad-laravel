@@ -4,11 +4,33 @@
 	
 @section('app_css')
 	@parent
-
+	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/jquery-ui.custom.min.css') }}" />
+	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/jquery.gritter.min.css') }}" />
 @endsection
 
 @section('app_body')
 	<body class="no-skin">
+
+
+		<!-- Modal -->
+	    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="loadingmodal">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+	                  <h3 class="header smaller lighter grey">
+	                  	Procesando ... 
+						<i class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i>
+					  </h3>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
 		<div id="navbar" class="navbar navbar-default          ace-save-state">
 			<div class="navbar-container ace-save-state" id="navbar-container">
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
@@ -278,6 +300,7 @@
 		<script src="{{ asset('ac_theme/assets/js/bootstrap.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/jquery-ui.custom.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/jquery.ui.touch-punch.min.js') }}"></script>
+        <script src="{{ asset('ac_theme/assets/js/spin.js') }}"></script>
 	@show
 	</body>
 @endsection
