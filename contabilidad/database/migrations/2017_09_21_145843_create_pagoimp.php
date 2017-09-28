@@ -11,6 +11,7 @@ class CreatePagoimp extends Migration
      *
      * @return void
      */
+    //Información de impuestos asociados a cada pago
     public function up()
     {
         Schema::create('pagoimp', function (Blueprint $table) {

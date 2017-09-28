@@ -11,6 +11,7 @@ class CreateProdingrs extends Migration
      *
      * @return void
      */
+    //Desglose de cuenta de ingreso para cada código de concepto del SAT, asociado a cada tipo de cliente o cliente
     public function up()
     {
         Schema::create('prodingr', function (Blueprint $table) {

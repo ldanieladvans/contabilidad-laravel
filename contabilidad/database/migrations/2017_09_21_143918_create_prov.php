@@ -11,6 +11,7 @@ class CreateProv extends Migration
      *
      * @return void
      */
+    //Información a contabilizar de comprobante de ingreso o egreso
     public function up()
     {
         Schema::create('provis', function (Blueprint $table) {

@@ -11,6 +11,8 @@ class CreateFormapago extends Migration
      *
      * @return void
      */
+
+    //Configuración de cuentas contables asociadas a las diferentes formas de pago
     public function up()
     {
         Schema::create('formpago', function (Blueprint $table) {

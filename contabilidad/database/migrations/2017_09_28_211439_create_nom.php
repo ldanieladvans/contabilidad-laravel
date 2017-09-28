@@ -11,6 +11,7 @@ class CreateNom extends Migration
      *
      * @return void
      */
+    //Información a contabilizar de un comprobante de nómina
     public function up()
     {
         Schema::create('nom', function (Blueprint $table) {

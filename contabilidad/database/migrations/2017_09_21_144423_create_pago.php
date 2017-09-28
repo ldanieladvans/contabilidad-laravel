@@ -11,6 +11,7 @@ class CreatePago extends Migration
      *
      * @return void
      */
+    //Información a contabilizar de comprobante con complemento de pago
     public function up()
     {
         Schema::create('pago', function (Blueprint $table) {

@@ -11,6 +11,7 @@ class CreateProdgast extends Migration
      *
      * @return void
      */
+    //Desglose de cuenta gastos para cada código de concepto del SAT, asociado a tipo de proveedor o proveedor
     public function up()
     {
         Schema::create('prodgast', function (Blueprint $table) {

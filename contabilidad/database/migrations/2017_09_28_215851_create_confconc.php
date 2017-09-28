@@ -12,7 +12,7 @@ class CreateConfconc extends Migration
      * @return void
      */
 
-    //Tabla para configurar cuentas contables para cada concepto de nómina, en caso de que se requiera tal desglose
+    //Tabla para configurar cuentas contables para cada concepto de nómina, en caso de que se requiera tal desglose en la contabilización
     public function up()
     {
         Schema::create('confconc', function (Blueprint $table) {

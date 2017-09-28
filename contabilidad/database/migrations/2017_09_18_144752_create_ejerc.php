@@ -11,6 +11,7 @@ class CreateEjerc extends Migration
      *
      * @return void
      */
+    //Ejercicios fiscales
     public function up()
     {
         Schema::create('ejerc', function (Blueprint $table) {

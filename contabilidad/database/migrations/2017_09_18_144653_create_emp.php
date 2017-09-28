@@ -11,6 +11,7 @@ class CreateEmp extends Migration
      *
      * @return void
      */
+    //Información general de la empresa
     public function up()
     {
          Schema::create('emp', function (Blueprint $table) {

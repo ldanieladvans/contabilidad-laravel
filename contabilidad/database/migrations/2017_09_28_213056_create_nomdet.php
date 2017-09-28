@@ -11,6 +11,7 @@ class CreateNomdet extends Migration
      *
      * @return void
      */
+    //Detalle a nivel de concepto de un comprobante de nómina
     public function up()
     {
         Schema::create('nomdet', function (Blueprint $table) {

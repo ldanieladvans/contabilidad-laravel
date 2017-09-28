@@ -11,6 +11,7 @@ class CreateCompsald extends Migration
      *
      * @return void
      */
+    //Información de compensación de saldos asociada a detalle de nómina
     public function up()
     {
         Schema::create('compsald', function (Blueprint $table) {
