@@ -11,6 +11,7 @@ class CreatePagorel extends Migration
      *
      * @return void
      */
+    //Información sobre comprobante relacionado a un pago (documento al que se paga)
     public function up()
     {
         Schema::create('pagorel', function (Blueprint $table) {

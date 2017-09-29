@@ -11,6 +11,7 @@ class CreateAsiento extends Migration
      *
      * @return void
      */
+    //Asientos o transacciones contables
     public function up()
     {
         Schema::create('asiento', function (Blueprint $table) {

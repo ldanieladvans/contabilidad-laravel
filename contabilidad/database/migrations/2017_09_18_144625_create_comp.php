@@ -11,6 +11,7 @@ class CreateComp extends Migration
      *
      * @return void
      */
+    //Almacena datos comunes de comprobante
     public function up()
     {
         Schema::create('comp', function (Blueprint $table) {
@@ -30,7 +31,9 @@ class CreateComp extends Migration
             $table->string('comp_num_factelect')->nullable();
             $table->string('comp_taxid')->nullable();
 
+            //Campo para identificar si tiene complemento de pago
             $table->boolean('comp_espago')->default(false)->nullable();
+            //Campo para identificar si es importado de bóveda
             $table->string('comp_imp_bov')->default(true)->nullable();
 
             

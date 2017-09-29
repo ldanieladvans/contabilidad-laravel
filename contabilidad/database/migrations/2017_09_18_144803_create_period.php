@@ -11,6 +11,7 @@ class CreatePeriod extends Migration
      *
      * @return void
      */
+    //Períodos fiscales
     public function up()
     {
         Schema::create('period', function (Blueprint $table) {

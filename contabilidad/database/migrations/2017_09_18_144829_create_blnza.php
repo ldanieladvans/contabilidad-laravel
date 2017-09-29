@@ -11,6 +11,7 @@ class CreateBlnza extends Migration
      *
      * @return void
      */
+    //Balanza de comprobación
     public function up()
     {
         Schema::create('blnza', function (Blueprint $table) {

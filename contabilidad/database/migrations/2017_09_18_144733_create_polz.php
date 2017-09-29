@@ -11,6 +11,7 @@ class CreatePolz extends Migration
      *
      * @return void
      */
+    //Pólizas contables
     public function up()
     {
         Schema::create('polz', function (Blueprint $table) {

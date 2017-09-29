@@ -36,6 +36,10 @@ class Comprobante extends Model
         return $this->belongsToMany('App\Poliza','polzcomp','polzcomp_comp_id','polzcomp_polz_id');
     }
 
+    public function nominas()
+    {
+        return $this->hasMany('App\Nomina','nom_comp_id');
+    }
 
     
 }

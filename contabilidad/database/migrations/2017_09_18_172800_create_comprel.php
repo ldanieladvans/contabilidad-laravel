@@ -11,6 +11,7 @@ class CreateComprel extends Migration
      *
      * @return void
      */
+    //Comprobantes relacionados a comprobante principal, de nodo de Documentos relacionados del comprobante
     public function up()
     {
         Schema::create('comprel', function (Blueprint $table) {

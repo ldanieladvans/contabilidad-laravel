@@ -46,6 +46,35 @@ class Cuenta extends Model
         return $this->hasMany('App\FormaPago','formpago_ctacont_id');
     }
 
+    public function cuentasNominaProvision()
+    {
+        return $this->hasMany('App\ConfigNomina','confnom_prov_nom_cta_id');
+    }
+
+    public function cuentasNominaPercepcion()
+    {
+        return $this->hasMany('App\ConfigNomina','confnom_percep_cta_id');
+    }
+
+    public function cuentasNominaRetencion()
+    {
+        return $this->hasMany('App\ConfigNomina','confnom_retenc_cta_id');
+    }
+
+    public function cuentasNominaOtrosPagos()
+    {
+        return $this->hasMany('App\ConfigNomina','confnom_otrospag_cta_id');
+    }
+
+    public function cuentasConcepto()
+    {
+        return $this->hasMany('App\ConfigConcepto','confconc_cta_id');
+    }
+
+
+
+    
+
 
     
 }

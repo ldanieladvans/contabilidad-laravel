@@ -11,6 +11,7 @@ class CreateImpdet extends Migration
      *
      * @return void
      */
+    //Desglose de cada impuesto asociado a un pago
     public function up()
     {
         Schema::create('impdet', function (Blueprint $table) {

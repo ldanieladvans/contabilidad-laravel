@@ -11,6 +11,7 @@ class CreatePolzcomp extends Migration
      *
      * @return void
      */
+    //Relación de muchos a muchos entre póliza y comprobante
     public function up()
     {
         Schema::create('polzcomp', function (Blueprint $table) {
