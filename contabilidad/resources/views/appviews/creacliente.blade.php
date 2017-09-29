@@ -202,7 +202,7 @@
 											<div id="campos_nueva_dir" class="form-group">
 												<div class="form-group">
 					                            	<!--<div >
-								                        <div >
+								                        <div>
 								                          	<select class="js-example-basic-single js-states form-control" name="dom_country" id="dom_country">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($countries as $country)
@@ -251,17 +251,254 @@
 									</div>
 
 									<div id="messages" class="tab-pane fade">
-										<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+										<table width="100%">
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-xs-12 col-sm-2 col-md-2" for="cliente_concepto_pol">Concepto Póliza:</label>
+														<div class="col-md-10 col-sm-10 col-xs-12">
+															<div class="clearfix">
+																<input type="text" name="cliente_concepto_pol" id="cliente_concepto_pol" class="col-md-10 col-sm-10 col-xs-12"/>
+															</div>
+														</div>
+													</div>	
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_forma_contab">Forma de contabilización:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_forma_contab" id="cliente_forma_contab" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_forma_contab as $cfc)
+								                            	<option value="{{ $cfc->id }}">{{ $cfc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ingreso_id">Cuenta de ingreso:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ingreso_id" id="cliente_cta_ingreso_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_ingreso_id as $cci)
+								                            	<option value="{{ $cci->id }}">{{ $cci->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_desc_id">Cuenta de descuento:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_desc_id as $ccd)
+								                            	<option value="{{ $ccd->id }}">{{ $ccd->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_traslad_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_x_cob_id" id="cliente_cta_iva_traslad_x_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_iva_traslad_x_cob_id as $ccitxc)
+								                            	<option value="{{ $ccitxc->id }}">{{ $ccitxc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_traslad_cob_id">Cuenta IVA trasladado cobrado:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_cob_id" id="cliente_cta_iva_traslad_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_iva_traslad_cob_id as $ccitc)
+								                            	<option value="{{ $ccitc->id }}">{{ $ccitc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_reten_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_x_cob_id" id="cliente_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_iva_reten_x_cob_id as $ccirxc)
+								                            	<option value="{{ $ccirxc->id }}">{{ $ccirxc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_reten_cob_id">Cuenta IVA trasladado cobrado:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_cob_id" id="cliente_cta_iva_reten_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_iva_reten_cob_id as $ccirc)
+								                            	<option value="{{ $ccirc->id }}">{{ $ccirc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_isr_reten_id">Cuenta ISR retenido:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_id" id="cliente_cta_isr_reten_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_isr_reten_id as $ccir)
+								                            	<option value="{{ $ccir->id }}">{{ $ccir->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_por_cobrar_id">Cuenta por cobrar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_por_cobrar_id as $ccpc)
+								                            	<option value="{{ $ccpc->id }}">{{ $ccpc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+										</table>
 									</div>
 
 									<div id="contacts" class="tab-pane fade">
-										<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
-									</div>
+										<table width="100%">
+											<tr>
+												<td width="50%">
+													<div class="col-xs-12 col-sm-12 col-md-12">
+														<div class="widget-box">
+															<div class="widget-header">
+																<h4 class="widget-title">Contacto1</h4>
+															</div>
 
-								</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<div>
+																		<label for="cliente_nom_contact">
+																			Nombre
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-group"></i>
+																			</span>
+																			<input class="form-control input-mask-date" type="text" id="cliente_nom_contact" name="cliente_nom_contact"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																	<div>
+																		<label for="cliente_tel_contact">
+																			Teléfono
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-phone"></i>
+																			</span>
+																			<input class="form-control input-mask-phone" type="tel" id="cliente_tel_contact" name="cliente_tel_contact"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																	<div>
+																		<label for="cliente_email_contact">
+																			Correo
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-envelope"></i>
+																			</span>
+																			<input class="form-control input-mask-phone" type="tel" id="cliente_email_contact" name="cliente_email_contact"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+												</td>
+												<td width="50%">
+													<div class="col-xs-12 col-sm-12 col-md-12">
+														<div class="widget-box">
+															<div class="widget-header">
+																<h4 class="widget-title">Contacto2</h4>
+															</div>
+
+															<div class="widget-body">
+																<div class="widget-main">
+																	<div>
+																		<label for="cliente_nom_contact_otro">
+																			Nombre
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-group"></i>
+																			</span>
+																			<input class="form-control input-mask-date" type="text" id="cliente_nom_contact_otro" name="cliente_nom_contact_otro"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																	<div>
+																		<label for="cliente_tel_contact_otro">
+																			Teléfono
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-phone"></i>
+																			</span>
+																			<input class="form-control input-mask-phone" type="tel" id="cliente_tel_contact_otro" name="cliente_tel_contact_otro"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																	<div>
+																		<label for="cliente_email_contact_otro">
+																			Correo
+																		</label>
+
+																		<div class="input-group">
+																			<span class="input-group-addon">
+																				<i class="ace-icon fa fa-envelope"></i>
+																			</span>
+																			<input class="form-control input-mask-phone" type="tel" id="cliente_email_contact_otro" name="cliente_email_contact_otro"/>
+																		</div>
+																	</div>
+
+																	<hr />
+																</div>
+															</div>
+														</div>
+													</div><!-- /.span -->
+												</td>
+											</tr>
+										</table>
+
+									</div>
 							</div>
 						</div>
 					</div>
+
+					<hr />
+					<hr />
 
 					<div class="ln_solid"></div>
                         <div class="form-group">
@@ -338,6 +575,51 @@
 
 				$("#dom_country").select2({
 				  	placeholder: "Selecciona el municipio",
+				  	allowClear: true
+				});
+
+				$("#cliente_forma_contab").select2({
+				  	placeholder: "Selecciona la forma de contabilización",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_ingreso_id").select2({
+				  	placeholder: "Selecciona la cuenta de ingreso",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_desc_id").select2({
+				  	placeholder: "Selecciona la cuenta de descuento",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_iva_traslad_x_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA trasladado por cobrar",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_iva_traslad_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA trasladado cobrado",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_iva_reten_x_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA retenido por cobrar",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_iva_reten_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA retenido cobrado",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_isr_reten_id").select2({
+				  	placeholder: "Selecciona la cuenta de ISR retenido",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_por_cobrar_id").select2({
+				  	placeholder: "Selecciona la cuenta por cobrar",
 				  	allowClear: true
 				});
 			
@@ -643,11 +925,12 @@
 
 
 	    	$.mask.definitions['~']='[+-]';
-			$('#phone').mask('(999) 999-9999');
+			$('#cliente_tel_contact').mask('(999) 999-9999');
+			$('#cliente_tel_contact_otro').mask('(999) 999-9999');
 		
-			jQuery.validator.addMethod("phone", function (value, element) {
-				return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
-			}, "Enter a valid phone number.");
+			jQuery.validator.addMethod("cliente_rfc", function (value, element) {
+				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
+			}, "Introduzca un RFC válido.");
 		
 			$('#creacliente').validate({
 				errorElement: 'div',
@@ -658,63 +941,33 @@
 					cliente_nom: {
 						required: true
 					},
-					email: {
+					cliente_email: {
 						required: true,
 						email:true
 					},
-					password: {
+					cliente_rfc: {
 						required: true,
-						minlength: 5
-					},
-					password2: {
-						required: true,
-						minlength: 5,
-						equalTo: "#password"
-					},
-					name: {
+						cliente_rfc: 'required'
+					}/*,
+					cliente_tipocliente_id: {
 						required: true
-					},
-					phone: {
-						required: true,
-						phone: 'required'
-					},
-					url: {
-						required: true,
-						url: true
-					},
-					comment: {
-						required: true
-					},
-					state: {
-						required: true
-					},
-					platform: {
-						required: true
-					},
-					subscription: {
-						required: true
-					},
-					gender: {
-						required: true,
-					},
-					agree: {
-						required: true,
-					}
+					}*/
 				},
 		
 				messages: {
-					email: {
-						required: "Please provide a valid email.",
-						email: "Please provide a valid email."
+					cliente_nom: {
+						required: "Este campo es requerido."
 					},
-					password: {
-						required: "Please specify a password.",
-						minlength: "Please specify a secure password."
+					cliente_email: {
+						required: "Este campo es requerido.",
+						email: "Introduzca una dirección de correo válida."
 					},
-					state: "Please choose state",
-					subscription: "Please choose at least one option",
-					gender: "Please choose gender",
-					agree: "Please accept our policy"
+					cliente_rfc: {
+						required: "Este campo es requerido."
+					},
+					cliente_tipocliente_id: {
+						required: "Este campo es requerido."
+					}
 				},
 		
 		
@@ -728,6 +981,7 @@
 				},
 		
 				errorPlacement: function (error, element) {
+					console.log(error);
 					if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
 						var controls = element.closest('div[class*="col-"]');
 						if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
@@ -743,8 +997,10 @@
 				},
 		
 				submitHandler: function (form) {
+					form.submit();
 				},
 				invalidHandler: function (form) {
+					console.log('2');
 				}
 			});
 

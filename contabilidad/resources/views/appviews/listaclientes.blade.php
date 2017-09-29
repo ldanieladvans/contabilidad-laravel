@@ -109,19 +109,19 @@
 				        columns: [
 				            {
 				                dataField: "cliente_nom",
-				                name: 'Nombre'
+				                caption: 'Nombre'
 				            },
 				            {
 				                dataField: "cliente_rfc",
-				                name: 'RFC'
+				                caption: 'RFC'
 				            },
 				            {
 				                dataField: "cliente_email",
-				                name: 'Correo'
+				                caption: 'Correo'
 				            },
 				            {
 				                dataField: "cliente_concepto_pol",
-				                name: 'Concepto'
+				                caption: 'Concepto'
 				               // groupIndex: 0
 				            }
 				        ],

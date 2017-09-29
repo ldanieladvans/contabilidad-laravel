@@ -194,6 +194,8 @@ return [
 
         Bican\Roles\RolesServiceProvider::class,
 
+        Laravel\Passport\PassportServiceProvider::class,
+
     ],
 
     /*
