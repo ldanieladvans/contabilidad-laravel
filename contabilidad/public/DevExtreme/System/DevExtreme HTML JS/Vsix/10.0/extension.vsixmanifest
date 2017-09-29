@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
+  <Identifier Id="e7107cda-17d3-469f-920c-6d62815c5e62">
+    <Name>DevExtreme</Name>
+    <Author>Developer Express Inc.</Author>
+    <Version>17.1.6</Version>
+    <Description xml:space="preserve">Easily build multi-channel applications - from Windows 8 and the iPad to iPhone and Android smartphones.</Description>
+    <Locale>1033</Locale>
+    <Icon>VsixIcon.ico</Icon>
+    <PreviewImage>DevExtreme.png</PreviewImage>
+		<MoreInfoUrl>http://www.devexpress.com/Subscriptions/DXperience/dxtreme.xml</MoreInfoUrl>
+    <SupportedProducts>
+      <VisualStudio Version="10.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+    </SupportedProducts>
+    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.0" />
+  </Identifier>
+  <References>
+    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
+      <Name>Visual Studio MPF</Name>
+      <MoreInfoUrl>http://devexpress.com/Products/Visual_Studio_Add-in/</MoreInfoUrl>
+    </Reference>
+  </References>
+  <Content>
+    <VsPackage>DevExpress.DXTreme.Design2010.pkgdef</VsPackage>
+	<MefComponent>DevExpress.DXTreme.Design2010.dll</MefComponent>
+    <Assembly AssemblyName="DevExpress.DXTreme.Design.Wizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">DevExpress.DXTreme.Design.Wizards.dll</Assembly>
+    <Assembly AssemblyName="DevExpress.DXTreme.Design.JSProjectHttpHandler, Version=17.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">WebServer\bin\DevExpress.DXTreme.Design.JSProjectHttpHandler.dll</Assembly>
+    <ProjectTemplate>ProjectTemplates</ProjectTemplate>
+    <ItemTemplate>ItemTemplates</ItemTemplate>
+  </Content>
+</Vsix>

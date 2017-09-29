@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Sinergi\BrowserDetector\Browser;
 use App\User;
+use App\Munic;
+use App\Cpmex;
 
 class Controller extends BaseController
 {
@@ -46,5 +48,43 @@ class Controller extends BaseController
         $response = $http->get($url_aux.'/api/'.$app_service.'?'.$query, $array_send);
 
        return json_decode((string) $response->getBody(), true);
+    }
+
+
+    public function getCpData(Request $request)
+    {
+        $alldata = $request->all();
+        $result_response = [];
+        $states_key = config('app.states_key');
+        $testval = '';
+        $munics = [];
+        $query = Cpmex::select();
+        if(array_key_exists('cp',$alldata)){
+            if($alldata['cp']!=''){
+                $d_codigo = "%".$alldata['cp']."%";
+                $query->where('d_codigo', 'like', $d_codigo);
+            }
+        }
+        if(array_key_exists('dommunicserv',$alldata)){
+            if($alldata['dommunicserv']!=''){
+                $query->where('c_mnpio', '=', $alldata['dommunicserv']);
+            }
+        }
+        if(array_key_exists('domestadoserv',$alldata)){
+            if($alldata['domestadoserv']!=''){
+                $munics = Munic::where('m_state',strtoupper($alldata['domestadoserv']))->get();
+                $query->where('c_estado', '=', $states_key[$alldata['domestadoserv']]);
+            }
+        }
+        $result_response = $query->get();
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'tabledata' => $result_response,
+            'munics' => $munics,
+            'alldata' => $alldata
+        );
+        return \Response::json($response);
     }
 }
