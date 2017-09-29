@@ -130,11 +130,28 @@ class CreateRelaciones extends Migration
                 $table->integer('tipcliente_cta_isr_reten_id')->unsigned()->nullable();
                 $table->foreign('tipcliente_cta_isr_reten_id')->references('id')->on('ctacont')->onDelete('set null');
 
+               
                 $table->integer('tipcliente_cta_por_cobrar_id')->unsigned()->nullable();
                 $table->foreign('tipcliente_cta_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
 
                 $table->integer('tipcliente_cta_anticp_client_id')->unsigned()->nullable();
                 $table->foreign('tipcliente_cta_anticp_client_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipcliente_cta_isr_reten_cob_id')->unsigned()->nullable();
+                $table->foreign('tipcliente_cta_isr_reten_cob_id')->references('id')->on('ctacont')->onDelete('set null');
+
+
+                $table->integer('tipcliente_cta_ieps_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('tipcliente_cta_ieps_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipcliente_cta_ieps_cobrado_id')->unsigned()->nullable();
+                $table->foreign('tipcliente_cta_ieps_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipcliente_cta_ieps_reten_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('tipcliente_cta_ieps_reten_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipcliente_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
+                $table->foreign('tipcliente_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
 
             });
 
@@ -172,6 +189,22 @@ class CreateRelaciones extends Migration
 
                 $table->integer('cliente_cta_anticp_client_id')->unsigned()->nullable();
                 $table->foreign('cliente_cta_anticp_client_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('cliente_cta_isr_reten_cob_id')->unsigned()->nullable();
+                $table->foreign('cliente_cta_isr_reten_cob_id')->references('id')->on('ctacont')->onDelete('set null');
+
+
+                $table->integer('cliente_cta_ieps_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('cliente_cta_ieps_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('cliente_cta_ieps_cobrado_id')->unsigned()->nullable();
+                $table->foreign('cliente_cta_ieps_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('cliente_cta_ieps_reten_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('cliente_cta_ieps_reten_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('cliente_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
+                $table->foreign('cliente_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
             });
 
          Schema::table('prodingr', function($table)
@@ -214,6 +247,22 @@ class CreateRelaciones extends Migration
 
                 $table->integer('tipprov_cta_anticp_prov_id')->unsigned()->nullable();
                 $table->foreign('tipprov_cta_anticp_prov_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipprov_cta_isr_reten_cob_id')->unsigned()->nullable();
+                $table->foreign('tipprov_cta_isr_reten_cob_id')->references('id')->on('ctacont')->onDelete('set null');
+
+
+                $table->integer('tipprov_cta_ieps_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('tipprov_cta_ieps_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipprov_cta_ieps_cobrado_id')->unsigned()->nullable();
+                $table->foreign('tipprov_cta_ieps_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipprov_cta_ieps_reten_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('tipprov_cta_ieps_reten_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('tipprov_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
+                $table->foreign('tipprov_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
             });
 
          Schema::table('proveed', function($table)
@@ -250,6 +299,22 @@ class CreateRelaciones extends Migration
 
                 $table->integer('proveed_cta_anticp_prov_id')->unsigned()->nullable();
                 $table->foreign('proveed_cta_anticp_prov_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('proveed_cta_isr_reten_cob_id')->unsigned()->nullable();
+                $table->foreign('proveed_cta_isr_reten_cob_id')->references('id')->on('ctacont')->onDelete('set null');
+
+
+                $table->integer('proveed_cta_ieps_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('proveed_cta_ieps_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('proveed_cta_ieps_cobrado_id')->unsigned()->nullable();
+                $table->foreign('proveed_cta_ieps_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('proveed_cta_ieps_reten_por_cobrar_id')->unsigned()->nullable();
+                $table->foreign('proveed_cta_ieps_reten_por_cobrar_id')->references('id')->on('ctacont')->onDelete('set null');
+
+                $table->integer('proveed_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
+                $table->foreign('proveed_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
             });
 
          Schema::table('prodgast', function($table)
