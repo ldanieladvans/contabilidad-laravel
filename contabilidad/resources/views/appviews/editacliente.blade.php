@@ -16,7 +16,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Crear Cliente</a>
+	            <a href="#">Actualizar Cliente</a>
 	        </li>
 	    </ul>
 	</div>
@@ -41,13 +41,14 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				<form class="form-horizontal" action="{{ route('clientes.store') }}" method='POST' id="creacliente">
-					{{ csrf_field() }}
+				{{ Form::open(['route' => ['clientes.update', $cliente], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT']) }}
+                	{{ Form::hidden('_method', 'PUT') }}
+                	
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_nom">Nombre:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="cliente_nom" id="cliente_nom" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="cliente_nom" id="cliente_nom" value="{{ $cliente->cliente_nom }}" class="col-md-10 col-sm-10 col-xs-12"/>
 							</div>
 						</div>
 					</div>
@@ -56,7 +57,7 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_rfc">RFC:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="cliente_rfc" id="cliente_rfc" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="cliente_rfc" id="cliente_rfc" value="{{ $cliente->cliente_rfc }}" class="col-md-10 col-sm-10 col-xs-12"/>
 							</div>
 						</div>
 					</div>
@@ -65,7 +66,7 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_email">Correo:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="email" name="cliente_email" id="cliente_email" class="col-md-12 col-sm-9 col-xs-12"/>
+								<input type="email" name="cliente_email" id="cliente_email" value="{{ $cliente->cliente_email }}" class="col-md-12 col-sm-9 col-xs-12"/>
 							</div>
 						</div>
 
@@ -73,7 +74,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="cliente_tipocliente_id" name="cliente_tipocliente_id" data-placeholder="Seleccione el tipo de cliente ..." style="width: 83%; display: none;">
 								@foreach($tipocliente as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tipocliente_desc }}</option>
+	                            	<option value="{{ $tp->id }}" {{$cliente->cliente_tipocliente_id == $tp->id ? 'selected':''}}>{{ $tp->tipocliente_desc }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -130,7 +131,7 @@
 											<select class="js-example-basic-single js-states form-control" id="cliente_direc_id" name="cliente_direc_id" data-placeholder="Seleccione una dirección ...">
 												<option value="">Seleccione ...</option>
 												@foreach($domicilios as $domicile)
-					                            	<option value="{{ $domicile->id }}">{{ $domicile->direc_num_ext }} - {{ $domicile->direc_cp }} - {{ $domicile->direc_estado }} - {{ $domicile->direc_colonia }} - {{ $domicile->direc_municipio }} - {{ $domicile->direc_pais }}</option>
+					                            	<option value="{{ $domicile->id }}" {{$cliente->cliente_direc_id == $domicile->id ? 'selected':''}}>{{ $domicile->direc_num_ext }} - {{ $domicile->direc_cp }} - {{ $domicile->direc_estado }} - {{ $domicile->direc_colonia }} - {{ $domicile->direc_municipio }} - {{ $domicile->direc_pais }}</option>
 					                            @endforeach
 											</select>
 										</div>
@@ -259,7 +260,7 @@
 														<label class="control-label col-xs-12 col-sm-2 col-md-2" for="cliente_concepto_polz">Concepto Póliza:</label>
 														<div class="col-md-10 col-sm-10 col-xs-12">
 															<div class="clearfix">
-																<input type="text" name="cliente_concepto_polz" id="cliente_concepto_polz" class="col-md-10 col-sm-10 col-xs-12"/>
+																<input type="text" name="cliente_concepto_polz" id="cliente_concepto_polz" value="{{$cliente->cliente_concepto_polz}}" class="col-md-10 col-sm-10 col-xs-12"/>
 															</div>
 														</div>
 													</div>	
@@ -270,7 +271,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_forma_contab" id="cliente_forma_contab" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_forma_contab as $cfc)
-								                            	<option value="{{ $cfc->id }}">{{ $cfc->id }}</option>
+								                            	<option value="{{ $cfc->id }}" {{$cliente->cliente_forma_contab == $cfc->id ? 'selected':''}}>{{ $cfc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -396,7 +397,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-group"></i>
 																			</span>
-																			<input class="form-control" type="text" id="cliente_nom_contct" name="cliente_nom_contct"/>
+																			<input class="form-control" type="text" id="cliente_nom_contct" name="cliente_nom_contct" value="{{$cliente->cliente_nom_contct}}"/>
 																		</div>
 																	</div>
 
@@ -410,7 +411,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-phone"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_tel_contct" name="cliente_tel_contct"/>
+																			<input class="form-control" type="tel" id="cliente_tel_contct" name="cliente_tel_contct" value="{{$cliente->cliente_tel_contct}}"/>
 																		</div>
 																	</div>
 
@@ -424,7 +425,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-envelope"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_email_contct" name="cliente_email_contct"/>
+																			<input class="form-control" type="tel" id="cliente_email_contct" name="cliente_email_contct" value="{{$cliente->cliente_email_contct}}"/>
 																		</div>
 																	</div>
 
@@ -452,7 +453,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-group"></i>
 																			</span>
-																			<input class="form-control" type="text" id="cliente_nom_contct_otro" name="cliente_nom_contct_otro"/>
+																			<input class="form-control" type="text" id="cliente_nom_contct_otro" name="cliente_nom_contct_otro" value="{{$cliente->cliente_nom_contct_otro}}"/>
 																		</div>
 																	</div>
 
@@ -466,7 +467,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-phone"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_tel_contct_otro" name="cliente_tel_contct_otro"/>
+																			<input class="form-control" type="tel" id="cliente_tel_contct_otro" name="cliente_tel_contct_otro" value="{{$cliente->cliente_tel_contct_otro}}"/>
 																		</div>
 																	</div>
 
@@ -480,7 +481,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-envelope"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_email_contct_otro" name="cliente_email_contct_otro"/>
+																			<input class="form-control" type="tel" id="cliente_email_contct_otro" name="cliente_email_contct_otro" value="{{$cliente->cliente_email_contct_otro}}"/>
 																		</div>
 																	</div>
 
@@ -503,14 +504,13 @@
 
 					<div class="ln_solid"></div>
                         <div class="form-group">
-	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
 	                            <button id="cancel" type="button" onclick="location.href = '/clientes';" class="btn btn-info">Cancelar</button>
-	                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
 	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
 	                        </div>
                         </div>
 
-				</form>
+				{{ Form::close() }}
 
 			</div>
 	</div>

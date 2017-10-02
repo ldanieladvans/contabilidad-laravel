@@ -87,4 +87,31 @@ class Controller extends BaseController
         );
         return \Response::json($response);
     }
+
+    public function delItems(Request $request)
+    {
+        $alldata = $request->all();
+
+        $str_class = 'App\\';
+
+        $records_counter = 0;
+
+        if(array_key_exists('model',$alldata)){
+            $str_class = $str_class.$alldata['model'];
+        }
+
+        if(array_key_exists('ids',$alldata)){
+            $str_class::destroy($alldata['ids']);
+            $records_counter = count($alldata['ids']);
+        }
+
+        $fmessage = 'Se han eliminado '.$records_counter. ' registros';
+        \Session::flash('message',$fmessage);
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok'
+        );
+        return \Response::json($response);
+    }
 }

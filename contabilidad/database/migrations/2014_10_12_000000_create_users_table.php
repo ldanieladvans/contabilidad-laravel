@@ -20,6 +20,13 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->string('usrc_nick',100)->nullable();
+            $table->string('usrc_tel',15)->nullable();
+            $table->boolean('usrc_activo')->default(1);
+            $table->string('usrc_pic')->nullable();
+            $table->string('usrc_type',3)->default('app');
+            $table->boolean('pass_changed')->default(0);
         });
     }
 

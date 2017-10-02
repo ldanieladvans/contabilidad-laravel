@@ -149,6 +149,33 @@
 							</li>
 						</ul>
 					</li>
+
+					<li id="menuseguridad" class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-unlock-alt"></i>
+							<span class="menu-text">
+								SEGURIDAD
+							</span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+
+							<li id="menuusuarios" class="">
+								<a href="{{ route('usuarios.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									USUARIOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							
+						</ul>
+					</li>
 				</ul><!-- /.nav-list -->
 
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -175,7 +202,7 @@
 			            @section('general_content')
 			            <div class="page-content">
 			                @section('settings_content')
-			                <div class="ace-settings-container" id="ace-settings-container">
+			                <!--<div class="ace-settings-container" id="ace-settings-container">
 			                    <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
 			                        <i class="ace-icon fa fa-cog bigger-130"></i>
 			                    </div>
@@ -221,7 +248,7 @@
 			                                    <b>.container</b>
 			                                </label>
 			                            </div>
-			                        </div><!-- /.pull-left -->
+			                        </div>
 
 			                        <div class="pull-left width-50">
 			                            <div class="ace-settings-item">
@@ -238,9 +265,10 @@
 			                                <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
 			                                <label class="lbl" for="ace-settings-highlight"> Alt. Active Item</label>
 			                            </div>
-			                        </div><!-- /.pull-left -->
-			                    </div><!-- /.ace-settings-box -->
-			                </div><!-- /.ace-settings-container -->
+			                        </div>
+			                    </div>
+			                </div> -->
+			                <!-- /.ace-settings-container -->
 			                @show
 
 			                @section('page_header_content')
@@ -301,6 +329,17 @@
 		<script src="{{ asset('ac_theme/assets/js/jquery-ui.custom.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/jquery.ui.touch-punch.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/spin.js') }}"></script>
+        <script src="{{ asset('ac_theme/assets/js/bootbox.js') }}"></script>
+        <script type="text/javascript">
+        	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        	$('#alertmsgcta').click(function() {
+              console.log('alertmsgcta button clicked');
+          });
+          
+          setTimeout(function() {
+              $('#alertmsgcta').trigger('click');
+          }, 4e3);
+        </script>
 	@show
 	</body>
 @endsection

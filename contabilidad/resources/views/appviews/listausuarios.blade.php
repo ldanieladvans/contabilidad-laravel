@@ -21,8 +21,8 @@
 	<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 	    <ul class="breadcrumb">
 	        <li>
-	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Lista de Clientes</a>
+	            <i class="ace-icon fa fa-user home-icon"></i>
+	            <a href="#">Lista de Usuarios</a>
 	        </li>
 	    </ul>
 	</div>
@@ -42,9 +42,9 @@
 
 @section('variable_content')
 	<div class="row">
-		<div id="crearcliente"></div>
+		<div id="crearusuario"></div>
 		<!-- Input para guardar datos del grid -->
-			<input type="hidden" value="{{$clientes}}" id="clientes"/>
+			<input type="hidden" value="{{$usuarios}}" id="usuarios"/>
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
@@ -53,7 +53,7 @@
 			</div>
 		
 		<!-- Div DataGrid -->
-		<div id="clienteLista"></div>
+		<div id="usuarioLista"></div>
 	</div>
 @endsection
 
@@ -68,15 +68,15 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menucliente").addClass('active');
-	        	$("#menudirectorio").addClass('open');
+	        	$("#menuusuarios").addClass('active');
+	        	$("#menuseguridad").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){
 
-					var data = jQuery.parseJSON(document.getElementById('clientes').value);
+					var data = jQuery.parseJSON(document.getElementById('usuarios').value);
 
-				    var dataGrid = $("#clienteLista").dxDataGrid({
+				    var dataGrid = $("#usuarioLista").dxDataGrid({
 				        dataSource: data,
 				        allowColumnReordering: true,
 				        selection: {
@@ -108,21 +108,12 @@
 				        noDataText: 'Sin datos',
 				        columns: [
 				            {
-				                dataField: "cliente_nom",
+				                dataField: "name",
 				                caption: 'Nombre'
 				            },
 				            {
-				                dataField: "cliente_rfc",
-				                caption: 'RFC'
-				            },
-				            {
-				                dataField: "cliente_email",
+				                dataField: "email",
 				                caption: 'Correo'
-				            },
-				            {
-				                dataField: "cliente_concepto_pol",
-				                caption: 'Concepto'
-				               // groupIndex: 0
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
@@ -134,11 +125,11 @@
 				            summaryItem: "count"
 				        }],
 				        summary: {
-				            groupItems: [{
+				            /*groupItems: [{
 				                column: "CompanyName",
 				                summaryType: "count",
 				                displayFormat: "{0}",
-				            }/*, {
+				            }, {
 				                column: "SaleAmount",
 				                summaryType: "max",
 				                valueFormat: "currency",
@@ -156,13 +147,13 @@
 				                valueFormat: "currency",
 				                displayFormat: "Total: {0}",
 				                showInGroupFooter: true
-				            }*/]
+				            }]*/
 				        }
 				    }).dxDataGrid("instance");
 
 
 				    /* Botón de creación */
-				    $("#crearcliente").dxButton({
+				    $("#crearusuario").dxButton({
 				        text: "Crear",
 				        type: "default",
 				        onClick: function(e) { 
@@ -190,7 +181,7 @@
 						    		$.ajax({
 						                url: '/delItems',
 					                	type: 'POST',
-					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Cliente'},
+					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'User'},
 						                dataType: 'JSON',
 						                success: function (data) {
 					                	    $('#loadingmodal').modal('hide');
@@ -210,7 +201,7 @@
 				        disabled: true,
 				        icon: 'edit',
 				        onClick: function () {
-				            window.location.href = 'clientes/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				            window.location.href = 'usuarios/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
 				        }
 				    }).dxButton("instance");  
 				});
