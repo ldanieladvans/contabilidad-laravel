@@ -12,6 +12,8 @@ use Sinergi\BrowserDetector\Browser;
 use App\User;
 use App\Munic;
 use App\Cpmex;
+use Bican\Roles\Models\Role;
+use Bican\Roles\Models\Permission;
 
 class Controller extends BaseController
 {
@@ -111,6 +113,35 @@ class Controller extends BaseController
         $response = array(
             'status' => 'success',
             'msg' => 'Ok'
+        );
+        return \Response::json($response);
+    }
+
+    public function permsbyroles(Request $request)
+    {
+        $rolestr = '';
+        $permstr = '';
+        $alldata = $request->all();
+        $return_array = array();
+        if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){
+            foreach ($alldata['selected'] as $select) {
+                $role = Role::find((int)$select);
+                $tests = false;
+                if (isset($role)){
+                    $tests = $role->permissions()->get();
+                    foreach ($tests as $test) {
+                        array_push($return_array, $test->id);
+                        $permstr = $permstr . $test->name . ',';
+                    }
+                }
+            }
+        }
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'ok',
+            'roles' => $return_array,
+            'alldata' => $alldata
         );
         return \Response::json($response);
     }

@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-editable.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/jquery.gritter.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-editable.min.css') }}" />
-	<link rel="stylesheet" href="{{ asset('css/fileinput.css') }}" />
 @endsection
 
 @section('breadcrumbs')
@@ -20,7 +19,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Crear Usuario</a>
+	            <a href="#">Editar Usuario</a>
 	        </li>
 	    </ul>
 	</div>
@@ -45,39 +44,31 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				<form class="form-horizontal" action="{{ route('usuarios.store') }}" method='POST' id="creausuario" enctype="multipart/form-data">
-					{{ csrf_field() }}
+				{{ Form::open(['route' => ['usuarios.update', $usuario->id], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left']) }}
+                		{{ Form::hidden('_method', 'PUT') }}
 
 					<table border="0" class="col-md-12 col-sm-12 col-xs-12">
 						<tr>
 							<td width="20%">
-								<!--<span class="profile-picture">
-									<input type="file" id="avatar" name="avatar" alt="Perfil" src="{{ asset('default_avatar_male.jpg') }}"/>
-								</span>-->
 								<div class="row">
 							        <div class="col-md-2 col-sm-2 col-xs-2">
 				                		<div id="imgcontainer" class="file-preview-frame">
 					                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}" hidden>
-					                		<img id="blah" alt="your image" width="150" height="150" src="{{asset('default_avatar_male.jpg')}}" />
+					                		<img id="blah" alt="your image" width="150" height="150" src="{{$usuario->usrc_pic ? asset('storage/'.$usuario->usrc_pic) : asset('default_avatar_male.jpg')}}" />
+					                		<input type="hidden" name="checkpic" id="checkpic" value="{{$usuario->usrc_pic ? 1 : 0}}">
 					                		<button id="cleanpic" type="button" onclick="cleanFunc();"  class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 					                	</div>
 					                	
 				                	</div>
 			            		</div>
-
 							</td>
 							<td>
 								<div class="form-group">
 									<label class="control-label col-xs-12 col-sm-2 col-md-2" for="cliente_nom">Nombre:</label>
 									<div class="col-md-10 col-sm-10 col-xs-12">
 										<div class="clearfix">
-											<input type="text" name="name" id="name" class="col-md-10 col-sm-10 col-xs-12" value="{{ old('name') }}"/>
+											<input type="text" name="name" id="name" class="col-md-10 col-sm-10 col-xs-12" value="{{$usuario->name}}"/>
 										</div>
-										@if ($errors->has('name'))
-		                                    <span class="help-block">
-		                                        <strong style="color: red;">{{ $errors->first('name') }}</strong>
-		                                    </span>
-		                                @endif
 									</div>
 								</div>
 
@@ -85,38 +76,30 @@
 									<label class="control-label col-xs-12 col-sm-2 col-md-2" for="cliente_nom">Correo/Usuario:</label>
 									<div class="col-md-10 col-sm-10 col-xs-12">
 										<div class="clearfix">
-											<input type="email" name="email" id="email" class="col-md-10 col-sm-10 col-xs-12" value="{{ old('email') }}"/>
+											<input type="email" name="email" id="email" class="col-md-10 col-sm-10 col-xs-12" value="{{$usuario->email}}"/>
 										</div>
-										@if ($errors->has('email'))
-		                                    <span class="help-block">
-		                                        <strong style="color: red;">{{ $errors->first('email') }}</strong>
-		                                    </span>
-		                                @endif
 									</div>
 								</div>
 
-								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-2 col-md-2" for="password">Contraseña:</label>
-									<div class="col-md-10 col-sm-10 col-xs-12">
-										<div class="clearfix">
-											<input type="password" name="password" id="password" class="col-md-10 col-sm-10 col-xs-12"/>
+								@if(Auth::user()->id == $usuario->id)
+									<div class="form-group">
+										<label class="control-label col-xs-12 col-sm-2 col-md-2" for="password">Contraseña:</label>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<div class="clearfix">
+												<input type="password" name="password" id="password" class="col-md-10 col-sm-10 col-xs-12"/>
+											</div>
 										</div>
-										@if ($errors->has('password'))
-		                                    <span class="help-block">
-		                                        <strong style="color: red;">{{ $errors->first('password') }}</strong>
-		                                    </span>
-		                                @endif
 									</div>
-								</div>
 
-								<div class="form-group">
-									<label class="control-label col-xs-12 col-sm-2 col-md-2" for="password_confirm">Confirmar Contraseña:</label>
-									<div class="col-md-10 col-sm-10 col-xs-12">
-										<div class="clearfix">
-											<input type="password" name="password_confirmation" id="password-confirm" class="col-md-10 col-sm-10 col-xs-12"/>
+									<div class="form-group">
+										<label class="control-label col-xs-12 col-sm-2 col-md-2" for="password_confirm">Confirmar Contraseña:</label>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<div class="clearfix">
+												<input type="password" name="password_confirm" id="password_confirm" class="col-md-10 col-sm-10 col-xs-12"/>
+											</div>
 										</div>
 									</div>
-								</div>
+								@endif
 							</td>
 						</tr>
 						<tr>
@@ -139,7 +122,7 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_nom">Teléfono:</label>
 						<div class="col-md-5 col-sm-5 col-xs-12">
 							<div class="clearfix">
-								<input type="tel" name="usrc_tel" id="usrc_tel" class="col-md-10 col-sm-10 col-xs-12" value="{{ old('usrc_tel') }}"/>
+								<input type="tel" name="usrc_tel" id="usrc_tel" class="col-md-10 col-sm-10 col-xs-12" value="{{$usuario->usrc_tel}}"/>
 							</div>
 						</div>
 					
@@ -147,8 +130,8 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="usrc_type">Tipo:</label>
 						<div class="col-md-5 col-sm-5 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="usrc_type" name="usrc_type" data-placeholder="Seleccione el tipo de usuario ..." style="width: 73%; display: none;">
-	                        	<option value="app" selected>Aplicación</option>
-	                        	<option value="api">Servicio</option>
+	                        	<option value="app" {{$usuario->usrc_type=='app' ? 'selected' : ''}}>Aplicación</option>
+	                        	<option value="api" {{$usuario->usrc_type=='api' ? 'selected' : ''}}>Servicio</option>
 							</select>
 						</div>
 
@@ -180,7 +163,7 @@
 							                <div class="col-md-10 col-sm-10 col-xs-12">
 							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." class="js-example-basic-multiple" onchange="onSelectUserCreate(this)" multiple="multiple" style="width: 100%; display: none;">
 							                        @foreach($roles as $role)
-														<option value="{{ $role->id }}">{{ $role->name }}</option>
+														<option value="{{ $role->id }}" {{$usuario->hasRole($role->id) ? 'selected':''}}>{{ $role->name }}</option>
 													@endforeach
 							                    </select>
 							                </div>
@@ -190,7 +173,7 @@
 						                    <div class="col-md-10 col-sm-10 col-xs-12">
 						                        <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="js-example-basic-multiple" multiple="multiple" style="width: 100%; display: none;">
 													@foreach($permisos as $permiso)
-						                            	<option value="{{ $permiso->id }}">{{ $permiso->name }}</option>
+						                            	<option value="{{ $permiso->id }}" {{$usuario->customGetUserPerms($permission->id,true) ? 'selected':''}}>{{ $permiso->name }}</option>
 						                            @endforeach
 						                      </select>
 						                  	</div>
@@ -205,12 +188,11 @@
                     <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                             <button id="cancel" type="button" onclick="location.href = '/usuarios';" class="btn btn-info">Cancelar</button>
-                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </div>
 
-				</form>
+				{{ Form::close() }}
 
 			</div>
 	</div>
@@ -355,6 +337,7 @@
 			function cleanFunc(){
 				$("#blah").attr("src", document.getElementById('imageiddef').src);
 				$("#usrc_pic").val('');
+				document.getElementById('checkpic').value = 0;
 	    	}
 
 
@@ -375,6 +358,7 @@
 			                     $("#blah").attr("src", e.target.result);
 			                 }
 			                 reader.readAsDataURL($(this)[0].files[i]);
+			                 document.getElementById('checkpic').value = 1;
 			             }
 
 			         } else {
@@ -407,7 +391,7 @@
 						required: true,
 						minlength: 8
 					},
-					password_confirmation: {
+					password_confirm: {
 						required: true,
 						minlength: 8,
 						equalTo: "#password"
@@ -433,7 +417,7 @@
 						required: "Este campo es requerido.",
 						minlength: "La contraseña debe tener 8 carateres mínimo."
 					},
-					password_confirmation: {
+					password_confirm: {
 						required: "Este campo es requerido.",
 						minlength: "La contraseña debe tener 8 carateres mínimo.",
 						equalTo: "Las contraseñas deben coincidir."
@@ -473,12 +457,10 @@
 				},
 		
 				submitHandler: function (form) {
-					alert('correcto');
 					form.submit();
 				},
 				invalidHandler: function (form) {
 					console.log('2');
-					alert('incorrecto');
 				}
 			});
 

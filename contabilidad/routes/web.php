@@ -33,6 +33,7 @@ Route::resource('usuarios', 'UsuarioController');
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/delItems', 'Controller@delItems');
+Route::post('/permsbyroles', 'Controller@permsbyroles');
 /* end ldaniel*/
 
 
