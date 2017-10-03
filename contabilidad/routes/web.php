@@ -29,6 +29,9 @@ Route::get('/', function () {
 /* ldaniel routes section */
 Route::resource('clientes', 'ClienteController');
 Route::resource('usuarios', 'UsuarioController');
+Route::resource('roles', 'RolController');
+Route::resource('permisos', 'PermisoController');
+Route::resource('bits', 'BitsController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

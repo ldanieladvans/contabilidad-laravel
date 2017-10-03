@@ -12,12 +12,38 @@ use Sinergi\BrowserDetector\Browser;
 use App\User;
 use App\Munic;
 use App\Cpmex;
+use App\Bitacora;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function registeredBinnacle($request, $fname='', $fmessage='', $user_id=null, $user_name='', $controller=''){
+        $user = \Auth::user();
+        $split_var = explode('\Controllers',get_class($this));
+        $binnacle = new Bitacora();
+        $binnacle->bitac_user_id = $user_id;
+        $binnacle->bitac_user = $user_name;
+        $binnacle->bitac_fecha = date("Y-m-d H:i:s");
+        $binnacle->bitac_tipo_op = $fname;
+        $binnacle->bitac_ip = $binnacle->getrealip();
+        $browser_arr = $binnacle->getBrowser();
+        $binnacle->bitac_naveg = $browser_arr['name'].' '.$browser_arr['version'];
+        if($controller!=''){
+            $binnacle->bitac_modulo = $controller;
+        }else{
+            $binnacle->bitac_modulo = $split_var[1];
+        }
+        
+        $binnacle->bitac_result = 'TODO';
+        $binnacle->bitac_msg = $fmessage;
+        $binnacle->bitac_dato = json_encode($request);
+        $binnacle->save();
+    }
 
     public function getAccessToken($control_app='cuenta'){
 
@@ -93,7 +119,7 @@ class Controller extends BaseController
     public function delItems(Request $request)
     {
         $alldata = $request->all();
-
+        $logued_user = Auth::user();
         $str_class = 'App\\';
 
         $records_counter = 0;
@@ -103,12 +129,19 @@ class Controller extends BaseController
         }
 
         if(array_key_exists('ids',$alldata)){
-            $str_class::destroy($alldata['ids']);
+            if($str_class=='App\Role'){
+                Role::destroy($alldata['ids']);
+            }elseif ($str_class=='App\Permission') {
+                Permission::destroy($alldata['ids']);
+            }else{
+                $str_class::destroy($alldata['ids']);
+            }
             $records_counter = count($alldata['ids']);
         }
 
         $fmessage = 'Se han eliminado '.$records_counter. ' registros';
         \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '',$alldata['model']);
         
         $response = array(
             'status' => 'success',
@@ -145,4 +178,6 @@ class Controller extends BaseController
         );
         return \Response::json($response);
     }
+
+
 }

@@ -257,7 +257,7 @@
 	            allowClear: true
 	        });
 
-			jQuery(function($) {
+			/*jQuery(function($) {
 			
 				//editables on first profile page
 				$.fn.editable.defaults.mode = 'inline';
@@ -350,7 +350,7 @@
 					})
 				}catch(e) {}
 				
-			});
+			});*/
 
 			function cleanFunc(){
 				$("#blah").attr("src", document.getElementById('imageiddef').src);

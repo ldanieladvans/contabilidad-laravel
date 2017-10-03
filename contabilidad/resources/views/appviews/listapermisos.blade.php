@@ -22,7 +22,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-user home-icon"></i>
-	            <a href="#">Lista de Usuarios</a>
+	            <a href="#">Lista de Permisos</a>
 	        </li>
 	    </ul>
 	</div>
@@ -42,18 +42,16 @@
 
 @section('variable_content')
 	<div class="row">
-		<div id="crearusuario"></div>
 		<!-- Input para guardar datos del grid -->
-			<input type="hidden" value="{{$usuarios}}" id="usuarios"/>
+			<input type="hidden" value="{{$permisos}}" id="permisos"/>
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
-				<div id="borrarLista" align="justify"></div>
 				<div id="editarLista" align="justify"></div>
 			</div>
 		
 		<!-- Div DataGrid -->
-		<div id="usuarioLista"></div>
+		<div id="permisoLista"></div>
 	</div>
 @endsection
 
@@ -68,19 +66,19 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menuusuarios").addClass('active');
+	        	$("#menupermisos").addClass('active');
 	        	$("#menuseguridad").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){
 
-					var data = jQuery.parseJSON(document.getElementById('usuarios').value);
+					var data = jQuery.parseJSON(document.getElementById('permisos').value);
 
-				    var dataGrid = $("#usuarioLista").dxDataGrid({
+				    var dataGrid = $("#permisoLista").dxDataGrid({
 				        dataSource: data,
 				        allowColumnReordering: true,
 				        selection: {
-				            mode: "multiple"
+				            mode: "single"
 				        },
 				        grouping: {
 				            autoExpandAll: true,
@@ -112,13 +110,16 @@
 				                caption: 'Nombre'
 				            },
 				            {
-				                dataField: "email",
-				                caption: 'Correo'
+				                dataField: "slug",
+				                caption: 'Código'
+				            },
+				            {
+				                dataField: "description",
+				                caption: 'Descripción'
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
 				            var data = selectedItems.selectedRowsData;
-				            deleteButton.option("disabled", !data.length);
 				            editButton.option("disabled", data.length!=1);
 				        },
 				        sortByGroupSummaryInfo: [{
@@ -152,56 +153,12 @@
 				    }).dxDataGrid("instance");
 
 
-				    /* Botón de creación */
-				    $("#crearusuario").dxButton({
-				        text: "Crear",
-				        type: "default",
-				        onClick: function(e) { 
-				        	//DevExpress.ui.notify("The Apply button was clicked");
-				        	window.location.href = window.location.href + '/create';
-				        }
-				    });
-
-
-				    /* Botones de opciones */
-				    var deleteButton = $("#borrarLista").dxButton({
-				        text: "Eliminar",
-				        disabled: true,
-				        icon: 'trash',
-				        onClick: function () {
-				        	var del_list = [];
-				            //dataGrid.clearSelection();
-				            //console.log(dataGrid.getSelectedRowKeys());
-				            dataGrid.getSelectedRowKeys().forEach(function(item){
-		                        del_list.push(item['ID']);
-		                    });
-				            bootbox.confirm("¿Está seguro que quiere eliminar estos registros?", function(result) {
-								if(result) {
-									$('#loadingmodal').modal('show');
-						    		$.ajax({
-						                url: '/delItems',
-					                	type: 'POST',
-					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'User'},
-						                dataType: 'JSON',
-						                success: function (data) {
-					                	    $('#loadingmodal').modal('hide');
-					                	    window.location.href = window.location.href;
-						                },
-						                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-						                    console.log(errorThrown);
-					                    }
-						            });
-								}
-							});
-				        }
-				    }).dxButton("instance");
-
 				    var editButton = $("#editarLista").dxButton({
 				        text: "Editar",
 				        disabled: true,
 				        icon: 'edit',
 				        onClick: function () {
-				            window.location.href = 'usuarios/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				            window.location.href = 'permisos/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
 				        }
 				    }).dxButton("instance");  
 				});

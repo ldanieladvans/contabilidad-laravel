@@ -48,7 +48,7 @@
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
-				<div id="borrarLista" align="center"></div>
+				<div id="borrarLista" align="justify"></div>
 				<div id="editarLista" align="justify"></div>
 			</div>
 		

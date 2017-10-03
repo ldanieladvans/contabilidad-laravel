@@ -100,7 +100,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-        
+        $logued_user = Auth::user();
         $user = $this->customregister($request,$alldata);
         
         $file     = false;
@@ -149,6 +149,7 @@ class UsuarioController extends Controller
 
         $fmessage = 'Se ha creado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
         return redirect()->route('usuarios.index');
 
@@ -189,6 +190,7 @@ class UsuarioController extends Controller
     public function update(Request $request, $id)
     {
         $alldata = $request->all();
+        $logued_user = Auth::user();
         $file     = false;
 
         $user = User::findOrFail($id);
@@ -220,10 +222,6 @@ class UsuarioController extends Controller
 
         
         $user->save();
-
-        /*echo "<pre>";
-        print_r($user);die();
-        echo "</pre>";*/
         
         $user->detachAllRoles();
         if(array_key_exists('roles',$alldata)){
@@ -252,6 +250,8 @@ class UsuarioController extends Controller
         }
         $fmessage = 'Se ha actualizado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+
         return redirect()->route('usuarios.index');
     }
 

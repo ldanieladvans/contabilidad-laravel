@@ -10,6 +10,7 @@ use App\Cpmex;
 use App\Country;
 use App\TipoCliente;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ClienteController extends Controller
 {
@@ -56,6 +57,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
+        $logued_user = Auth::user();
         if(array_key_exists('nueva_dir',$alldata)){
             $new_dir = new Direccion();
             $new_dir->direc_calle = array_key_exists('dom_calle',$alldata) ? $alldata['dom_calle'] : '';
@@ -87,6 +89,7 @@ class ClienteController extends Controller
 
         $fmessage = 'Se ha creado el cliente: '.$cliente->cliente_nom;
         \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
         return redirect()->route('clientes.index');
     }
@@ -125,9 +128,7 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $alldata = $request->all();
-        /*echo "<pre>";
-        print_r($alldata);
-        echo "</pre>";*/
+        $logued_user = Auth::user();
         if(array_key_exists('nueva_dir',$alldata)){
             $new_dir = new Direccion();
             $new_dir->direc_calle = array_key_exists('dom_calle',$alldata) ? $alldata['dom_calle'] : '';
@@ -168,6 +169,7 @@ class ClienteController extends Controller
 
         $fmessage = 'Se ha actualizado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
         return redirect()->route('clientes.index');
     }

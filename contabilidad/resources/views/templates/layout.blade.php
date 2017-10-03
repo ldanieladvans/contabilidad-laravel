@@ -58,7 +58,7 @@
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<!-- TODO Img -->
-								<!--<img class="nav-user-photo" src="{{ asset('favicon.ico') }}" alt="Jason's Photo" />-->
+								<img class="nav-user-photo" src="{{ Auth::user()->usrc_pic ? asset('storage/'.Auth::user()->usrc_pic) : asset('default_avatar_male.jpg')}}" alt="" />
 								<span class="user-info">
 									<small>Welcome,</small>
 									{{Auth::user()->name}}
@@ -168,6 +168,33 @@
 								<a href="{{ route('usuarios.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									USUARIOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li id="menuroles" class="">
+								<a href="{{ route('roles.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									ROLES
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li id="menupermisos" class="">
+								<a href="{{ route('permisos.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									PERMISOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li id="menupermisos" class="">
+								<a href="{{ route('bits.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									BITACORA
 								</a>
 
 								<b class="arrow"></b>
