@@ -147,6 +147,37 @@
 
 								<b class="arrow"></b>
 							</li>
+
+							<li id="menucategorias" class="">
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa-caret-right"></i>
+
+									TIPOS
+									<b class="arrow fa fa-angle-down"></b>
+								</a>
+
+								<b class="arrow"></b>
+
+								<ul id="submenucategorias" class="submenu">
+									<li id="menutipocliente" class="">
+										<a href="{{ route('tclientes.index') }}">
+											<i class="menu-icon fa fa-group green"></i>
+											TIPOS DE CLIENTE
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menutipoproveedor" class="">
+										<a href="{{ route('tproveedores.index') }}">
+											<i class="menu-icon fa fa-group green"></i>
+											TIPOS DE PROVEEDOR
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 

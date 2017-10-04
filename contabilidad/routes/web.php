@@ -33,6 +33,8 @@ Route::resource('roles', 'RolController');
 Route::resource('permisos', 'PermisoController');
 Route::resource('bits', 'BitsController');
 Route::resource('proveedores', 'ProveedorController');
+Route::resource('tclientes', 'TipoClienteController');
+Route::resource('tproveedores', 'TipoProveedorController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

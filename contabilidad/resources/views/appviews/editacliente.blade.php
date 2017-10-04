@@ -309,7 +309,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ingreso_id" id="cliente_cta_ingreso_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_ingreso_id as $cci)
-								                            	<option value="{{ $cci->id }}">{{ $cci->id }}</option>
+								                            	<option value="{{ $cci->id }}" {{$cliente->cliente_cta_ingreso_id == $cci->id ? 'selected':''}}>{{ $cfc->id }}>{{ $cci->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -320,7 +320,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_desc_id as $ccd)
-								                            	<option value="{{ $ccd->id }}">{{ $ccd->id }}</option>
+								                            	<option value="{{ $ccd->id }}" {{$cliente->cliente_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $cfc->id }}>{{ $ccd->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -333,7 +333,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_x_cob_id" id="cliente_cta_iva_traslad_x_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_iva_traslad_x_cob_id as $ccitxc)
-								                            	<option value="{{ $ccitxc->id }}">{{ $ccitxc->id }}</option>
+								                            	<option value="{{ $ccitxc->id }}" {{$cliente->cliente_cta_iva_traslad_x_cob_id == $ccitxc->id ? 'selected':''}}>{{ $ccitxc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -344,7 +344,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_cob_id" id="cliente_cta_iva_traslad_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_iva_traslad_cob_id as $ccitc)
-								                            	<option value="{{ $ccitc->id }}">{{ $ccitc->id }}</option>
+								                            	<option value="{{ $ccitc->id }}" {{$cliente->cliente_cta_iva_traslad_cob_id == $ccitc->id ? 'selected':''}}>{{ $ccitc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -357,7 +357,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_x_cob_id" id="cliente_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_iva_reten_x_cob_id as $ccirxc)
-								                            	<option value="{{ $ccirxc->id }}">{{ $ccirxc->id }}</option>
+								                            	<option value="{{ $ccirxc->id }}" {{$cliente->cliente_cta_iva_reten_x_cob_id == $ccirxc->id ? 'selected':''}}>{{ $ccirxc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -368,7 +368,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_cob_id" id="cliente_cta_iva_reten_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_iva_reten_cob_id as $ccirc)
-								                            	<option value="{{ $ccirc->id }}">{{ $ccirc->id }}</option>
+								                            	<option value="{{ $ccirc->id }}" {{$cliente->cliente_cta_iva_reten_cob_id == $ccirc->id ? 'selected':''}}>{{ $ccirc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -381,7 +381,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_id" id="cliente_cta_isr_reten_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_isr_reten_id as $ccir)
-								                            	<option value="{{ $ccir->id }}">{{ $ccir->id }}</option>
+								                            	<option value="{{ $ccir->id }}" {{$cliente->cliente_cta_isr_reten_id == $ccir->id ? 'selected':''}}>{{ $ccir->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -392,7 +392,7 @@
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            	@foreach($cliente_cta_por_cobrar_id as $ccpc)
-								                            	<option value="{{ $ccpc->id }}">{{ $ccpc->id }}</option>
+								                            	<option value="{{ $ccpc->id }}" {{$cliente->cliente_cta_por_cobrar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
