@@ -139,8 +139,8 @@
 								<b class="arrow"></b>
 							</li>
 
-							<li class="">
-								<a href="#">
+							<li id="menuproveedor" class="">
+								<a href="{{ route('proveedores.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									PROVEEDORES
 								</a>
@@ -191,7 +191,7 @@
 								<b class="arrow"></b>
 							</li>
 
-							<li id="menupermisos" class="">
+							<li id="menubits" class="">
 								<a href="{{ route('bits.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									BITACORA

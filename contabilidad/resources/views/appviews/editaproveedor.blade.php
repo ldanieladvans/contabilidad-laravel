@@ -16,7 +16,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Actualizar Cliente</a>
+	            <a href="#">Actualizar Proveedor</a>
 	        </li>
 	    </ul>
 	</div>
@@ -41,49 +41,48 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				{{ Form::open(['route' => ['clientes.update', $cliente->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editacliente']) }}
+				{{ Form::open(['route' => ['proveedores.update', $proveedor->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editaproveedor']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
-                	
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_nom">Nombre:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="proveed_nom">Nombre:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="cliente_nom" id="cliente_nom" value="{{ $cliente->cliente_nom }}" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="proveed_nom" id="proveed_nom" class="col-md-10 col-sm-10 col-xs-12" value="{{$proveedor->proveed_nom}}" />
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_rfc">RFC:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="proveed_rfc">RFC:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="cliente_rfc" id="cliente_rfc" value="{{ $cliente->cliente_rfc }}" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="proveed_rfc" id="proveed_rfc" class="col-md-10 col-sm-10 col-xs-12" value="{{$proveedor->proveed_rfc}}" />
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_email">Correo:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveed_email">Correo:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="email" name="cliente_email" id="cliente_email" value="{{ $cliente->cliente_email }}" class="col-md-12 col-sm-9 col-xs-12"/>
+								<input type="email" name="proveed_email" id="proveed_email" class="col-md-12 col-sm-9 col-xs-12" value="{{$proveedor->proveed_email}}" />
 							</div>
 						</div>
 
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_tel">Teléfono:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveed_tel">Teléfono:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="tel" name="cliente_tel" id="cliente_tel" class="col-md-10 col-sm-10 col-xs-12" value="{{ $cliente->cliente_tel }}"/>
+								<input type="tel" name="proveed_tel" id="proveed_tel" class="col-md-10 col-sm-10 col-xs-12" value="{{$proveedor->proveed_tel}}" />
 							</div>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_tipocliente_id">Tipo:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveed_tipprov_id">Tipo:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="cliente_tipocliente_id" name="cliente_tipocliente_id" data-placeholder="Seleccione el tipo de cliente ..." style="width: 83%; display: none;">
-								@foreach($tipocliente as $tp)
-	                            	<option value="{{ $tp->id }}" {{$cliente->cliente_tipocliente_id == $tp->id ? 'selected':''}}>{{ $tp->tipocliente_desc }}</option>
+							<select class="js-example-basic-single js-states form-control" id="proveed_tipprov_id" name="proveed_tipprov_id" data-placeholder="Seleccione el tipo de proveedor ..." style="width: 83%; display: none;">
+								@foreach($tipoproveedor as $tp)
+	                            	<option value="{{ $tp->id }}" {{$proveedor->proveed_tipprov_id == $tp->id ? 'selected':''}}>{{ $tp->tipprov_desc }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -134,13 +133,13 @@
 											</div>
 										</div>
 										<div id="contenedor_selecc_dir">
-											<label for="cliente_direc_id">Domicilio</label>
+											<label for="proveed_direc_id">Domicilio</label>
 
 											<br />
-											<select class="js-example-basic-single js-states form-control" id="cliente_direc_id" name="cliente_direc_id" data-placeholder="Seleccione una dirección ...">
+											<select class="js-example-basic-single js-states form-control" id="proveed_direc_id" name="proveed_direc_id" data-placeholder="Seleccione una dirección ...">
 												<option value="">Seleccione ...</option>
 												@foreach($domicilios as $domicile)
-					                            	<option value="{{ $domicile->id }}" {{$cliente->cliente_direc_id == $domicile->id ? 'selected':''}}>{{ $domicile->direc_num_ext }} - {{ $domicile->direc_cp }} - {{ $domicile->direc_estado }} - {{ $domicile->direc_colonia }} - {{ $domicile->direc_municipio }} - {{ $domicile->direc_pais }}</option>
+					                            	<option value="{{ $domicile->id }}" {{$proveedor->proveed_direc_id == $domicile->id ? 'selected':''}}>{{ $domicile->direc_num_ext }} - {{ $domicile->direc_cp }} - {{ $domicile->direc_estado }} - {{ $domicile->direc_colonia }} - {{ $domicile->direc_municipio }} - {{ $domicile->direc_pais }}</option>
 					                            @endforeach
 											</select>
 										</div>
@@ -266,10 +265,10 @@
 											<tr>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-xs-12 col-sm-2 col-md-2" for="cliente_concepto_polz">Concepto Póliza:</label>
+														<label class="control-label col-xs-12 col-sm-2 col-md-2" for="proveed_concepto_polz">Concepto Póliza:</label>
 														<div class="col-md-10 col-sm-10 col-xs-12">
 															<div class="clearfix">
-																<input type="text" name="cliente_concepto_polz" id="cliente_concepto_polz" value="{{$cliente->cliente_concepto_polz}}" class="col-md-10 col-sm-10 col-xs-12"/>
+																<input type="text" name="proveed_concepto_polz" id="proveed_concepto_polz" class="col-md-10 col-sm-10 col-xs-12" value="{{$proveedor->proveed_concepto_polz}}"/>
 															</div>
 														</div>
 													</div>
@@ -281,46 +280,22 @@
 											<tr>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_anticp_client_id">Cuenta de anticipo:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_anticp_client_id" id="cliente_cta_anticp_client_id" style="width: 60%; display: none;">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_anticp_prov_id">Cuenta de anticipo:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_anticp_prov_id" id="proveed_cta_anticp_prov_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_anticp_client_id as $ccac)
-								                            	<option value="{{ $ccac->id }}" {{$cliente->cliente_cta_anticp_client_id == $ccac->id ? 'selected':''}}>{{ $ccac->id }}</option>
+							                            	@foreach($proveed_cta_anticp_prov_id as $ccac)
+								                            	<option value="{{ $ccac->id }}" {{$proveedor->proveed_cta_anticp_prov_id == $ccac->id ? 'selected':''}}>{{ $ccac->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
 												</td>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_forma_contab">Forma de contabilización:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_forma_contab" id="cliente_forma_contab" style="width: 60%; display: none;">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_forma_contab">Forma de contabilización:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_forma_contab" id="proveed_forma_contab" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_forma_contab as $cfc)
-								                            	<option value="{{ $cfc->id }}" {{$cliente->cliente_forma_contab == $cfc->id ? 'selected':''}}>{{ $cfc->id }}</option>
-								                            @endforeach
-							                          	</select>
-							                        </div>
-												</td>
-											</tr>
-											<tr>
-												<td width="50%">
-													<div class="form-group">
-														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ingreso_id">Cuenta de ingreso:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ingreso_id" id="cliente_cta_ingreso_id" style="width: 60%; display: none;">
-							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_ingreso_id as $cci)
-								                            	<option value="{{ $cci->id }}">{{ $cci->id }}</option>
-								                            @endforeach
-							                          	</select>
-							                        </div>
-												</td>
-												<td width="50%">
-													<div class="form-group">
-														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_desc_id">Cuenta de descuento:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
-							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_desc_id as $ccd)
-								                            	<option value="{{ $ccd->id }}">{{ $ccd->id }}</option>
+							                            	@foreach($proveed_forma_contab as $cfc)
+								                            	<option value="{{ $cfc->id }}" {{$proveedor->proveed_forma_contab == $cfc->id ? 'selected':''}}>{{ $cfc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -329,46 +304,22 @@
 											<tr>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_traslad_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_x_cob_id" id="cliente_cta_iva_traslad_x_cob_id" style="width: 60%; display: none;">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_egreso_id">Cuenta de egreso:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_egreso_id" id="proveed_cta_egreso_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_iva_traslad_x_cob_id as $ccitxc)
-								                            	<option value="{{ $ccitxc->id }}">{{ $ccitxc->id }}</option>
+							                            	@foreach($proveed_cta_egreso_id as $cci)
+								                            	<option value="{{ $cci->id }}" {{$proveedor->proveed_cta_egreso_id == $cci->id ? 'selected':''}}>{{ $cci->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
 												</td>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_traslad_cob_id">Cuenta IVA trasladado cobrado:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_cob_id" id="cliente_cta_iva_traslad_cob_id" style="width: 60%; display: none;">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_desc_id">Cuenta de descuento:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_desc_id" id="proveed_cta_desc_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_iva_traslad_cob_id as $ccitc)
-								                            	<option value="{{ $ccitc->id }}">{{ $ccitc->id }}</option>
-								                            @endforeach
-							                          	</select>
-							                        </div>
-												</td>
-											</tr>
-											<tr>
-												<td width="50%">
-													<div class="form-group">
-														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_reten_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_x_cob_id" id="cliente_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
-							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_iva_reten_x_cob_id as $ccirxc)
-								                            	<option value="{{ $ccirxc->id }}">{{ $ccirxc->id }}</option>
-								                            @endforeach
-							                          	</select>
-							                        </div>
-												</td>
-												<td width="50%">
-													<div class="form-group">
-														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_reten_cob_id">Cuenta IVA trasladado cobrado:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_cob_id" id="cliente_cta_iva_reten_cob_id" style="width: 60%; display: none;">
-							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_iva_reten_cob_id as $ccirc)
-								                            	<option value="{{ $ccirc->id }}">{{ $ccirc->id }}</option>
+							                            	@foreach($proveed_cta_desc_id as $ccd)
+								                            	<option value="{{ $ccd->id }}" {{$proveedor->proveed_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -377,22 +328,70 @@
 											<tr>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_isr_reten_id">Cuenta ISR retenido:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_id" id="cliente_cta_isr_reten_id" style="width: 60%; display: none;">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_iva_acredit_x_cob_id">Cuenta IVA acreditado por cobrar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_acredit_x_cob_id" id="proveed_cta_iva_acredit_x_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_isr_reten_id as $ccir)
-								                            	<option value="{{ $ccir->id }}">{{ $ccir->id }}</option>
+							                            	@foreach($proveed_cta_iva_acredit_x_cob_id as $ccitxc)
+								                            	<option value="{{ $ccitxc->id }}" {{$proveedor->proveed_cta_iva_acredit_x_cob_id == $ccitxc->id ? 'selected':''}}>{{ $ccitxc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
 												</td>
 												<td width="50%">
 													<div class="form-group">
-														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_por_cobrar_id">Cuenta por cobrar:</label>
-							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_iva_acredit_cob_id">Cuenta IVA acreditado cobrado:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_acredit_cob_id" id="proveed_cta_iva_acredit_cob_id" style="width: 60%; display: none;">
 							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_cta_por_cobrar_id as $ccpc)
-								                            	<option value="{{ $ccpc->id }}">{{ $ccpc->id }}</option>
+							                            	@foreach($proveed_cta_iva_acredit_cob_id as $ccitc)
+								                            	<option value="{{ $ccitc->id }}" {{$proveedor->proveed_cta_iva_acredit_cob_id == $ccitc->id ? 'selected':''}}>{{ $ccitc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_iva_reten_x_cob_id">Cuenta IVA retenido por cobrar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_reten_x_cob_id" id="proveed_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($proveed_cta_iva_reten_x_cob_id as $ccirxc)
+								                            	<option value="{{ $ccirxc->id }}" {{$proveedor->proveed_cta_iva_reten_x_cob_id == $ccirxc->id ? 'selected':''}}>{{ $ccirxc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_iva_reten_cob_id">Cuenta IVA retenido cobrado:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_reten_cob_id" id="proveed_cta_iva_reten_cob_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($proveed_cta_iva_reten_cob_id as $ccirc)
+								                            	<option value="{{ $ccirc->id }}" {{$proveedor->proveed_cta_iva_reten_cob_id == $ccirc->id ? 'selected':''}}>{{ $ccirc->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_isr_reten_id">Cuenta ISR retenido:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_id" id="proveed_cta_isr_reten_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($proveed_cta_isr_reten_id as $ccir)
+								                            	<option value="{{ $ccir->id }}" {{$proveedor->proveed_cta_isr_reten_id == $ccir->id ? 'selected':''}}>{{ $ccir->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+												</td>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_por_pagar_id">Cuenta por pagar:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_por_pagar_id" id="proveed_cta_por_pagar_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($proveed_cta_por_pagar_id as $ccpc)
+								                            	<option value="{{ $ccpc->id }}" {{$proveedor->proveed_cta_por_pagar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->id }}</option>
 								                            @endforeach
 							                          	</select>
 							                        </div>
@@ -414,7 +413,7 @@
 															<div class="widget-body">
 																<div class="widget-main">
 																	<div>
-																		<label for="cliente_nom_contct">
+																		<label for="proveed_nom_contct">
 																			Nombre
 																		</label>
 
@@ -422,13 +421,13 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-group"></i>
 																			</span>
-																			<input class="form-control" type="text" id="cliente_nom_contct" name="cliente_nom_contct" value="{{$cliente->cliente_nom_contct}}"/>
+																			<input class="form-control" type="text" id="proveed_nom_contct" name="proveed_nom_contct" value="{{$proveedor->proveed_nom_contct}}"/>
 																		</div>
 																	</div>
 
 																	<hr />
 																	<div>
-																		<label for="cliente_tel_contct">
+																		<label for="proveed_tel_contct">
 																			Teléfono
 																		</label>
 
@@ -436,13 +435,13 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-phone"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_tel_contct" name="cliente_tel_contct" value="{{$cliente->cliente_tel_contct}}"/>
+																			<input class="form-control" type="tel" id="proveed_tel_contct" name="proveed_tel_contct" value="{{$proveedor->proveed_tel_contct}}"/>
 																		</div>
 																	</div>
 
 																	<hr />
 																	<div>
-																		<label for="cliente_email_contct">
+																		<label for="proveed_email_contct">
 																			Correo
 																		</label>
 
@@ -450,7 +449,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-envelope"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_email_contct" name="cliente_email_contct" value="{{$cliente->cliente_email_contct}}"/>
+																			<input class="form-control" type="tel" id="proveed_email_contct" name="proveed_email_contct" value="{{$proveedor->proveed_email_contct}}"/>
 																		</div>
 																	</div>
 
@@ -470,7 +469,7 @@
 															<div class="widget-body">
 																<div class="widget-main">
 																	<div>
-																		<label for="cliente_nom_contct_otro">
+																		<label for="proveed_nom_contct_otro">
 																			Nombre
 																		</label>
 
@@ -478,13 +477,13 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-group"></i>
 																			</span>
-																			<input class="form-control" type="text" id="cliente_nom_contct_otro" name="cliente_nom_contct_otro" value="{{$cliente->cliente_nom_contct_otro}}"/>
+																			<input class="form-control" type="text" id="proveed_nom_contct_otro" name="proveed_nom_contct_otro" value="{{$proveedor->proveed_nom_contct_otro}}"/>
 																		</div>
 																	</div>
 
 																	<hr />
 																	<div>
-																		<label for="cliente_tel_contct_otro">
+																		<label for="proveed_tel_contct_otro">
 																			Teléfono
 																		</label>
 
@@ -492,13 +491,13 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-phone"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_tel_contct_otro" name="cliente_tel_contct_otro" value="{{$cliente->cliente_tel_contct_otro}}"/>
+																			<input class="form-control" type="tel" id="proveed_tel_contct_otro" name="proveed_tel_contct_otro" value="{{$proveedor->proveed_tel_contct_otro}}"/>
 																		</div>
 																	</div>
 
 																	<hr />
 																	<div>
-																		<label for="cliente_email_contct_otro">
+																		<label for="proveed_email_contct_otro">
 																			Correo
 																		</label>
 
@@ -506,7 +505,7 @@
 																			<span class="input-group-addon">
 																				<i class="ace-icon fa fa-envelope"></i>
 																			</span>
-																			<input class="form-control" type="tel" id="cliente_email_contct_otro" name="cliente_email_contct_otro" value="{{$cliente->cliente_email_contct_otro}}"/>
+																			<input class="form-control" type="tel" id="proveed_email_contct_otro" name="proveed_email_contct_otro" value="{{$proveedor->proveed_email_contct_otro}}"/>
 																		</div>
 																	</div>
 
@@ -530,8 +529,8 @@
 
 					<div class="ln_solid"></div>
                         <div class="form-group">
-	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-4">
-	                            <button id="cancel" type="button" onclick="location.href = '/clientes';" class="btn btn-info">Cancelar</button>
+	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+	                            <button id="cancel" type="button" onclick="location.href = '/proveedores';" class="btn btn-info">Cancelar</button>
 	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
 	                        </div>
                         </div>
@@ -576,17 +575,17 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menucliente").addClass('active');
+	        	$("#menuproveedor").addClass('active');
 	        	$("#menudirectorio").addClass('open');
 
         	/*Inicializando selects*/
-	        	$("#cliente_direc_id").select2({
+	        	$("#proveed_direc_id").select2({
 				  	placeholder: "Selecciona el domicilio",
 				  	allowClear: true
 				});
 
-				$("#cliente_tipocliente_id").select2({
-				  	placeholder: "Selecciona el tipo de cliente",
+				$("#proveed_tipprov_id").select2({
+				  	placeholder: "Selecciona el tipo de proveedor",
 				  	allowClear: true
 				});
 
@@ -605,52 +604,52 @@
 				  	allowClear: true
 				});
 
-				$("#cliente_forma_contab").select2({
+				$("#proveed_forma_contab").select2({
 				  	placeholder: "Selecciona la forma de contabilización",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_ingreso_id").select2({
-				  	placeholder: "Selecciona la cuenta de ingreso",
+				$("#proveed_cta_egreso_id").select2({
+				  	placeholder: "Selecciona la cuenta de egreso",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_desc_id").select2({
+				$("#proveed_cta_desc_id").select2({
 				  	placeholder: "Selecciona la cuenta de descuento",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_iva_traslad_x_cob_id").select2({
-				  	placeholder: "Selecciona la cuenta de IVA trasladado por cobrar",
+				$("#proveed_cta_iva_acredit_x_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA acreditado por cobrar",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_iva_traslad_cob_id").select2({
-				  	placeholder: "Selecciona la cuenta de IVA trasladado cobrado",
+				$("#proveed_cta_iva_acredit_cob_id").select2({
+				  	placeholder: "Selecciona la cuenta de IVA acreditado cobrado",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_iva_reten_x_cob_id").select2({
+				$("#proveed_cta_iva_reten_x_cob_id").select2({
 				  	placeholder: "Selecciona la cuenta de IVA retenido por cobrar",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_iva_reten_cob_id").select2({
+				$("#proveed_cta_iva_reten_cob_id").select2({
 				  	placeholder: "Selecciona la cuenta de IVA retenido cobrado",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_isr_reten_id").select2({
+				$("#proveed_cta_isr_reten_id").select2({
 				  	placeholder: "Selecciona la cuenta de ISR retenido",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_por_cobrar_id").select2({
-				  	placeholder: "Selecciona la cuenta por cobrar",
+				$("#proveed_cta_por_pagar_id").select2({
+				  	placeholder: "Selecciona la cuenta por pagar",
 				  	allowClear: true
 				});
 
-				$("#cliente_cta_anticp_client_id").select2({
+				$("#proveed_cta_anticp_prov_id").select2({
 				  	placeholder: "Selecciona la cuenta de anticipo",
 				  	allowClear: true
 				});
@@ -957,54 +956,54 @@
 
 
 	    	$.mask.definitions['~']='[+-]';
-			$('#cliente_tel_contact').mask('(999) 999-9999');
-			$('#cliente_tel_contact_otro').mask('(999) 999-9999');
-			$('#cliente_tel').mask('(999) 999-9999');
+			$('#proveed_tel_contct').mask('(999) 999-9999');
+			$('#proveed_tel_contct_otro').mask('(999) 999-9999');
+			$('#proveed_tel').mask('(999) 999-9999');
 		
-			jQuery.validator.addMethod("cliente_rfc", function (value, element) {
+			jQuery.validator.addMethod("proveed_rfc", function (value, element) {
 				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
 			}, "Introduzca un RFC válido.");
 		
-			$('#editacliente').validate({
+			$('#editaproveedor').validate({
 				errorElement: 'div',
 				errorClass: 'help-block',
 				focusInvalid: false,
 				ignore: "",
 				rules: {
-					cliente_nom: {
+					proveed_nom: {
 						required: true
 					},
-					cliente_email: {
+					proveed_email: {
 						required: true,
 						email:true
 					},
-					cliente_rfc: {
+					proveed_rfc: {
 						required: true,
-						cliente_rfc: 'required'
+						proveed_rfc: 'required'
 					},
-					cliente_tel: {
+					proveed_tel: {
 						required: true
-					},
-					cliente_tipocliente_id: {
+					}/*,
+					proveed_tipprov_id: {
 						required: true
-					}
+					}*/
 				},
 		
 				messages: {
-					cliente_nom: {
+					proveed_nom: {
 						required: "Este campo es requerido."
 					},
-					cliente_email: {
+					proveed_email: {
 						required: "Este campo es requerido.",
 						email: "Introduzca una dirección de correo válida."
 					},
-					cliente_rfc: {
+					proveed_rfc: {
 						required: "Este campo es requerido."
 					},
-					cliente_tel: {
+					proveed_tel: {
 						required: "Este campo es requerido."
 					},
-					cliente_tipocliente_id: {
+					proveed_tipprov_id: {
 						required: "Este campo es requerido."
 					}
 				},

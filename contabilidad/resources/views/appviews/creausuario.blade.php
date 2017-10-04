@@ -242,6 +242,13 @@
 
 		<script type="text/javascript">
 
+			/* Marcando el menú seleccionado */
+	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
+				  value.classList.remove("active");
+				});
+	        	$("#menuusuarios").addClass('active');
+	        	$("#menuseguridad").addClass('open');
+
 			$("#roles").select2({
 	            placeholder: "Selecciona los roles",
 	            allowClear: true

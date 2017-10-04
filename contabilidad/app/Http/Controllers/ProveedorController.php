@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Cliente;
+use App\Proveedor;
 use App\Direccion;
 use App\Munic;
 use App\Cpmex;
 use App\Country;
-use App\TipoCliente;
+use App\TipoProveedor;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-class ClienteController extends Controller
+class ProveedorController extends Controller
 {
     
     public function __construct()
@@ -27,14 +27,14 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::all();
-        $clientes_list = array();
-        $clientes_contador = 0;
-        foreach ($clientes as $cl) {
-            $clientes_list[$clientes_contador] = ['ID'=>$cl->id,'cliente_nom'=>$cl->cliente_nom,'cliente_rfc'=>$cl->cliente_rfc,'cliente_email'=>$cl->cliente_email,'cliente_concepto_polz'=>$cl->cliente_concepto_polz];
-            $clientes_contador ++;
+        $proveedores = Proveedor::all();
+        $proveedores_list = array();
+        $proveedores_contador = 0;
+        foreach ($proveedores as $pv) {
+            $proveedores_list[$proveedores_contador] = ['ID'=>$pv->id,'proveed_nom'=>$pv->proveed_nom,'proveed_rfc'=>$pv->proveed_rfc,'proveed_email'=>$pv->proveed_email,'proveed_tel'=>$pv->proveed_tel,'proveed_concepto_polz'=>$pv->proveed_concepto_polz];
+            $proveedores_contador ++;
         }
-        return view('appviews.listaclientes',['clientes'=>json_encode($clientes_list)]);
+        return view('appviews.listaproveedores',['proveedores'=>json_encode($proveedores_list)]);
     }
 
     /**
@@ -45,7 +45,7 @@ class ClienteController extends Controller
     public function create()
     {
         $domicilios = Direccion::all();
-        return view('appviews.creacliente',['domicilios'=>$domicilios,'countries'=>Country::all(),'tipocliente'=>TipoCliente::all(),'cliente_forma_contab'=>[],'cliente_cta_ingreso_id'=>[],'cliente_cta_desc_id'=>[],'cliente_cta_iva_traslad_x_cob_id'=>[],'cliente_cta_iva_traslad_cob_id'=>[],'cliente_cta_iva_reten_x_cob_id'=>[],'cliente_cta_iva_reten_cob_id'=>[],'cliente_cta_isr_reten_id'=>[],'cliente_cta_por_cobrar_id'=>[],'cliente_cta_anticp_client_id'=>[]]);
+        return view('appviews.creaproveedor',['domicilios'=>$domicilios,'countries'=>Country::all(),'tipoproveedor'=>TipoProveedor::all(),'proveed_forma_contab'=>[],'proveed_cta_egreso_id'=>[],'proveed_cta_desc_id'=>[],'proveed_cta_iva_acredit_x_cob_id'=>[],'proveed_cta_iva_acredit_cob_id'=>[],'proveed_cta_iva_reten_x_cob_id'=>[],'proveed_cta_iva_reten_cob_id'=>[],'proveed_cta_isr_reten_id'=>[],'proveed_cta_por_pagar_id'=>[],'proveed_cta_anticp_prov_id'=>[]]);
     }
 
     /**
@@ -70,7 +70,7 @@ class ClienteController extends Controller
             $new_dir->direc_cp = array_key_exists('dom_cp',$alldata) ? $alldata['dom_cp'] : '';
             $new_dir->direc_pais = 'MEX';
             $new_dir->save();
-            $alldata['cliente_direc_id'] =  $new_dir->id;
+            $alldata['proveed_direc_id'] =  $new_dir->id;
         }
         unset($alldata['dom_search_cp']);
         unset($alldata['dom_estado_aux']);
@@ -84,14 +84,14 @@ class ClienteController extends Controller
         unset($alldata['dom_numext']);
         unset($alldata['dom_numint']);
 
-        $cliente = new Cliente($alldata);
-        $cliente->save();
+        $proveedor = new Proveedor($alldata);
+        $proveedor->save();
 
-        $fmessage = 'Se ha creado el cliente: '.$cliente->cliente_nom;
+        $fmessage = 'Se ha creado el proveedor: '.$proveedor->proveed_nom;
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
-        return redirect()->route('clientes.index');
+        return redirect()->route('proveedores.index');
     }
 
     /**
@@ -102,7 +102,7 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
-
+        //
     }
 
     /**
@@ -113,9 +113,9 @@ class ClienteController extends Controller
      */
     public function edit($id)
     {
-        $cliente = Cliente::findOrFail($id);
+        $proveedor = Proveedor::findOrFail($id);
         $domicilios = Direccion::all();
-        return view('appviews.editacliente',['cliente'=>$cliente,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipocliente'=>TipoCliente::all(),'cliente_forma_contab'=>[],'cliente_cta_ingreso_id'=>[],'cliente_cta_desc_id'=>[],'cliente_cta_iva_traslad_x_cob_id'=>[],'cliente_cta_iva_traslad_cob_id'=>[],'cliente_cta_iva_reten_x_cob_id'=>[],'cliente_cta_iva_reten_cob_id'=>[],'cliente_cta_isr_reten_id'=>[],'cliente_cta_por_cobrar_id'=>[],'cliente_cta_anticp_client_id'=>[]]);
+        return view('appviews.editaproveedor',['proveedor'=>$proveedor,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipoproveedor'=>TipoProveedor::all(),'proveed_forma_contab'=>[],'proveed_cta_egreso_id'=>[],'proveed_cta_desc_id'=>[],'proveed_cta_iva_acredit_x_cob_id'=>[],'proveed_cta_iva_acredit_cob_id'=>[],'proveed_cta_iva_reten_x_cob_id'=>[],'proveed_cta_iva_reten_cob_id'=>[],'proveed_cta_isr_reten_id'=>[],'proveed_cta_por_pagar_id'=>[],'proveed_cta_anticp_prov_id'=>[]]);
     }
 
     /**
@@ -129,7 +129,7 @@ class ClienteController extends Controller
     {
         $alldata = $request->all();
         $logued_user = Auth::user();
-        $cliente = Cliente::findOrFail($id);
+        $proveedor = Proveedor::findOrFail($id);
         if(array_key_exists('nueva_dir',$alldata)){
             $new_dir = new Direccion();
             $new_dir->direc_calle = array_key_exists('dom_calle',$alldata) ? $alldata['dom_calle'] : '';
@@ -142,38 +142,38 @@ class ClienteController extends Controller
             $new_dir->direc_cp = array_key_exists('dom_cp',$alldata) ? $alldata['dom_cp'] : '';
             $new_dir->direc_pais = 'MEX';
             $new_dir->save();
-            $alldata['cliente_direc_id'] =  $new_dir->id;
+            $alldata['proveed_direc_id'] =  $new_dir->id;
         }
 
-        $cliente->cliente_nom = $alldata['cliente_nom'];
-        $cliente->cliente_rfc = $alldata['cliente_rfc'];
-        $cliente->cliente_email = $alldata['cliente_email'];
-        $cliente->cliente_tel = $alldata['cliente_tel'];
-        $cliente->cliente_direc_id = $alldata['cliente_direc_id'];
-        $cliente->cliente_concepto_polz = $alldata['cliente_concepto_polz'];
-        $cliente->cliente_forma_contab = $alldata['cliente_forma_contab'];
-        $cliente->cliente_cta_ingreso_id = $alldata['cliente_cta_ingreso_id'];
-        $cliente->cliente_cta_desc_id = $alldata['cliente_cta_desc_id'];
-        $cliente->cliente_cta_iva_traslad_x_cob_id = $alldata['cliente_cta_iva_traslad_x_cob_id'];
-        $cliente->cliente_cta_iva_traslad_cob_id = $alldata['cliente_cta_iva_traslad_cob_id'];
-        $cliente->cliente_cta_iva_reten_x_cob_id = $alldata['cliente_cta_iva_reten_x_cob_id'];
-        $cliente->cliente_cta_iva_reten_cob_id = $alldata['cliente_cta_iva_reten_cob_id'];
-        $cliente->cliente_cta_isr_reten_id = $alldata['cliente_cta_isr_reten_id'];
-        $cliente->cliente_cta_por_cobrar_id = $alldata['cliente_cta_por_cobrar_id'];
-        $cliente->cliente_nom_contct = $alldata['cliente_nom_contct'];
-        $cliente->cliente_tel_contct = $alldata['cliente_tel_contct'];
-        $cliente->cliente_email_contct = $alldata['cliente_email_contct'];
-        $cliente->cliente_nom_contct_otro = $alldata['cliente_nom_contct_otro'];
-        $cliente->cliente_tel_contct_otro = $alldata['cliente_tel_contct_otro'];
-        $cliente->cliente_email_contct_otro = $alldata['cliente_email_contct_otro'];
+        $proveedor->proveed_nom = $alldata['proveed_nom'];
+        $proveedor->proveed_rfc = $alldata['proveed_rfc'];
+        $proveedor->proveed_email = $alldata['proveed_email'];
+        $proveedor->proveed_tel = $alldata['proveed_tel'];
+        $proveedor->proveed_direc_id = $alldata['proveed_direc_id'];
+        $proveedor->proveed_concepto_polz = $alldata['proveed_concepto_polz'];
+        $proveedor->proveed_forma_contab = $alldata['proveed_forma_contab'];
+        $proveedor->proveed_cta_egreso_id = $alldata['proveed_cta_egreso_id'];
+        $proveedor->proveed_cta_desc_id = $alldata['proveed_cta_desc_id'];
+        $proveedor->proveed_cta_iva_acredit_x_cob_id = $alldata['proveed_cta_iva_acredit_x_cob_id'];
+        $proveedor->proveed_cta_iva_acredit_cob_id = $alldata['proveed_cta_iva_acredit_cob_id'];
+        $proveedor->proveed_cta_iva_reten_x_cob_id = $alldata['proveed_cta_iva_reten_x_cob_id'];
+        $proveedor->proveed_cta_iva_reten_cob_id = $alldata['proveed_cta_iva_reten_cob_id'];
+        $proveedor->proveed_cta_isr_reten_id = $alldata['proveed_cta_isr_reten_id'];
+        $proveedor->proveed_cta_por_pagar_id = $alldata['proveed_cta_por_pagar_id'];
+        $proveedor->proveed_nom_contct = $alldata['proveed_nom_contct'];
+        $proveedor->proveed_tel_contct = $alldata['proveed_tel_contct'];
+        $proveedor->proveed_email_contct = $alldata['proveed_email_contct'];
+        $proveedor->proveed_nom_contct_otro = $alldata['proveed_nom_contct_otro'];
+        $proveedor->proveed_tel_contct_otro = $alldata['proveed_tel_contct_otro'];
+        $proveedor->proveed_email_contct_otro = $alldata['proveed_email_contct_otro'];
 
-        $cliente->save();
+        $proveedor->save();
 
-        $fmessage = 'Se ha actualizado el cliente: '.$alldata['cliente_nom'];
+        $fmessage = 'Se ha actualizado el proveedor: '.$alldata['proveed_nom'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
-        return redirect()->route('clientes.index');
+        return redirect()->route('proveedores.index');
     }
 
     /**

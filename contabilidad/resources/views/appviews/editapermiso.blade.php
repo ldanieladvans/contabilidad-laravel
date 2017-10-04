@@ -142,7 +142,12 @@
 
 		<script type="text/javascript">
 
-
+			/* Marcando el menú seleccionado */
+	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
+				  value.classList.remove("active");
+				});
+	        	$("#menupermisos").addClass('active');
+	        	$("#menuseguridad").addClass('open');
 
 			$('#editapermiso').validate({
 				errorElement: 'div',

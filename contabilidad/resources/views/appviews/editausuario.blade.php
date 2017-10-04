@@ -44,7 +44,7 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				{{ Form::open(['route' => ['usuarios.update', $usuario->id], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left']) }}
+				{{ Form::open(['route' => ['usuarios.update', $usuario->id], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left', 'id'=>'editausuario']) }}
                 		{{ Form::hidden('_method', 'PUT') }}
 
 					<table border="0" class="col-md-12 col-sm-12 col-xs-12">
@@ -173,7 +173,7 @@
 						                    <div class="col-md-10 col-sm-10 col-xs-12">
 						                        <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="js-example-basic-multiple" multiple="multiple" style="width: 100%; display: none;">
 													@foreach($permisos as $permiso)
-						                            	<option value="{{ $permiso->id }}" {{$usuario->customGetUserPerms($permission->id,true) ? 'selected':''}}>{{ $permiso->name }}</option>
+						                            	<option value="{{ $permiso->id }}" {{$usuario->customGetUserPerms($permiso->id,true) ? 'selected':''}}>{{ $permiso->name }}</option>
 						                            @endforeach
 						                      </select>
 						                  	</div>
@@ -223,6 +223,13 @@
 
 
 		<script type="text/javascript">
+
+			/* Marcando el menú seleccionado */
+	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
+				  value.classList.remove("active");
+				});
+	        	$("#menuusuarios").addClass('active');
+	        	$("#menuseguridad").addClass('open');
 
 			$("#roles").select2({
 	            placeholder: "Selecciona los roles",
@@ -374,7 +381,7 @@
 			jQuery.validator.addMethod("phone", function (value, element) {
 					return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
 				}, "Ingrese un número telefónico válido.");
-			$('#creausuario').validate({
+			$('#editausuario').validate({
 				errorElement: 'div',
 				errorClass: 'help-block',
 				focusInvalid: false,

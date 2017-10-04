@@ -69,6 +69,15 @@
 							</div>
 						</div>
 
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_tel">Teléfono:</label>
+						<div class="col-md-4 col-sm-4 col-xs-12">
+							<div class="clearfix">
+								<input type="tel" name="cliente_tel" id="cliente_tel" class="col-md-10 col-sm-10 col-xs-12"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_tipocliente_id">Tipo:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="cliente_tipocliente_id" name="cliente_tipocliente_id" data-placeholder="Seleccione el tipo de cliente ..." style="width: 83%; display: none;">
@@ -262,7 +271,23 @@
 																<input type="text" name="cliente_concepto_polz" id="cliente_concepto_polz" class="col-md-10 col-sm-10 col-xs-12"/>
 															</div>
 														</div>
-													</div>	
+													</div>
+												</td>
+												<td>
+													
+												</td>
+											</tr>
+											<tr>
+												<td width="50%">
+													<div class="form-group">
+														<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_anticp_client_id">Cuenta de anticipo:</label>
+							                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_anticp_client_id" id="cliente_cta_anticp_client_id" style="width: 60%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($cliente_cta_anticp_client_id as $ccac)
+								                            	<option value="{{ $ccac->id }}">{{ $ccac->id }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
 												</td>
 												<td width="50%">
 													<div class="form-group">
@@ -494,6 +519,7 @@
 										</table>
 
 									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -621,6 +647,11 @@
 
 				$("#cliente_cta_por_cobrar_id").select2({
 				  	placeholder: "Selecciona la cuenta por cobrar",
+				  	allowClear: true
+				});
+
+				$("#cliente_cta_anticp_client_id").select2({
+				  	placeholder: "Selecciona la cuenta de anticipo",
 				  	allowClear: true
 				});
 			
@@ -928,6 +959,7 @@
 	    	$.mask.definitions['~']='[+-]';
 			$('#cliente_tel_contact').mask('(999) 999-9999');
 			$('#cliente_tel_contact_otro').mask('(999) 999-9999');
+			$('#cliente_tel').mask('(999) 999-9999');
 		
 			jQuery.validator.addMethod("cliente_rfc", function (value, element) {
 				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
@@ -949,10 +981,13 @@
 					cliente_rfc: {
 						required: true,
 						cliente_rfc: 'required'
-					}/*,
+					},
+					cliente_tel: {
+						required: true
+					},
 					cliente_tipocliente_id: {
 						required: true
-					}*/
+					}
 				},
 		
 				messages: {
@@ -964,6 +999,9 @@
 						email: "Introduzca una dirección de correo válida."
 					},
 					cliente_rfc: {
+						required: "Este campo es requerido."
+					},
+					cliente_tel: {
 						required: "Este campo es requerido."
 					},
 					cliente_tipocliente_id: {

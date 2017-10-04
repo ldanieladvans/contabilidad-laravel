@@ -97,6 +97,10 @@
 				        headerFilter: {
 				            visible: true
 				        },
+				        pager:{
+				        	showPageSizeSelector: true,
+            				allowedPageSizes: [10,20,50,100]
+				        },
 				        paging: {
 				            pageSize: 10
 				        },  

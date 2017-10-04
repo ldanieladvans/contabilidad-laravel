@@ -22,7 +22,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Bitácora</a>
+	            <a href="#">Lista de Proveedores</a>
 	        </li>
 	    </ul>
 	</div>
@@ -42,16 +42,18 @@
 
 @section('variable_content')
 	<div class="row">
+		<div id="crearproveedor"></div>
 		<!-- Input para guardar datos del grid -->
-			<input type="hidden" value="{{$bits}}" id="bits"/>
+			<input type="hidden" value="{{$proveedores}}" id="proveedores"/>
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
-
+				<div id="borrarLista" align="justify"></div>
+				<div id="editarLista" align="justify"></div>
 			</div>
 		
 		<!-- Div DataGrid -->
-		<div id="bitsLista"></div>
+		<div id="proveedorLista"></div>
 	</div>
 @endsection
 
@@ -66,19 +68,19 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menubits").addClass('active');
-	        	$("#menuseguridad").addClass('open');
+	        	$("#menuproveedor").addClass('active');
+	        	$("#menudirectorio").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){
 
-					var data = jQuery.parseJSON(document.getElementById('bits').value);
+					var data = jQuery.parseJSON(document.getElementById('proveedores').value);
 
-				    var dataGrid = $("#bitsLista").dxDataGrid({
+				    var dataGrid = $("#proveedorLista").dxDataGrid({
 				        dataSource: data,
 				        allowColumnReordering: true,
 				        selection: {
-				            mode: "single"
+				            mode: "multiple"
 				        },
 				        grouping: {
 				            autoExpandAll: true,
@@ -110,36 +112,30 @@
 				        noDataText: 'Sin datos',
 				        columns: [
 				            {
-				                dataField: "bitac_user",
-				                caption: 'Usuario'
+				                dataField: "proveed_nom",
+				                caption: 'Nombre'
 				            },
 				            {
-				                dataField: "bitac_fecha",
-				                caption: 'Fecha'
+				                dataField: "proveed_rfc",
+				                caption: 'RFC'
 				            },
 				            {
-				                dataField: "bitac_tipo_op",
-				                caption: 'Operación'
+				                dataField: "proveed_email",
+				                caption: 'Correo'
 				            },
 				            {
-				                dataField: "bitac_ip",
-				                caption: 'Ip'
+				                dataField: "proveed_tel",
+				                caption: 'Teléfono'
 				            },
 				            {
-				                dataField: "bitac_naveg",
-				                caption: 'Navegador'
-				            },
-				            {
-				                dataField: "bitac_modulo",
-				                caption: 'Módulo'
-				            },
-				            {
-				                dataField: "bitac_msg",
-				                caption: 'Mensaje'
+				                dataField: "proveed_concepto_polz",
+				                caption: 'Concepto'
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
 				            var data = selectedItems.selectedRowsData;
+				            deleteButton.option("disabled", !data.length);
+				            editButton.option("disabled", data.length!=1);
 				        },
 				        sortByGroupSummaryInfo: [{
 				            summaryItem: "count"
@@ -171,6 +167,59 @@
 				        }
 				    }).dxDataGrid("instance");
 
+
+				    /* Botón de creación */
+				    $("#crearproveedor").dxButton({
+				        text: "Crear",
+				        type: "default",
+				        onClick: function(e) { 
+				        	//DevExpress.ui.notify("The Apply button was clicked");
+				        	window.location.href = window.location.href + '/create';
+				        }
+				    });
+
+
+				    /* Botones de opciones */
+				    var deleteButton = $("#borrarLista").dxButton({
+				        text: "Eliminar",
+				        disabled: true,
+				        icon: 'trash',
+				        onClick: function () {
+				        	var del_list = [];
+				            //dataGrid.clearSelection();
+				            //console.log(dataGrid.getSelectedRowKeys());
+				            dataGrid.getSelectedRowKeys().forEach(function(item){
+		                        del_list.push(item['ID']);
+		                    });
+				            bootbox.confirm("¿Está seguro que quiere eliminar estos registros?", function(result) {
+								if(result) {
+									$('#loadingmodal').modal('show');
+						    		$.ajax({
+						                url: '/delItems',
+					                	type: 'POST',
+					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Proveedor'},
+						                dataType: 'JSON',
+						                success: function (data) {
+					                	    $('#loadingmodal').modal('hide');
+					                	    window.location.href = window.location.href;
+						                },
+						                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+						                    console.log(errorThrown);
+					                    }
+						            });
+								}
+							});
+				        }
+				    }).dxButton("instance");
+
+				    var editButton = $("#editarLista").dxButton({
+				        text: "Editar",
+				        disabled: true,
+				        icon: 'edit',
+				        onClick: function () {
+				            window.location.href = 'proveedores/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				        }
+				    }).dxButton("instance");  
 				});
         </script>
 @endsection
