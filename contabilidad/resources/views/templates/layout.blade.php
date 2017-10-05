@@ -397,6 +397,29 @@
           setTimeout(function() {
               $('#alertmsgcta').trigger('click');
           }, 4e3);
+
+      	function productoIngreso(prodingr_cod_prod='',prodingr_tipcliente_id='false',prodingr_cliente_id='false',prodingr_cta_ingr_id='false'){
+          	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          	$('#loadingmodal').modal('show');
+            $.ajax({
+                url: '/prodingr',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,prodingr_cod_prod:prodingr_cod_prod,prodingr_tipcliente_id:prodingr_tipcliente_id,prodingr_cliente_id:prodingr_cliente_id,prodingr_cta_ingr_id:prodingr_cta_ingr_id},
+                dataType: 'JSON',
+                success: function (data) {
+            	    $('#loadingmodal').modal('hide');
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    console.log(errorThrown);
+                }
+            });
+
+      	}
+
+          function productoEgreso(){
+          	
+          }
         </script>
 	@show
 	</body>

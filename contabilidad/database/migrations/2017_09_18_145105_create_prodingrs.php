@@ -17,7 +17,7 @@ class CreateProdingrs extends Migration
         Schema::create('prodingr', function (Blueprint $table) {
             $table->increments('id');
             $table->string('prodingr_cod_prod')->nullable();
-           
+            $table->string('devext_id')->nullable();
             
             $table->timestamps();
         });

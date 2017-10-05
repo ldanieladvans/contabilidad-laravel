@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/daterangepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-datetimepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-colorpicker.min.css') }}" />
+	<!--<link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.spa.css') }}" />-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.common.css') }}" />
+    <link rel="dx-theme" data-theme="generic.light" href="{{ asset('DevExtreme/Sources/Lib/css/dx.light.css') }}" />
 @endsection
 
 @section('breadcrumbs')
@@ -43,6 +46,11 @@
 				<!-- PAGE CONTENT BEGINS -->
 				{{ Form::open(['route' => ['tproveedores.update', $tproveedor->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editatproveedor']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
+
+                	<input type="hidden" value="{{$egresos_productos}}" id="egresos_productos"/>
+                	<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
+                	<input type="hidden" value="{{$tproveedor}}" id="tproveedor"/>
+
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-2 col-md-2" for="tipprov_desc">Nombre/Descripción:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
@@ -64,6 +72,13 @@
 										<a data-toggle="tab" href="#messages">
 											<i class="green ace-icon fa fa-bank bigger-120"></i>
 											Contabilidad
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#prodsat">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Producto/SAT
 										</a>
 									</li>
 
@@ -197,6 +212,12 @@
 										</table>
 									</div>
 
+									<div id="prodsat" class="tab-pane fade">
+										<div class="form-group">
+											<div id="gridContainer"></div>
+										</div>
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -232,6 +253,8 @@
 		<script src="{{ asset('ac_theme/assets/js/jquery.dataTables.bootstrap.min.js') }}"></script>
 
 		<script src="{{ asset('ac_theme/assets/js/dataTables.select.min.js') }}"></script>
+
+		<script src="{{ asset('DevExtreme/Sources/Lib/js/dx.all.js') }}"></script>
 		<!-- ace scripts -->
 		<script src="{{ asset('ac_theme/assets/js/ace-elements.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/ace.min.js') }}"></script>
@@ -246,6 +269,8 @@
 	    	var dom_cp_serv = '';
 	    	var dom_munic_text = '';
 	    	var dtobj = null;
+
+	    	var tproveedor = jQuery.parseJSON(document.getElementById("tproveedor").value);
 
 			//$('#loadingmodal').modal('show');
 
@@ -355,6 +380,129 @@
 					console.log('2');
 				}
 			});
+
+
+		var egresos_productos = jQuery.parseJSON(document.getElementById('egresos_productos').value);
+		var cuentas = jQuery.parseJSON(document.getElementById('cuentas').value);
+
+		/*Tabla Producto SAT*/
+			$("#gridContainer").dxDataGrid({
+		        dataSource: egresos_productos,
+		        paging: {
+		            enabled: false
+		        },
+		        editing: {
+		            mode: "row",
+		            allowUpdating: true,
+		            allowDeleting: true,
+		            allowAdding: true,
+		            texts:{
+		            	addRow: 'Nueva',
+		            	cancelRowChanges: 'Cancelar',
+		            	deleteRow: 'Borrar',
+		            	editRow: 'Editar',
+		            	saveRowChanges: 'Guardar',
+		            	confirmDeleteMessage: '¿Está seguro que quiere eliminar este registro?'
+		            },
+		        }, 
+		        columns: [
+		            {
+		                dataField: "prodgast_cod_prod",
+		                caption: "Código Producto",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            }, {
+		                dataField: "prodgast_cta_gast_id",
+		                caption: "Cuenta",
+		                lookup: {
+		                    dataSource: cuentas,
+		                    displayExpr: "Name",
+		                    valueExpr: "ID"
+		                },
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            }   
+		        ],
+		        onEditingStart: function(e) {
+		            console.log("EditingStart");
+		        },
+		        onInitNewRow: function(e) {
+		            console.log("InitNewRow");
+		        },
+		        onRowInserting: function(e) {
+		            console.log("RowInserting");
+		        },
+		        onRowInserted: function(e) {
+		            console.log("RowInserted");
+
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodgast',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodgast_cod_prod:e.data.prodgast_cod_prod,prodgast_tipprov_id:tproveedor.id,prodgast_proveed_id:'false',prodgast_cta_gast_id:e.data.prodgast_cta_gast_id,crudmethod:'create',row_id:'false'},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+
+		            e.component.deleteRow(e.key.__KEY__);
+
+		            console.log(e);
+		        },
+		        onRowUpdating: function(e) {
+		            console.log("RowUpdating");
+		        },
+		        onRowUpdated: function(e) {
+		            console.log("RowUpdated");
+		            console.log(e);
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodgast',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodgast_cod_prod:e.key.prodgast_cod_prod,prodgast_tipprov_id:tproveedor.id,prodgast_proveed_id:'false',prodgast_cta_gast_id:e.key.prodgast_cta_gast_id,crudmethod:'edit',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoving: function(e) {
+		            console.log("RowRemoving");
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodgast',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodgast_cod_prod:e.data.prodgast_cod_prod,prodgast_tipprov_id:tproveedor.id,prodgast_proveed_id:'false',prodgast_cta_gast_id:e.data.prodgast_cta_gast_id,crudmethod:'delete',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoved: function(e) {
+		            console.log("RowRemoved");
+		        }
+		    });
 
 		</script>
 

@@ -49,6 +49,7 @@
 
                 	<input type="hidden" value="{{$ingresos_productos}}" id="ingresos_productos"/>
                 	<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
+                	<input type="hidden" value="{{$cliente}}" id="cliente"/>
                 	
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_nom">Nombre:</label>
@@ -599,6 +600,8 @@
 	    	var dom_munic_text = '';
 	    	var dtobj = null;
 
+	    	var cliente = jQuery.parseJSON(document.getElementById("cliente").value);
+
 			//$('#loadingmodal').modal('show');
 
 			/* Marcando el menú seleccionado */
@@ -1086,12 +1089,23 @@
 		            mode: "row",
 		            allowUpdating: true,
 		            allowDeleting: true,
-		            allowAdding: true
+		            allowAdding: true,
+		            texts:{
+		            	addRow: 'Nueva',
+		            	cancelRowChanges: 'Cancelar',
+		            	deleteRow: 'Borrar',
+		            	editRow: 'Editar',
+		            	saveRowChanges: 'Guardar',
+		            	confirmDeleteMessage: '¿Está seguro que quiere eliminar este registro?'
+		            },
 		        }, 
 		        columns: [
 		            {
 		                dataField: "prodingr_cod_prod",
-		                caption: "Código Producto"
+		                caption: "Código Producto",
+		                validationRules: [{
+		                    type: "required"
+		                }]
 		            }, {
 		                dataField: "prodingr_cta_ingr_id",
 		                caption: "Cuenta",
@@ -1099,7 +1113,10 @@
 		                    dataSource: cuentas,
 		                    displayExpr: "Name",
 		                    valueExpr: "ID"
-		                }
+		                },
+		                validationRules: [{
+		                    type: "required"
+		                }]
 		            }   
 		        ],
 		        onEditingStart: function(e) {
@@ -1113,15 +1130,66 @@
 		        },
 		        onRowInserted: function(e) {
 		            console.log("RowInserted");
+
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodingr',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodingr_cod_prod:e.data.prodingr_cod_prod,prodingr_tipcliente_id:'false',prodingr_cliente_id:cliente.id,prodingr_cta_ingr_id:e.data.prodingr_cta_ingr_id,crudmethod:'create',row_id:'false'},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+
+		            console.log(e);
 		        },
 		        onRowUpdating: function(e) {
 		            console.log("RowUpdating");
 		        },
 		        onRowUpdated: function(e) {
 		            console.log("RowUpdated");
+		            console.log(e);
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodingr',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodingr_cod_prod:e.key.prodingr_cod_prod,prodingr_tipcliente_id:'false',prodingr_cliente_id:cliente.id,prodingr_cta_ingr_id:e.key.prodingr_cta_ingr_id,crudmethod:'edit',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
 		        },
 		        onRowRemoving: function(e) {
 		            console.log("RowRemoving");
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/prodingr',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN,prodingr_cod_prod:e.key.prodingr_cod_prod,prodingr_tipcliente_id:'false',prodingr_cliente_id:cliente.id,prodingr_cta_ingr_id:e.key.prodingr_cta_ingr_id,crudmethod:'delete',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
 		        },
 		        onRowRemoved: function(e) {
 		            console.log("RowRemoved");

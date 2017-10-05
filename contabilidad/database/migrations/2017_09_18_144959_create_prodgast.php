@@ -17,6 +17,7 @@ class CreateProdgast extends Migration
         Schema::create('prodgast', function (Blueprint $table) {
             $table->increments('id');
             $table->string('prodgast_cod_prod')->nullable();
+            $table->string('devext_id')->nullable();
            
             
             $table->timestamps();

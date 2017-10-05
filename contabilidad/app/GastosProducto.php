@@ -8,7 +8,7 @@ class GastosProducto extends Model
 {
     protected $table = "prodgast";
 
-    protected $fillable = ['prodgast_cod_prod','prodgast_tipprov_id','prodgast_proveed_id','prodgast_cta_gast_id'];
+    protected $fillable = ['prodgast_cod_prod','prodgast_tipprov_id','prodgast_proveed_id','prodgast_cta_gast_id','devext_id'];
 
     public function __construct(array $attributes = [])
     {

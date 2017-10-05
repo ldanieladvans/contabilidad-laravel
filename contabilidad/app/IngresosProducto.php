@@ -8,7 +8,7 @@ class IngresosProducto extends Model
 {
     protected $table = "prodingr";
 
-    protected $fillable = ['prodingr_cod_prod','prodingr_tipcliente_id','prodingr_cliente_id','prodingr_cta_ingr_id'];
+    protected $fillable = ['prodingr_cod_prod','prodingr_tipcliente_id','prodingr_cliente_id','prodingr_cta_ingr_id','devext_id'];
 
     public function __construct(array $attributes = [])
     {

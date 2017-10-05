@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cliente;
 use App\TipoCliente;
+use App\IngresosProducto;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,8 +83,21 @@ class TipoClienteController extends Controller
      */
     public function edit($id)
     {
+        $ingresos_producto = IngresosProducto::where('prodingr_tipcliente_id',$id)->get();
+        $ingresos_producto_list = array();
+        $ingresos_producto_contador = 0;
+
+        $cuentas = array();
+        $cuentas[0]=['ID'=>1,'Name'=>'Cuenta 1'];
+        $cuentas[1]=['ID'=>2,'Name'=>'Cuenta 2'];
+
+        foreach ($ingresos_producto as $ip) {
+            $ingresos_producto_list[$ingresos_producto_contador] = ['ID'=>$ip->id,'prodingr_cod_prod'=>$ip->prodingr_cod_prod,'prodingr_cta_ingr_id'=>$ip->prodingr_cta_ingr_id];
+            $ingresos_producto_contador ++;
+        }
+
         $tcliente = TipoCliente::findOrFail($id);
-        return view('appviews.editatcliente',['tcliente'=>$tcliente,'tipcliente_cta_ingreso_id'=>[],'tipcliente_cta_desc_id'=>[],'tipcliente_cta_iva_traslad_x_cob_id'=>[],'tipcliente_cta_iva_traslad_cob_id'=>[],'tipcliente_cta_iva_reten_x_cob_id'=>[],'tipcliente_cta_iva_reten_cob_id'=>[],'tipcliente_cta_isr_reten_id'=>[],'tipcliente_cta_por_cobrar_id'=>[],'tipcliente_cta_anticp_client_id'=>[]]);
+        return view('appviews.editatcliente',['tcliente'=>$tcliente,'tipcliente_cta_ingreso_id'=>[],'tipcliente_cta_desc_id'=>[],'tipcliente_cta_iva_traslad_x_cob_id'=>[],'tipcliente_cta_iva_traslad_cob_id'=>[],'tipcliente_cta_iva_reten_x_cob_id'=>[],'tipcliente_cta_iva_reten_cob_id'=>[],'tipcliente_cta_isr_reten_id'=>[],'tipcliente_cta_por_cobrar_id'=>[],'tipcliente_cta_anticp_client_id'=>[],'ingresos_productos'=>json_encode($ingresos_producto_list),'cuentas'=>json_encode($cuentas)]);
     }
 
     /**

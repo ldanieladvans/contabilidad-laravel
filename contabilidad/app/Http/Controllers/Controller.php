@@ -13,6 +13,8 @@ use App\User;
 use App\Munic;
 use App\Cpmex;
 use App\Bitacora;
+use App\IngresosProducto;
+use App\GastosProducto;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -175,6 +177,150 @@ class Controller extends BaseController
             'msg' => 'ok',
             'roles' => $return_array,
             'alldata' => $alldata
+        );
+        return \Response::json($response);
+    }
+
+
+    public function prodIngr(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $prodingr_cod_prod = false;
+        $prodingr_tipcliente_id = false;
+        $prodingr_cliente_id = false;
+        $prodingr_cta_ingr_id = false;
+        $data_id = false;
+
+        if($alldata['prodingr_cod_prod']!='false'){
+            $to_save_data['prodingr_cod_prod'] = $alldata['prodingr_cod_prod'];
+             $prodingr_cod_prod = $alldata['prodingr_cod_prod'];
+        }
+        if($alldata['prodingr_tipcliente_id']!='false'){
+            $to_save_data['prodingr_tipcliente_id'] = $alldata['prodingr_tipcliente_id'];
+            $prodingr_tipcliente_id = $alldata['prodingr_tipcliente_id'];
+        }
+        if($alldata['prodingr_cliente_id']!='false'){
+            $to_save_data['prodingr_cliente_id'] = $alldata['prodingr_cliente_id'];
+            $prodingr_cliente_id = $alldata['prodingr_cliente_id'];
+        }
+        if($alldata['prodingr_cta_ingr_id']!='false'){
+            $to_save_data['prodingr_cta_ingr_id'] = $alldata['prodingr_cta_ingr_id'];
+            $prodingr_cta_ingr_id = $alldata['prodingr_cta_ingr_id'];
+        }
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $prodingr = new IngresosProducto($to_save_data);
+            $prodingr->save();
+            $data_id = $prodingr->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $prodingr = IngresosProducto::findOrFail($row_id);
+                if($prodingr_cod_prod){
+                    $prodingr->prodingr_cod_prod = $prodingr_cod_prod;
+                }
+                if($prodingr_tipcliente_id){
+                    $prodingr->prodingr_tipcliente_id = $prodingr_tipcliente_id;
+                }
+                if($prodingr_cliente_id){
+                    $prodingr->prodingr_cliente_id = $prodingr_cliente_id;
+                }
+                if($prodingr_cta_ingr_id){
+                    $prodingr->prodingr_cta_ingr_id = $prodingr_cta_ingr_id;
+                }
+                $prodingr->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                IngresosProducto::destroy($row_id);
+            }
+        }
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
+        );
+        return \Response::json($response);
+    }
+
+
+    public function prodGast(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $prodgast_cod_prod = false;
+        $prodgast_tipprov_id = false;
+        $prodgast_proveed_id = false;
+        $prodgast_cta_gast_id = false;
+        $data_id = false;
+
+        if($alldata['prodgast_cod_prod']!='false'){
+            $to_save_data['prodgast_cod_prod'] = $alldata['prodgast_cod_prod'];
+             $prodgast_cod_prod = $alldata['prodgast_cod_prod'];
+        }
+        if($alldata['prodgast_tipprov_id']!='false'){
+            $to_save_data['prodgast_tipprov_id'] = $alldata['prodgast_tipprov_id'];
+            $prodgast_tipprov_id = $alldata['prodgast_tipprov_id'];
+        }
+        if($alldata['prodgast_proveed_id']!='false'){
+            $to_save_data['prodgast_proveed_id'] = $alldata['prodgast_proveed_id'];
+            $prodgast_proveed_id = $alldata['prodgast_proveed_id'];
+        }
+        if($alldata['prodgast_cta_gast_id']!='false'){
+            $to_save_data['prodgast_cta_gast_id'] = $alldata['prodgast_cta_gast_id'];
+            $prodgast_cta_gast_id = $alldata['prodgast_cta_gast_id'];
+        }
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $prodgast = new GastosProducto($to_save_data);
+            $prodgast->save();
+            $data_id = $prodgast->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $prodgast = GastosProducto::findOrFail($row_id);
+                if($prodgast_cod_prod){
+                    $prodgast->prodgast_cod_prod = $prodgast_cod_prod;
+                }
+                if($prodgast_tipprov_id){
+                    $prodgast->prodgast_tipprov_id = $prodgast_tipprov_id;
+                }
+                if($prodgast_proveed_id){
+                    $prodgast->prodgast_proveed_id = $prodgast_proveed_id;
+                }
+                if($prodgast_cta_gast_id){
+                    $prodgast->prodgast_cta_gast_id = $prodgast_cta_gast_id;
+                }
+                $prodgast->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                GastosProducto::destroy($row_id);
+            }
+        }
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
         );
         return \Response::json($response);
     }

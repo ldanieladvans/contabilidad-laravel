@@ -40,6 +40,8 @@ Route::resource('tproveedores', 'TipoProveedorController');
 Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/delItems', 'Controller@delItems');
 Route::post('/permsbyroles', 'Controller@permsbyroles');
+Route::post('/prodingr', 'Controller@prodIngr');
+Route::post('/prodgast', 'Controller@prodGast');
 /* end ldaniel*/
 
 

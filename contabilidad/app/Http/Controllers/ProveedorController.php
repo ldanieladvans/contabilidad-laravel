@@ -9,6 +9,7 @@ use App\Munic;
 use App\Cpmex;
 use App\Country;
 use App\TipoProveedor;
+use App\GastosProducto;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -113,9 +114,22 @@ class ProveedorController extends Controller
      */
     public function edit($id)
     {
+        $egresos_producto = GastosProducto::where('prodgast_proveed_id',$id)->get();
+        $egresos_producto_list = array();
+        $egresos_producto_contador = 0;
+
+        $cuentas = array();
+        $cuentas[0]=['ID'=>1,'Name'=>'Cuenta 1'];
+        $cuentas[1]=['ID'=>2,'Name'=>'Cuenta 2'];
+
+        foreach ($egresos_producto as $ep) {
+            $egresos_producto_list[$egresos_producto_contador] = ['ID'=>$ep->id,'prodgast_cod_prod'=>$ep->prodgast_cod_prod,'prodgast_cta_gast_id'=>$ep->prodgast_cta_gast_id];
+            $egresos_producto_contador ++;
+        }
+
         $proveedor = Proveedor::findOrFail($id);
         $domicilios = Direccion::all();
-        return view('appviews.editaproveedor',['proveedor'=>$proveedor,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipoproveedor'=>TipoProveedor::all(),'proveed_forma_contab'=>[],'proveed_cta_egreso_id'=>[],'proveed_cta_desc_id'=>[],'proveed_cta_iva_acredit_x_cob_id'=>[],'proveed_cta_iva_acredit_cob_id'=>[],'proveed_cta_iva_reten_x_cob_id'=>[],'proveed_cta_iva_reten_cob_id'=>[],'proveed_cta_isr_reten_id'=>[],'proveed_cta_por_pagar_id'=>[],'proveed_cta_anticp_prov_id'=>[]]);
+        return view('appviews.editaproveedor',['proveedor'=>$proveedor,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipoproveedor'=>TipoProveedor::all(),'proveed_forma_contab'=>[],'proveed_cta_egreso_id'=>[],'proveed_cta_desc_id'=>[],'proveed_cta_iva_acredit_x_cob_id'=>[],'proveed_cta_iva_acredit_cob_id'=>[],'proveed_cta_iva_reten_x_cob_id'=>[],'proveed_cta_iva_reten_cob_id'=>[],'proveed_cta_isr_reten_id'=>[],'proveed_cta_por_pagar_id'=>[],'proveed_cta_anticp_prov_id'=>[],'egresos_productos'=>json_encode($egresos_producto_list),'cuentas'=>json_encode($cuentas)]);
     }
 
     /**
