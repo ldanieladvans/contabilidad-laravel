@@ -9,6 +9,7 @@ use App\Munic;
 use App\Cpmex;
 use App\Country;
 use App\TipoCliente;
+use App\IngresosProducto;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -113,9 +114,22 @@ class ClienteController extends Controller
      */
     public function edit($id)
     {
+        $ingresos_producto = IngresosProducto::where('prodingr_cliente_id',$id)->get();
+        $ingresos_producto_list = array();
+        $ingresos_producto_contador = 0;
+
+        $cuentas = array();
+        $cuentas[0]=['ID'=>1,'Name'=>'Cuenta 1'];
+        $cuentas[1]=['ID'=>2,'Name'=>'Cuenta 2'];
+
+        foreach ($ingresos_producto as $ip) {
+            $ingresos_producto_list[$ingresos_producto_contador] = ['ID'=>$ip->id,'prodingr_cod_prod'=>$ip->prodingr_cod_prod,'prodingr_cta_ingr_id'=>$ip->prodingr_cta_ingr_id];
+            $ingresos_producto_contador ++;
+        }
+
         $cliente = Cliente::findOrFail($id);
         $domicilios = Direccion::all();
-        return view('appviews.editacliente',['cliente'=>$cliente,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipocliente'=>TipoCliente::all(),'cliente_forma_contab'=>[],'cliente_cta_ingreso_id'=>[],'cliente_cta_desc_id'=>[],'cliente_cta_iva_traslad_x_cob_id'=>[],'cliente_cta_iva_traslad_cob_id'=>[],'cliente_cta_iva_reten_x_cob_id'=>[],'cliente_cta_iva_reten_cob_id'=>[],'cliente_cta_isr_reten_id'=>[],'cliente_cta_por_cobrar_id'=>[],'cliente_cta_anticp_client_id'=>[]]);
+        return view('appviews.editacliente',['cliente'=>$cliente,'domicilios'=>$domicilios,'countries'=>Country::all(),'tipocliente'=>TipoCliente::all(),'cliente_forma_contab'=>[],'cliente_cta_ingreso_id'=>[],'cliente_cta_desc_id'=>[],'cliente_cta_iva_traslad_x_cob_id'=>[],'cliente_cta_iva_traslad_cob_id'=>[],'cliente_cta_iva_reten_x_cob_id'=>[],'cliente_cta_iva_reten_cob_id'=>[],'cliente_cta_isr_reten_id'=>[],'cliente_cta_por_cobrar_id'=>[],'cliente_cta_anticp_client_id'=>[],'ingresos_productos'=>json_encode($ingresos_producto_list),'cuentas'=>json_encode($cuentas)]);
     }
 
     /**

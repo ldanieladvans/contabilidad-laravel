@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/daterangepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-datetimepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-colorpicker.min.css') }}" />
+	<!--<link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.spa.css') }}" />-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.common.css') }}" />
+    <link rel="dx-theme" data-theme="generic.light" href="{{ asset('DevExtreme/Sources/Lib/css/dx.light.css') }}" />
 @endsection
 
 @section('breadcrumbs')
@@ -43,6 +46,9 @@
 				<!-- PAGE CONTENT BEGINS -->
 				{{ Form::open(['route' => ['clientes.update', $cliente->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editacliente']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
+
+                	<input type="hidden" value="{{$ingresos_productos}}" id="ingresos_productos"/>
+                	<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
                 	
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="cliente_nom">Nombre:</label>
@@ -89,6 +95,8 @@
 						</div>
 					</div>
 
+					
+
 					<div class="form-group">
 						<div class="col-md-12 col-sm-12 col-xs-12">
 
@@ -107,6 +115,13 @@
 										<a data-toggle="tab" href="#messages">
 											<i class="green ace-icon fa fa-bank bigger-120"></i>
 											Contabilidad
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#prodsat">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Producto/SAT
 										</a>
 									</li>
 
@@ -399,6 +414,14 @@
 												</td>
 											</tr>
 										</table>
+
+										
+									</div>
+
+									<div id="prodsat" class="tab-pane fade">
+										<div class="form-group">
+											<div id="gridContainer"></div>
+										</div>
 									</div>
 
 									<div id="contacts" class="tab-pane fade">
@@ -518,8 +541,12 @@
 												</td>
 											</tr>
 										</table>
-
 									</div>
+
+									</br>
+
+									
+
 								</div>
 							</div>
 						</div>
@@ -555,6 +582,8 @@
 		<script src="{{ asset('ac_theme/assets/js/jquery.dataTables.bootstrap.min.js') }}"></script>
 
 		<script src="{{ asset('ac_theme/assets/js/dataTables.select.min.js') }}"></script>
+
+		<script src="{{ asset('DevExtreme/Sources/Lib/js/dx.all.js') }}"></script>
 		<!-- ace scripts -->
 		<script src="{{ asset('ac_theme/assets/js/ace-elements.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/ace.min.js') }}"></script>
@@ -1042,6 +1071,62 @@
 					console.log('2');
 				}
 			});
+
+
+			var ingresos_productos = jQuery.parseJSON(document.getElementById('ingresos_productos').value);
+			var cuentas = jQuery.parseJSON(document.getElementById('cuentas').value);
+
+		/*Tabla Producto SAT*/
+			$("#gridContainer").dxDataGrid({
+		        dataSource: ingresos_productos,
+		        paging: {
+		            enabled: false
+		        },
+		        editing: {
+		            mode: "row",
+		            allowUpdating: true,
+		            allowDeleting: true,
+		            allowAdding: true
+		        }, 
+		        columns: [
+		            {
+		                dataField: "prodingr_cod_prod",
+		                caption: "Código Producto"
+		            }, {
+		                dataField: "prodingr_cta_ingr_id",
+		                caption: "Cuenta",
+		                lookup: {
+		                    dataSource: cuentas,
+		                    displayExpr: "Name",
+		                    valueExpr: "ID"
+		                }
+		            }   
+		        ],
+		        onEditingStart: function(e) {
+		            console.log("EditingStart");
+		        },
+		        onInitNewRow: function(e) {
+		            console.log("InitNewRow");
+		        },
+		        onRowInserting: function(e) {
+		            console.log("RowInserting");
+		        },
+		        onRowInserted: function(e) {
+		            console.log("RowInserted");
+		        },
+		        onRowUpdating: function(e) {
+		            console.log("RowUpdating");
+		        },
+		        onRowUpdated: function(e) {
+		            console.log("RowUpdated");
+		        },
+		        onRowRemoving: function(e) {
+		            console.log("RowRemoving");
+		        },
+		        onRowRemoved: function(e) {
+		            console.log("RowRemoved");
+		        }
+		    });
 
 		</script>
 
