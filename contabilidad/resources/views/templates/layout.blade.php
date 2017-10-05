@@ -181,6 +181,38 @@
 						</ul>
 					</li>
 
+
+
+					<li id="menucontabilidad" class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-bank"></i>
+							<span class="menu-text">
+								CONTABILIDAD
+							</span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+
+							<li id="menucuentas" class="">
+								<a href="{{ route('cuentas.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									CUENTAS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							
+						</ul>
+					</li>
+
+
+
+
 					<li id="menuseguridad" class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-unlock-alt"></i>
@@ -398,28 +430,6 @@
               $('#alertmsgcta').trigger('click');
           }, 4e3);
 
-      	function productoIngreso(prodingr_cod_prod='',prodingr_tipcliente_id='false',prodingr_cliente_id='false',prodingr_cta_ingr_id='false'){
-          	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-          	$('#loadingmodal').modal('show');
-            $.ajax({
-                url: '/prodingr',
-                type: 'POST',
-                data: {_token: CSRF_TOKEN,prodingr_cod_prod:prodingr_cod_prod,prodingr_tipcliente_id:prodingr_tipcliente_id,prodingr_cliente_id:prodingr_cliente_id,prodingr_cta_ingr_id:prodingr_cta_ingr_id},
-                dataType: 'JSON',
-                success: function (data) {
-            	    $('#loadingmodal').modal('hide');
-
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    console.log(errorThrown);
-                }
-            });
-
-      	}
-
-          function productoEgreso(){
-          	
-          }
         </script>
 	@show
 	</body>

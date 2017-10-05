@@ -35,6 +35,7 @@ Route::resource('bits', 'BitsController');
 Route::resource('proveedores', 'ProveedorController');
 Route::resource('tclientes', 'TipoClienteController');
 Route::resource('tproveedores', 'TipoProveedorController');
+Route::resource('cuentas', 'CuentaController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
