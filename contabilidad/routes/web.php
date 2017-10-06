@@ -36,6 +36,8 @@ Route::resource('proveedores', 'ProveedorController');
 Route::resource('tclientes', 'TipoClienteController');
 Route::resource('tproveedores', 'TipoProveedorController');
 Route::resource('cuentas', 'CuentaController');
+Route::resource('tsubcuentas', 'TipoSubCuentaController');
+Route::resource('fspago', 'FormaPagoController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

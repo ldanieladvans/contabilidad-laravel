@@ -206,6 +206,24 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menutiposubcuenta" class="">
+								<a href="{{ route('tsubcuentas.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									TIPOS DE SUB-CUENTA
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li id="menuformapago" class="">
+								<a href="{{ route('fspago.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									FORMAS DE PAGO
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							
 						</ul>
 					</li>

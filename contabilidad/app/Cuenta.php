@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Scottlaurent\Accounting\ModelTraits\AccountingJournal;
 
 class Cuenta extends Model
 {
+    use AccountingJournal;
     protected $table = "ctacont";
 
     protected $fillable = ['ctacont_catsat_cod','ctacont_catsat_nom','ctacont_tipocta_cod','ctacont_tipocta_nom','ctacont_num','ctacont_desc','ctacont_natur','ctacont_efectivo','ctacont_f_iniciosat','ctacont_decalarada','ctacont_pte_complnt','ctacont_tiposubcta_id'];

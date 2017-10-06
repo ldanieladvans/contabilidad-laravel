@@ -16,7 +16,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Crear Cuenta</a>
+	            <a href="#">Actualizar Cuenta</a>
 	        </li>
 	    </ul>
 	</div>
@@ -41,8 +41,8 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				<form class="form-horizontal" action="{{ route('cuentas.store') }}" method='POST' id="creacuenta">
-					{{ csrf_field() }}
+				{{ Form::open(['route' => ['cuentas.update', $cuenta->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editacuenta']) }}
+                	{{ Form::hidden('_method', 'PUT') }}
 
 					<input type="hidden" name="ctacont_catsat_nom" id="ctacont_catsat_nom" value="Test">
 					<input type="hidden" name="ctacont_tipocta_nom" id="ctacont_tipocta_nom" value="Test">
@@ -51,7 +51,7 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="ctacont_num">Número de cuenta:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="ctacont_num" id="ctacont_num" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="ctacont_num" id="ctacont_num" class="col-md-10 col-sm-10 col-xs-12" value="{{$cuenta->ctacont_num}}"/>
 							</div>
 						</div>
 					</div>
@@ -61,7 +61,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_catsat_cod" name="ctacont_catsat_cod" data-placeholder="Seleccione la cuenta SAT..." style="width: 83%; display: none;">
 								@foreach($ctacont_catsat_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+	                            	<option value="{{ $tp->id }}" {{$cuenta->ctacont_catsat_cod == $tp->id ? 'selected':''}}>{{ $tp->id }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -70,7 +70,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_tipocta_cod" name="ctacont_tipocta_cod" data-placeholder="Seleccione el tipo de cuenta SAT..." style="width: 83%; display: none;">
 								@foreach($ctacont_tipocta_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+	                            	<option value="{{ $tp->id }}" {{$cuenta->ctacont_tipocta_cod == $tp->id ? 'selected':''}}>{{ $tp->id }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -81,7 +81,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_tiposubcta_id" name="ctacont_tiposubcta_id" data-placeholder="Seleccione el tipo de subcuenta ..." style="width: 83%; display: none;">
 								@foreach($ctacont_tiposubcta_id as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+	                            	<option value="{{ $tp->id }}" {{$cuenta->ctacont_tiposubcta_id == $tp->id ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -90,8 +90,8 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_natur" name="ctacont_natur" data-placeholder="Seleccione la naturaleza de la cuenta ..." style="width: 83%; display: none;">
 									<option value="">Seleccione ...</option>
-	                            	<option value="credit">Acreedora</option>
-	                            	<option value="debit">Deudora</option>
+	                            	<option value="credit" {{$cuenta->ctacont_natur == 'credit' ? 'selected':''}}>Acreedora</option>
+	                            	<option value="debit" {{$cuenta->ctacont_natur == 'debit' ? 'selected':''}}>Deudora</option>
 							</select>
 						</div>
 					</div>
@@ -129,7 +129,7 @@
 										<div class="form-group">
 											<div class="col-md-12 col-sm-12 col-xs-12">
 												<div class="clearfix">
-													<input type="text" placeholder="Descripción" name="ctacont_desc" id="ctacont_desc" class="col-md-12 col-sm-12 col-xs-12"/>
+													<input type="text" placeholder="Descripción" name="ctacont_desc" id="ctacont_desc" class="col-md-12 col-sm-12 col-xs-12" value="{{$cuenta->ctacont_desc}}"/>
 												</div>
 											</div>
 										</div>
@@ -140,7 +140,7 @@
 											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ctacont_tiposubcta_id">Fecha SAT:</label>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<div class="clearfix">
-													<input class="form-control date-picker" id="ctacont_f_iniciosat" name="ctacont_f_iniciosat" type="date" data-date-format="yyyy-mm-dd" />
+													<input class="form-control date-picker" id="ctacont_f_iniciosat" name="ctacont_f_iniciosat" type="date" data-date-format="yyyy-mm-dd" value="{{$cuenta->ctacont_f_iniciosat}}" />
 												</div>
 											</div>
 										</div>
@@ -149,7 +149,7 @@
 											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="ctacont_efectivo">Cuenta de efectivo ?: </label>
 											    <div class="col-md-2 col-sm-2 col-xs-12">
 											    	<label>
-														<input name="ctacont_efectivo" id="ctacont_efectivo" class="ace ace-switch" type="checkbox"/>
+														<input name="ctacont_efectivo" id="ctacont_efectivo" class="ace ace-switch" type="checkbox" {{$cuenta->ctacont_efectivo ? 'checked':''}}/>
 														<span class="lbl" data-lbl="Si&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No"></span>
 													</label>
 												</div>
@@ -157,7 +157,7 @@
 											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="ctacont_decalarada">Cuenta declarada ?: </label>
 										    <div class="col-md-2 col-sm-2 col-xs-12">
 										    	<label>
-													<input name="ctacont_decalarada" id="ctacont_decalarada" class="ace ace-switch" type="checkbox"/>
+													<input name="ctacont_decalarada" id="ctacont_decalarada" class="ace ace-switch" type="checkbox" {{$cuenta->ctacont_decalarada ? 'checked':''}}/>
 													<span class="lbl" data-lbl="Si&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No"></span>
 												</label>
 											</div>
@@ -166,7 +166,7 @@
 
 										    <div class="col-md-2 col-sm-2 col-xs-12">
 										    	<label>
-													<input name="ctacont_pte_complnt" id="ctacont_pte_complnt" class="ace ace-switch" type="checkbox"/>
+													<input name="ctacont_pte_complnt" id="ctacont_pte_complnt" class="ace ace-switch" type="checkbox" {{$cuenta->ctacont_pte_complnt ? 'checked':''}}/>
 													<span class="lbl" data-lbl="Si&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No"></span>
 												</label>
 											</div>
@@ -186,12 +186,11 @@
                         <div class="form-group">
 	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
 	                            <button id="cancel" type="button" onclick="location.href = '/cuentas';" class="btn btn-info">Cancelar</button>
-	                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
 	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
 	                        </div>
                         </div>
 
-				</form>
+				{{ Form::close() }}
 
 			</div>
 	</div>

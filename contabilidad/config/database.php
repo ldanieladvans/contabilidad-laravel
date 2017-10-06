@@ -93,6 +93,21 @@ return [
             'engine' => null,
         ],
 
+        'cat_sat' => [
+            'driver' => 'mysql',
+            'host' => '108.163.166.82',
+            'port' => '3306',
+            'database' => 'cat_sta',
+            'username' => 'app-advans',
+            'password' => 'XL.WE2maYF58u.N',
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
     ],
 
     /*
