@@ -224,6 +224,15 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menupago" class="">
+								<a href="{{ route('pagos.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									PAGOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							
 						</ul>
 					</li>

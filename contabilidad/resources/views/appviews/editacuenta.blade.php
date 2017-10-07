@@ -44,8 +44,8 @@
 				{{ Form::open(['route' => ['cuentas.update', $cuenta->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editacuenta']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
 
-					<input type="hidden" name="ctacont_catsat_nom" id="ctacont_catsat_nom" value="Test">
-					<input type="hidden" name="ctacont_tipocta_nom" id="ctacont_tipocta_nom" value="Test">
+					<input type="hidden" name="ctacont_catsat_nom" id="ctacont_catsat_nom" value="{{$cuenta->ctacont_catsat_nom}}">
+					<input type="hidden" name="ctacont_tipocta_nom" id="ctacont_tipocta_nom" value="{{$cuenta->ctacont_tipocta_nom}}">
 
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="ctacont_num">Número de cuenta:</label>
