@@ -15,6 +15,7 @@ use App\Cpmex;
 use App\Bitacora;
 use App\IngresosProducto;
 use App\GastosProducto;
+use App\ComprobanteRel;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -313,6 +314,78 @@ class Controller extends BaseController
         }else{
             if($row_id){
                 GastosProducto::destroy($row_id);
+            }
+        }
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
+        );
+        return \Response::json($response);
+    }
+
+
+    public function compRel(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $comprel_tiporel_cod = false;
+        $comprel_tiporel_nom = false;
+        $comprel_comp_rel_uuid = false;
+        $comprel_comp_id = false;
+        $data_id = false;
+
+        if($alldata['comprel_tiporel_cod']!='false'){
+            $to_save_data['comprel_tiporel_cod'] = $alldata['comprel_tiporel_cod'];
+             $comprel_tiporel_cod = $alldata['comprel_tiporel_cod'];
+        }
+        if($alldata['comprel_tiporel_nom']!='false'){
+            $to_save_data['comprel_tiporel_nom'] = $alldata['comprel_tiporel_nom'];
+            $comprel_tiporel_nom = $alldata['comprel_tiporel_nom'];
+        }
+        if($alldata['comprel_comp_rel_uuid']!='false'){
+            $to_save_data['comprel_comp_rel_uuid'] = $alldata['comprel_comp_rel_uuid'];
+            $comprel_comp_rel_uuid = $alldata['comprel_comp_rel_uuid'];
+        }
+        if($alldata['comprel_comp_id']!='false'){
+            $to_save_data['comprel_comp_id'] = $alldata['comprel_comp_id'];
+            $comprel_comp_id = $alldata['comprel_comp_id'];
+        }
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $comprel = new ComprobanteRel($to_save_data);
+            $comprel->save();
+            $data_id = $comprel->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $comprel = ComprobanteRel::findOrFail($row_id);
+                if($comprel_tiporel_cod){
+                    $comprel->comprel_tiporel_cod = $comprel_tiporel_cod;
+                }
+                if($comprel_tiporel_nom){
+                    $comprel->comprel_tiporel_nom = $comprel_tiporel_nom;
+                }
+                if($comprel_comp_rel_uuid){
+                    $comprel->comprel_comp_rel_uuid = $comprel_comp_rel_uuid;
+                }
+                if($comprel_comp_id){
+                    $comprel->comprel_comp_id = $comprel_comp_id;
+                }
+                $comprel->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                ComprobanteRel::destroy($row_id);
             }
         }
 

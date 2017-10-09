@@ -40,6 +40,7 @@ Route::resource('tsubcuentas', 'TipoSubCuentaController');
 Route::resource('fspago', 'FormaPagoController');
 Route::resource('pagos', 'PagoController');
 Route::resource('polizas', 'PolizaController');
+Route::resource('comprobantes', 'ComprobanteController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
@@ -47,6 +48,7 @@ Route::post('/delItems', 'Controller@delItems');
 Route::post('/permsbyroles', 'Controller@permsbyroles');
 Route::post('/prodingr', 'Controller@prodIngr');
 Route::post('/prodgast', 'Controller@prodGast');
+Route::post('/comprel', 'Controller@compRel');
 /* end ldaniel*/
 
 

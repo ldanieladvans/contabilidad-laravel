@@ -224,6 +224,15 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menucomprobante" class="">
+								<a href="{{ route('comprobantes.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									COMPROBANTES
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							<li id="menupoliza" class="">
 								<a href="{{ route('polizas.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
