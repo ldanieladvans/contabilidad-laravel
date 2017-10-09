@@ -229,7 +229,7 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menupago").addClass('active');
+	        	$("#menupoliza").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
 
         	/*Inicializando selects*/
