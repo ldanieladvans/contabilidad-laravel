@@ -16,7 +16,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Crear Pago</a>
+	            <a href="#">Actualizar Pago</a>
 	        </li>
 	    </ul>
 	</div>
@@ -41,8 +41,8 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				<form class="form-horizontal" action="{{ route('pagos.store') }}" method='POST' id="creapago">
-					{{ csrf_field() }}
+				{{ Form::open(['route' => ['pagos.update', $pago->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editapago']) }}
+                	{{ Form::hidden('_method', 'PUT') }}
 
 					<input type="hidden" name="pago_formpago_nom" id="pago_formpago_nom" value="">
 					<input type="hidden" name="pago_moneda_nom" id="pago_moneda_nom" value="">
@@ -51,7 +51,7 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_numoperc">No. operación:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_numoperc" id="pago_numoperc" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_numoperc" id="pago_numoperc" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_numoperc}}"/>
 							</div>
 						</div>
 					</div>
@@ -60,14 +60,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_monto">Monto:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="number" name="pago_monto" id="pago_monto" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="number" name="pago_monto" id="pago_monto" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_monto}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_fecha">Fecha:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="date" name="pago_fecha" id="pago_fecha" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="date" name="pago_fecha" id="pago_fecha" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_fecha}}"/>
 							</div>
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_tipo_cambio">Pago tipo de cambio:</label>
 						<div class="col-md-10 col-sm-10 col-xs-12">
 							<div class="clearfix">
-								<input type="number" name="pago_tipo_cambio" id="pago_tipo_cambio" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="number" name="pago_tipo_cambio" id="pago_tipo_cambio" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_tipo_cambio}}"/>
 							</div>
 						</div>
 					</div>
@@ -85,14 +85,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcemisor_ctaord">RFC Emisor:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_rfcemisor_ctaord" id="pago_rfcemisor_ctaord" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_rfcemisor_ctaord" id="pago_rfcemisor_ctaord" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_rfcemisor_ctaord}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_nombanc_emisor">Banco RFC emisor:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_nombanc_emisor" id="pago_nombanc_emisor" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_nombanc_emisor" id="pago_nombanc_emisor" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_nombanc_emisor}}"/>
 							</div>
 						</div>
 					</div>
@@ -101,14 +101,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_nombanc_ordext">pago_nombanc_ordext:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_nombanc_ordext" id="pago_nombanc_ordext" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_nombanc_ordext" id="pago_nombanc_ordext" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_nombanc_ordext}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ordnte">pago_cta_ordnte:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_cta_ordnte" id="pago_cta_ordnte" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_cta_ordnte" id="pago_cta_ordnte" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_cta_ordnte}}"/>
 							</div>
 						</div>
 					</div>
@@ -117,14 +117,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_sello_pago">Sello:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_sello_pago" id="pago_sello_pago" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_sello_pago" id="pago_sello_pago" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_sello_pago}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcrecept_ctaben">pago_rfcrecept_ctaben:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_rfcrecept_ctaben" id="pago_rfcrecept_ctaben" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_rfcrecept_ctaben" id="pago_rfcrecept_ctaben" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_rfcrecept_ctaben}}"/>
 							</div>
 						</div>
 					</div>
@@ -133,14 +133,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_banc_dest">pago_banc_dest:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_banc_dest" id="pago_banc_dest" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_banc_dest" id="pago_banc_dest" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_banc_dest}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_banc_dest_ext">pago_banc_dest_ext:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_banc_dest_ext" id="pago_banc_dest_ext" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_banc_dest_ext" id="pago_banc_dest_ext" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_banc_dest_ext}}"/>
 							</div>
 						</div>
 					</div>
@@ -150,14 +150,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ben">pago_cta_ben:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_cta_ben" id="pago_cta_ben" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_cta_ben" id="pago_cta_ben" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_cta_ben}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_numcheq">pago_numcheq:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_numcheq" id="pago_numcheq" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_numcheq" id="pago_numcheq" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_numcheq}}"/>
 							</div>
 						</div>
 					</div>
@@ -167,14 +167,14 @@
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_benef">pago_benef:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_benef" id="pago_benef" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_benef" id="pago_benef" class="col-md-12 col-sm-12 col-xs-12" value="{{$pago->pago_benef}}"/>
 							</div>
 						</div>
 
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cert_pago">pago_cert_pago:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_cert_pago" id="pago_cert_pago" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_cert_pago" id="pago_cert_pago" class="col-md-10 col-sm-10 col-xs-12" value="{{$pago->pago_cert_pago}}"/>
 							</div>
 						</div>
 					</div>
@@ -186,7 +186,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="pago_formpago_cod" name="pago_formpago_cod" data-placeholder="Seleccione la forma de pago SAT ..." style="width: 83%; display: none;">
 								@foreach($pago_formpago_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+	                            	<option value="{{ $tp->id }}" {{$pago->pago_formpago_cod == $tp->id ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -195,7 +195,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="pago_moneda_cod" name="pago_moneda_cod" data-placeholder="Seleccione la moneda ..." style="width: 83%; display: none;">
 									@foreach($pago_moneda_cod as $tp)
-		                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+		                            	<option value="{{ $tp->id }}" {{$pago->pago_moneda_cod == $tp->id ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
 		                            @endforeach
 							</select>
 						</div>
@@ -234,7 +234,7 @@
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pago_polz_id" name="pago_polz_id" data-placeholder="Seleccione la póliza ..." style="width: 83%; display: none;">
 													@foreach($pago_polz_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}" {{$pago->pago_polz_id == $tp->id ? 'selected':''}}>{{ $tp->id }}</option>
 						                            @endforeach
 												</select>
 											</div>
@@ -243,7 +243,7 @@
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pago_comp_id" name="pago_comp_id" data-placeholder="Seleccione el comprobante ..." style="width: 83%; display: none;">
 													@foreach($pago_comp_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}" {{$pago->pago_comp_id == $tp->id ? 'selected':''}}>{{ $tp->id }}</option>
 						                            @endforeach
 												</select>
 											</div>
@@ -263,12 +263,11 @@
                         <div class="form-group">
 	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
 	                            <button id="cancel" type="button" onclick="location.href = '/pagos';" class="btn btn-info">Cancelar</button>
-	                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
 	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
 	                        </div>
                         </div>
 
-				</form>
+				{{ Form::close() }}
 
 			</div>
 	</div>

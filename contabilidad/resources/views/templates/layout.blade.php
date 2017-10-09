@@ -224,6 +224,15 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menupoliza" class="">
+								<a href="{{ route('polizas.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									PÓLIZAS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							<li id="menupago" class="">
 								<a href="{{ route('pagos.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
