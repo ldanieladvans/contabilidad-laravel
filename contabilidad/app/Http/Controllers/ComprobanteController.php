@@ -9,6 +9,7 @@ use App\Poliza;
 use App\Comprobante;
 use App\ComprobanteRel;
 use App\Nomina;
+use App\Provision;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -113,8 +114,20 @@ class ComprobanteController extends Controller
             $compsrel_list[$compsrel_contador] = ['ID'=>$cp->id,'comprel_tiporel_nom'=>$cp->comprel_tiporel_nom,'comprel_tiporel_cod'=>$cp->comprel_tiporel_cod,'comprel_comp_rel_uuid'=>$cp->comprel_comp_rel_uuid];
             $compsrel_contador ++;
         }
+    
 
-        return view('appviews.editacomprobante',['comprobante'=>$comprobante,'compsrel'=>json_encode($compsrel_list)]);
+        $provis = Provision::where('provis_comp_id',$id)->get();
+        $provis_list = array();
+        $provis_contador = 0;
+
+        foreach ($provis as $pv) {
+            $provis_list[$provis_contador] = ['ID'=>$pv->id,'provis_monto'=>$pv->provis_monto,'provis_moneda_cod'=>$pv->provis_moneda_cod,'provis_moneda_nom'=>$pv->provis_moneda_nom,'provis_tipo_cambio'=>$pv->provis_tipo_cambio,'provis_metpago_cod'=>$pv->provis_metpago_cod,'provis_formpago_cod'=>$pv->provis_formpago_cod];
+            $provis_contador ++;
+        }
+
+        $polizas = Poliza::all();
+
+        return view('appviews.editacomprobante',['comprobante'=>$comprobante,'compsrel'=>json_encode($compsrel_list),'provis'=>json_encode($provis_list),'polizas'=>$polizas]);
     }
 
     /**
@@ -153,9 +166,15 @@ class ComprobanteController extends Controller
         $comprobante->comp_imp_bov = $comp_imp_bov;
 
         $comprobante->save();
+        $pols_sync = array();
+        if(array_key_exists('polizas', $alldata)){
+            $pols_sync = $alldata['polizas'];
+        }
+
+        $comprobante->polizas()->sync($pols_sync);
         $fmessage = 'Se ha actualizado el comprobante: '.$comprobante->comp_uuid;
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+        $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
         return redirect()->route('comprobantes.index');
     }

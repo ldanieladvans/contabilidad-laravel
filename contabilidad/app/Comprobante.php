@@ -41,5 +41,17 @@ class Comprobante extends Model
         return $this->hasMany('App\Nomina','nom_comp_id');
     }
 
+    public function getPolizas()
+    {
+        return (!$this->polizas) ? $this->polizas = $this->polizas()->get() : $this->polizas;
+    }
+
+    public function tienePoliza($poliza)
+    {
+        return $this->getPolizas()->contains(function ($value, $key) use ($poliza) {
+            return $poliza == $value->id;
+        });
+    }
+
     
 }

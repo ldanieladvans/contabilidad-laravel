@@ -41,6 +41,8 @@ Route::resource('fspago', 'FormaPagoController');
 Route::resource('pagos', 'PagoController');
 Route::resource('polizas', 'PolizaController');
 Route::resource('comprobantes', 'ComprobanteController');
+Route::resource('asientos', 'AsientoController');
+Route::resource('pagosrel', 'PagorelController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
@@ -49,6 +51,7 @@ Route::post('/permsbyroles', 'Controller@permsbyroles');
 Route::post('/prodingr', 'Controller@prodIngr');
 Route::post('/prodgast', 'Controller@prodGast');
 Route::post('/comprel', 'Controller@compRel');
+Route::post('/provis', 'Controller@provis');
 /* end ldaniel*/
 
 

@@ -16,6 +16,7 @@ use App\Bitacora;
 use App\IngresosProducto;
 use App\GastosProducto;
 use App\ComprobanteRel;
+use App\Provision;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -386,6 +387,99 @@ class Controller extends BaseController
         }else{
             if($row_id){
                 ComprobanteRel::destroy($row_id);
+            }
+        }
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
+        );
+        return \Response::json($response);
+    }
+
+
+    public function provis(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $provis_metpago_cod = false;
+        $provis_formpago_cod = false;
+        $provis_moneda_nom = false;
+        $provis_moneda_cod = false;
+        $provis_tipo_cambio = false;
+        $provis_monto = false;
+        $provis_comp_id = false;
+        $data_id = false;
+
+        if($alldata['provis_metpago_cod']!='false'){
+            $to_save_data['provis_metpago_cod'] = $alldata['provis_metpago_cod'];
+             $provis_metpago_cod = $alldata['provis_metpago_cod'];
+        }
+        if($alldata['provis_formpago_cod']!='false'){
+            $to_save_data['provis_formpago_cod'] = $alldata['provis_formpago_cod'];
+            $provis_formpago_cod = $alldata['provis_formpago_cod'];
+        }
+        if($alldata['provis_moneda_nom']!='false'){
+            $to_save_data['provis_moneda_nom'] = $alldata['provis_moneda_nom'];
+            $provis_moneda_nom = $alldata['provis_moneda_nom'];
+        }
+        if($alldata['provis_moneda_cod']!='false'){
+            $to_save_data['provis_moneda_cod'] = $alldata['provis_moneda_cod'];
+            $provis_moneda_cod = $alldata['provis_moneda_cod'];
+        }
+        if($alldata['provis_tipo_cambio']!='false'){
+            $to_save_data['provis_tipo_cambio'] = $alldata['provis_tipo_cambio'];
+            $provis_tipo_cambio = $alldata['provis_tipo_cambio'];
+        }
+        if($alldata['provis_monto']!='false'){
+            $to_save_data['provis_monto'] = $alldata['provis_monto'];
+            $provis_monto = $alldata['provis_monto'];
+        }
+        if($alldata['provis_comp_id']!='false'){
+            $to_save_data['provis_comp_id'] = $alldata['provis_comp_id'];
+            $provis_comp_id = $alldata['provis_comp_id'];
+        }
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $provi = new Provision($to_save_data);
+            $provi->save();
+            $data_id = $provi->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $provi = Provision::findOrFail($row_id);
+                if($provis_metpago_cod){
+                    $provi->provis_metpago_cod = $provis_metpago_cod;
+                }
+                if($provis_formpago_cod){
+                    $provi->provis_formpago_cod = $provis_formpago_cod;
+                }
+                if($provis_moneda_nom){
+                    $provi->provis_moneda_nom = $provis_moneda_nom;
+                }
+                if($provis_moneda_cod){
+                    $provi->provis_moneda_cod = $provis_moneda_cod;
+                }
+                if($provis_tipo_cambio){
+                    $provi->provis_tipo_cambio = $provis_tipo_cambio;
+                }
+                if($provis_monto){
+                    $provi->provis_monto = $provis_monto;
+                }
+                $provi->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                Provision::destroy($row_id);
             }
         }
 

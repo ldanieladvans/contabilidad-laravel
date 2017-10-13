@@ -49,6 +49,7 @@
 
                 	<input type="hidden" value="{{$compsrel}}" id="compsrel"/>
                 	<input type="hidden" value="{{$comprobante}}" id="comprobante"/>
+                	<input type="hidden" value="{{$provis}}" id="provis"/>
 
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="comp_uuid">UUID:</label>
@@ -135,9 +136,16 @@
 									</li>
 
 									<li>
-										<a data-toggle="tab" href="#contacts">
-											<i class="green ace-icon fa fa-group bigger-120"></i>
-											Contactos
+										<a data-toggle="tab" href="#provs">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Provisiones
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#pols">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Pólizas
 										</a>
 									</li>
 								</ul>
@@ -209,8 +217,24 @@
 										
 									</div>
 
-									<div id="contacts" class="tab-pane fade">
+									<div id="provs" class="tab-pane fade">
 
+										<div class="form-group">
+											<div id="gridContainerProvis"></div>
+										</div>
+										
+									</div>
+
+									<div id="pols" class="tab-pane fade">
+
+										<div class="form-group">
+										<label for="polizas">Pólizas: </label>
+											<select multiple="multiple" class="js-example-basic-multiple" id="polizas" name="polizas[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;">
+												@foreach($polizas as $pls)
+													<option value="{{$pls->id}}" {{$comprobante->tienePoliza($pls->id) ? 'selected':''}}>{{$pls->polz_concepto}}</option>
+												@endforeach
+											</select>
+										</div>
 										
 									</div>
 								</div>
@@ -282,9 +306,16 @@
 				  	allowClear: true
 				});
 
+				$("#polizas").select2({
+				  	placeholder: "Seleccione las pólizas ...",
+				  	allowClear: true,
+				  	multiple: true
+				});
+
 
 			var compsrel = jQuery.parseJSON(document.getElementById('compsrel').value);
 			var comprobante = jQuery.parseJSON(document.getElementById('comprobante').value);
+			var provis = jQuery.parseJSON(document.getElementById('provis').value);
 
 			console.log(comprobante.id);
 
@@ -473,6 +504,144 @@
 		                success: function (data) {
 		            	    $('#loadingmodal').modal('hide');
 		            	    var thisgrid = $("#gridContainer").dxDataGrid('instance');
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoved: function(e) {
+		            console.log("RowRemoved");
+		        }
+		    });
+
+
+			$("#gridContainerProvis").dxDataGrid({
+		        dataSource: provis,
+		        paging: {
+		            enabled: false
+		        },
+		        editing: {
+		            mode: "row",
+		            allowUpdating: true,
+		            allowDeleting: true,
+		            allowAdding: true,
+		            texts:{
+		            	addRow: 'Nueva',
+		            	cancelRowChanges: 'Cancelar',
+		            	deleteRow: 'Borrar',
+		            	editRow: 'Editar',
+		            	saveRowChanges: 'Guardar',
+		            	confirmDeleteMessage: '¿Está seguro que quiere eliminar este registro?'
+		            },
+		        }, 
+		        columns: [
+		            {
+		                dataField: "provis_metpago_cod",
+		                caption: "Método de Pago",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "provis_formpago_cod",
+		                caption: "Forma de Pago",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "provis_moneda_nom",
+		                caption: "Moneda",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "provis_moneda_cod",
+		                caption: "Código de Moneda",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "provis_tipo_cambio",
+		                caption: "Tipo de Cambio",
+		                dataType: "number",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "provis_monto",
+		                caption: "Monto",
+		                dataType: "number",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            }    
+		        ],
+		        onEditingStart: function(e) {
+		            console.log("EditingStart");
+		        },
+		        onInitNewRow: function(e) {
+		            console.log("InitNewRow");
+		        },
+		        onRowInserting: function(e) {
+		            console.log("RowInserting");
+		        },
+		        onRowInserted: function(e) {
+		            console.log("RowInserted");
+
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/provis',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, provis_comp_id:comprobante.id, provis_metpago_cod:e.data.provis_metpago_cod, provis_formpago_cod:e.data.provis_formpago_cod, provis_moneda_nom:e.data.provis_moneda_nom, provis_moneda_cod:e.data.provis_moneda_cod, provis_tipo_cambio:e.data.provis_tipo_cambio, provis_monto:e.data.provis_monto, crudmethod:'create',row_id:'false'},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+
+		            console.log(e);
+		        },
+		        onRowUpdating: function(e) {
+		            console.log("RowUpdating");
+		        },
+		        onRowUpdated: function(e) {
+		            console.log("RowUpdated");
+		            console.log(e);
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/provis',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, provis_comp_id:comprobante.id, provis_metpago_cod:e.key.provis_metpago_cod, provis_formpago_cod:e.key.provis_formpago_cod, provis_moneda_nom:e.key.provis_moneda_nom, provis_moneda_cod:e.key.provis_moneda_cod, provis_tipo_cambio:e.key.provis_tipo_cambio, provis_monto:e.key.provis_monto, crudmethod:'edit',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoving: function(e) {
+		            console.log("RowRemoving");
+		            $('#loadingmodal').modal('show');
+		            $.ajax({
+		                url: '/provis',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, provis_comp_id:comprobante.id, provis_metpago_cod:e.key.provis_metpago_cod, provis_formpago_cod:e.key.provis_formpago_cod, provis_moneda_nom:e.key.provis_moneda_nom, provis_moneda_cod:e.key.provis_moneda_cod, provis_tipo_cambio:e.key.provis_tipo_cambio, provis_monto:e.key.provis_monto, crudmethod:'delete',row_id:e.key.ID},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
 		            	    thisgrid.refresh();
 		                },
 		                error: function(XMLHttpRequest, textStatus, errorThrown) { 

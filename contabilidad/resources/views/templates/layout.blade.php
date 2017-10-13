@@ -242,10 +242,28 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menuasiento" class="">
+								<a href="{{ route('asientos.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									ASIENTOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							<li id="menupago" class="">
 								<a href="{{ route('pagos.index') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									PAGOS
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+							<li id="menupagorel" class="">
+								<a href="{{ route('pagosrel.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									PAGOS RELACIONADOS
 								</a>
 
 								<b class="arrow"></b>
