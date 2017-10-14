@@ -41,7 +41,9 @@ class PagorelController extends Controller
      */
     public function create()
     {
-        return view('appviews.creapagorel',['pagorel_formpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>[],'pagorel_asiento_id'=>[]]);
+        $pagos = Pago::all();
+        $asientos = Asiento::all();
+        return view('appviews.creapagorel',['pagorel_formpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
     }
 
     /**
@@ -52,7 +54,17 @@ class PagorelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $alldata = $request->all();
+        $logued_user = Auth::user();
+        $pagorel = new Pagorel($alldata);
+
+        $pagorel->save();
+
+        $fmessage = 'Se ha creado el pago relacionado: '.$pagorel->pagorel_pagado_uuid;
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+
+        return redirect()->route('pagosrel.index');
     }
 
     /**
@@ -74,7 +86,10 @@ class PagorelController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pagos = Pago::all();
+        $asientos = Asiento::all();
+        $pagorel = Pagorel::findOrFail($id);
+        return view('appviews.editapagorel',['pagorel'=>$pagorel,'pagorel_formpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
     }
 
     /**
@@ -86,7 +101,41 @@ class PagorelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $alldata = $request->all();
+        $logued_user = Auth::user();
+        $pagorel = Pagorel::findOrFail($id);
+
+        $pagorel->pagorel_pagado_uuid = $alldata['pagorel_pagado_uuid'];
+        $pagorel->pagorel_serie = $alldata['pagorel_serie'];
+        $pagorel->pagorel_folio = $alldata['pagorel_folio'];
+        
+        if(array_key_exists('pagorel_formpago_cod', $alldata)){
+            $pagorel->pagorel_formpago_cod = $alldata['pagorel_formpago_cod'];
+        }
+        
+        $pagorel->pagorel_formpago_nom = $alldata['pagorel_formpago_nom'];
+
+        if(array_key_exists('pagorel_moneda_cod', $alldata)){
+            $pagorel->pagorel_moneda_cod = $alldata['pagorel_moneda_cod'];
+        }
+        
+        $pagorel->pagorel_moneda_nom = $alldata['pagorel_moneda_nom'];
+        $pagorel->pagorel_tipo_cambio = $alldata['pagorel_tipo_cambio'];
+        $pagorel->pagorel_numparcldad = $alldata['pagorel_numparcldad'];
+        $pagorel->pagorel_sald_ant = $alldata['pagorel_sald_ant'];
+        $pagorel->pagorel_monto_pag = $alldata['pagorel_monto_pag'];
+        $pagorel->pagorel_sald_nuevo = $alldata['pagorel_sald_nuevo'];
+        $pagorel->pagorel_pago_id = $alldata['pagorel_pago_id'];
+        $pagorel->pagorel_asiento_id = $alldata['pagorel_asiento_id'];
+
+        $pagorel->save();
+
+
+        $fmessage = 'Se ha actualizado el pago relacionado: '.$pagorel->pagorel_pagado_uuid;
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+
+        return redirect()->route('pagosrel.index');
     }
 
     /**

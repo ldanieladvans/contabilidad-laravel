@@ -168,8 +168,9 @@
 											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_pago_id">Pago:</label>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pagorel_pago_id" name="pagorel_pago_id" data-placeholder="Seleccione el pago ..." style="width: 83%; display: none;">
+													<option value="">Seleccione ...</option>
 													@foreach($pagorel_pago_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}">{{ $tp->pago_numoperc }}</option>
 						                            @endforeach
 												</select>
 											</div>
@@ -177,8 +178,9 @@
 											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_asiento_id">Asiento:</label>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pagorel_asiento_id" name="pagorel_asiento_id" data-placeholder="Seleccione el asiento ..." style="width: 83%; display: none;">
+													<option value="">Seleccione ...</option>
 													@foreach($pagorel_asiento_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}">{{ $tp->asiento_folio_ref }}</option>
 						                            @endforeach
 												</select>
 											</div>
