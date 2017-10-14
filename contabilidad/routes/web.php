@@ -43,6 +43,8 @@ Route::resource('polizas', 'PolizaController');
 Route::resource('comprobantes', 'ComprobanteController');
 Route::resource('asientos', 'AsientoController');
 Route::resource('pagosrel', 'PagorelController');
+Route::resource('periodos', 'PeriodoController');
+Route::resource('ejercicios', 'EjercicioController');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

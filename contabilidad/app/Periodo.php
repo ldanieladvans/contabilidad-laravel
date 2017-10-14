@@ -8,7 +8,7 @@ class Periodo extends Model
 {
     protected $table = "period";
 
-    protected $fillable = ['period_cerrado','period_de_cierre','period_ejerc_id'];
+    protected $fillable = ['period_cerrado','period_de_cierre','period_ejerc_id','period_fecha_ini','period_fecha_fin'];
 
     public function __construct(array $attributes = [])
     {

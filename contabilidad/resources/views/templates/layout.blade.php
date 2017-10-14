@@ -161,7 +161,7 @@
 								<ul id="submenucategorias" class="submenu">
 									<li id="menutipocliente" class="">
 										<a href="{{ route('tclientes.index') }}">
-											<i class="menu-icon fa fa-group green"></i>
+											<i class="menu-icon fa fa-caret-right"></i>
 											TIPOS DE CLIENTE
 										</a>
 
@@ -170,7 +170,7 @@
 
 									<li id="menutipoproveedor" class="">
 										<a href="{{ route('tproveedores.index') }}">
-											<i class="menu-icon fa fa-group green"></i>
+											<i class="menu-icon fa fa-caret-right"></i>
 											TIPOS DE PROVEEDOR
 										</a>
 
@@ -197,32 +197,7 @@
 
 						<ul class="submenu">
 
-							<li id="menucuentas" class="">
-								<a href="{{ route('cuentas.index') }}">
-									<i class="menu-icon fa fa-caret-right"></i>
-									CUENTAS
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li id="menutiposubcuenta" class="">
-								<a href="{{ route('tsubcuentas.index') }}">
-									<i class="menu-icon fa fa-caret-right"></i>
-									TIPOS DE SUB-CUENTA
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li id="menuformapago" class="">
-								<a href="{{ route('fspago.index') }}">
-									<i class="menu-icon fa fa-caret-right"></i>
-									FORMAS DE PAGO
-								</a>
-
-								<b class="arrow"></b>
-							</li>
+							
 
 							<li id="menucomprobante" class="">
 								<a href="{{ route('comprobantes.index') }}">
@@ -267,6 +242,65 @@
 								</a>
 
 								<b class="arrow"></b>
+							</li>
+
+
+
+							<li id="menucontabilidadconfig" class="">
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa-caret-right"></i>
+
+									CONFIGURACIONES
+									<b class="arrow fa fa-angle-down"></b>
+								</a>
+
+								<b class="arrow"></b>
+								<ul id="submenucontabilidadconfig" class="submenu">
+									<li id="menucuentas" class="">
+										<a href="{{ route('cuentas.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											CUENTAS
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menutiposubcuenta" class="">
+										<a href="{{ route('tsubcuentas.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											TIPOS DE SUB-CUENTA
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menuformapago" class="">
+										<a href="{{ route('fspago.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											FORMAS DE PAGO
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menuejercicio" class="">
+										<a href="{{ route('ejercicios.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											EJERCICIOS
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menuperiodo" class="">
+										<a href="{{ route('periodos.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											PERIODOS
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+								</ul>
 							</li>
 
 							

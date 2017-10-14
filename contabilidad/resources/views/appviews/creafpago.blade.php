@@ -115,6 +115,7 @@
 				});
 	        	$("#menuformapago").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
+	        	$("#menucontabilidadconfig").addClass('open');
 
         	/*Inicializando selects*/
 	        	$("#formpago_ctacont_id").select2({

@@ -22,7 +22,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Lista de Cuentas</a>
+	            <a href="#">Lista de Ejercicios</a>
 	        </li>
 	    </ul>
 	</div>
@@ -42,9 +42,9 @@
 
 @section('variable_content')
 	<div class="row">
-		<div id="crearcuenta"></div>
+		<div id="crearejercicio"></div>
 		<!-- Input para guardar datos del grid -->
-			<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
+			<input type="hidden" value="{{$ejercicios}}" id="ejercicios"/>
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
@@ -53,7 +53,7 @@
 			</div>
 		
 		<!-- Div DataGrid -->
-		<div id="cuentaLista"></div>
+		<div id="ejercicioLista"></div>
 	</div>
 @endsection
 
@@ -68,16 +68,16 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menucuentas").addClass('active');
+	        	$("#menuejercicio").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
 	        	$("#menucontabilidadconfig").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){
 
-					var data = jQuery.parseJSON(document.getElementById('cuentas').value);
+					var data = jQuery.parseJSON(document.getElementById('ejercicios').value);
 
-				    var dataGrid = $("#cuentaLista").dxDataGrid({
+				    var dataGrid = $("#ejercicioLista").dxDataGrid({
 				        dataSource: data,
 				        allowColumnReordering: true,
 				        selection: {
@@ -113,24 +113,12 @@
 				        noDataText: 'Sin datos',
 				        columns: [
 				            {
-				                dataField: "ctacont_num",
-				                caption: 'Número de cuenta'
+				                dataField: "ejerc_anio",
+				                caption: 'Ejercicio'
 				            },
 				            {
-				                dataField: "ctacont_desc",
-				                caption: 'Descripción'
-				            },
-				            {
-				                dataField: "ctacont_tipocta_nom",
-				                caption: 'Tipo cuenta'
-				            },
-				            {
-				                dataField: "ctacont_natur",
-				                caption: 'Naturaleza'
-				            },
-				            {
-				                dataField: "ctacont_catsat_cod",
-				                caption: 'Código SAT'
+				                dataField: "ejerc_cerrado",
+				                caption: 'Cerrado'
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
@@ -170,7 +158,7 @@
 
 
 				    /* Botón de creación */
-				    $("#crearcuenta").dxButton({
+				    $("#crearejercicio").dxButton({
 				        text: "Crear",
 				        type: "default",
 				        onClick: function(e) { 
@@ -198,7 +186,7 @@
 						    		$.ajax({
 						                url: '/delItems',
 					                	type: 'POST',
-					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Cuenta'},
+					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Ejercicio'},
 						                dataType: 'JSON',
 						                success: function (data) {
 					                	    $('#loadingmodal').modal('hide');
@@ -218,7 +206,7 @@
 				        disabled: true,
 				        icon: 'edit',
 				        onClick: function () {
-				            window.location.href = 'cuentas/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				            window.location.href = 'ejercicios/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
 				        }
 				    }).dxButton("instance");  
 				});

@@ -137,12 +137,12 @@ class Cuenta extends Model
         return $this->hasMany('App\TipoCliente','tipcliente_cta_ieps_cobrado_id');
     }
 
-    public function clienteIepsRetenXCobrar()
+    public function tipoclienteIepsRetenXCobrar()
     {
         return $this->hasMany('App\TipoCliente','tipcliente_cta_ieps_reten_por_cobrar_id');
     }
     
-    public function clienteIepsRetenCobrado()
+    public function tipoclienteIepsRetenCobrado()
     {
         return $this->hasMany('App\TipoCliente','tipcliente_cta_ieps_reten_cobrado_id');
     }

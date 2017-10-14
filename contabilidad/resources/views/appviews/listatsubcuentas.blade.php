@@ -70,6 +70,7 @@
 				});
 	        	$("#menutiposubcuenta").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
+	        	$("#menucontabilidadconfig").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){

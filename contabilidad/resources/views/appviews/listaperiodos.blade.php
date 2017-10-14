@@ -22,7 +22,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Lista de Cuentas</a>
+	            <a href="#">Lista de Periodos</a>
 	        </li>
 	    </ul>
 	</div>
@@ -42,9 +42,9 @@
 
 @section('variable_content')
 	<div class="row">
-		<div id="crearcuenta"></div>
+		<div id="crearperiodo"></div>
 		<!-- Input para guardar datos del grid -->
-			<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
+			<input type="hidden" value="{{$periodos}}" id="periodos"/>
 		
 		<!-- Div contenedor de las acciones -->
 			<div id="listaContainer">
@@ -53,7 +53,7 @@
 			</div>
 		
 		<!-- Div DataGrid -->
-		<div id="cuentaLista"></div>
+		<div id="periodoLista"></div>
 	</div>
 @endsection
 
@@ -68,16 +68,16 @@
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menucuentas").addClass('active');
+	        	$("#menuperiodo").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
 	        	$("#menucontabilidadconfig").addClass('open');
 
         	/* DataGrid */
 	        	$(function(){
 
-					var data = jQuery.parseJSON(document.getElementById('cuentas').value);
+					var data = jQuery.parseJSON(document.getElementById('periodos').value);
 
-				    var dataGrid = $("#cuentaLista").dxDataGrid({
+				    var dataGrid = $("#periodoLista").dxDataGrid({
 				        dataSource: data,
 				        allowColumnReordering: true,
 				        selection: {
@@ -113,24 +113,24 @@
 				        noDataText: 'Sin datos',
 				        columns: [
 				            {
-				                dataField: "ctacont_num",
-				                caption: 'Número de cuenta'
+				                dataField: "period_ejerc_id",
+				                caption: 'Ejercicio'
 				            },
 				            {
-				                dataField: "ctacont_desc",
-				                caption: 'Descripción'
+				                dataField: "period_fecha_ini",
+				                caption: 'Fecha Inicio'
 				            },
 				            {
-				                dataField: "ctacont_tipocta_nom",
-				                caption: 'Tipo cuenta'
+				                dataField: "period_fecha_fin",
+				                caption: 'Fecha Fin'
 				            },
 				            {
-				                dataField: "ctacont_natur",
-				                caption: 'Naturaleza'
+				                dataField: "period_cerrado",
+				                caption: 'Periodo Cerrado ?'
 				            },
 				            {
-				                dataField: "ctacont_catsat_cod",
-				                caption: 'Código SAT'
+				                dataField: "period_de_cierre",
+				                caption: 'Periodo de Cierre ?'
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
@@ -170,7 +170,7 @@
 
 
 				    /* Botón de creación */
-				    $("#crearcuenta").dxButton({
+				    $("#crearperiodo").dxButton({
 				        text: "Crear",
 				        type: "default",
 				        onClick: function(e) { 
@@ -198,7 +198,7 @@
 						    		$.ajax({
 						                url: '/delItems',
 					                	type: 'POST',
-					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Cuenta'},
+					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Periodo'},
 						                dataType: 'JSON',
 						                success: function (data) {
 					                	    $('#loadingmodal').modal('hide');
@@ -218,7 +218,7 @@
 				        disabled: true,
 				        icon: 'edit',
 				        onClick: function () {
-				            window.location.href = 'cuentas/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				            window.location.href = 'periodos/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
 				        }
 				    }).dxButton("instance");  
 				});

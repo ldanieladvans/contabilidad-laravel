@@ -16,7 +16,7 @@
 	    <ul class="breadcrumb">
 	        <li>
 	            <i class="ace-icon fa fa-group home-icon"></i>
-	            <a href="#">Actualizar Forma de Pago</a>
+	            <a href="#">Crear Ejercicio</a>
 	        </li>
 	    </ul>
 	</div>
@@ -41,36 +41,58 @@
 		<!-- Div contenedor del formulario -->
 			<div class="col-xs-12">
 				<!-- PAGE CONTENT BEGINS -->
-				{{ Form::open(['route' => ['fspago.update', $fpago->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editafpago']) }}
+				{{ Form::open(['route' => ['ejercicios.update', $ejercicio->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editaejercicio']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
 
+
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="formpago_formpagosat_nom">Nombre:</label>
-						<div class="col-md-10 col-sm-10 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="formpago_formpagosat_nom" id="formpago_formpagosat_nom" class="col-md-10 col-sm-10 col-xs-12" value="{{$fpago->formpago_formpagosat_nom}}"/>
-							</div>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ejerc_anio">Ejercicio:</label>
+						<div class="col-md-9 col-sm-9 col-xs-12">
+							<input type="number" name="ejerc_anio" id="ejerc_anio" value="{{$ejercicio->ejerc_anio}}"/>
 						</div>
 					</div>
 
+
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="formpago_formpagosat_cod">Código:</label>
-						<div class="col-md-10 col-sm-10 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="formpago_formpagosat_cod" id="formpago_formpagosat_cod" class="col-md-10 col-sm-10 col-xs-12" value="{{$fpago->formpago_formpagosat_cod}}"/>
-							</div>
-						</div>
+						
 					</div>
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="formpago_ctacont_id">Cuenta:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="formpago_ctacont_id" name="formpago_ctacont_id" data-placeholder="Seleccione la cuenta ..." style="width: 83%; display: none;">
-								<option value="">Seleccione ...</option>
-								@foreach($cuentas as $ct)
-	                            	<option value="{{ $ct->id }}" {{$fpago->formpago_ctacont_id == $ct->id ? 'selected':''}}>{{ $ct->ctacont_num }}</option>
-	                            @endforeach
-							</select>
+						<div class="col-md-12 col-sm-12 col-xs-12">
+
+
+
+							<div class="tabbable">
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active">
+										<a data-toggle="tab" href="#home">
+											<i class="green ace-icon fa fa-home bigger-120"></i>
+											Chequeos
+										</a>
+									</li>
+								</ul>
+
+
+
+								<div class="tab-content">
+									<div id="home" class="tab-pane fade in active">
+										
+										<div class="form-group">
+											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="ejerc_cerrado">Ejericio Cerrado ?: </label>
+											    <div class="col-md-2 col-sm-2 col-xs-12">
+											    	<label>
+														<input name="ejerc_cerrado" id="ejerc_cerrado" class="ace ace-switch" type="checkbox" {{$ejercicio->ejerc_cerrado ? 'checked':''}}/>
+														<span class="lbl" data-lbl="Si&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No"></span>
+													</label>
+												</div>
+
+
+										</div>
+
+									</div>
+
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -80,7 +102,7 @@
 					<div class="ln_solid"></div>
                         <div class="form-group">
 	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-	                            <button id="cancel" type="button" onclick="location.href = '/fspago';" class="btn btn-info">Cancelar</button>
+	                            <button id="cancel" type="button" onclick="location.href = '/ejercicios';" class="btn btn-info">Cancelar</button>
 	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
 	                        </div>
                         </div>
@@ -108,19 +130,22 @@
 
 
 		<script type="text/javascript">
+
+			var dom_estado_serv = '';
+	    	var dom_munic_serv = '';
+	    	var dom_cp_serv = '';
+	    	var dom_munic_text = '';
+	    	var dtobj = null;
+
+			//$('#loadingmodal').modal('show');
+
 			/* Marcando el menú seleccionado */
 	        	$.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
 				  value.classList.remove("active");
 				});
-	        	$("#menuformapago").addClass('active');
+	        	$("#menuejercicio").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
 	        	$("#menucontabilidadconfig").addClass('open');
-
-        	/*Inicializando selects*/
-	        	$("#formpago_ctacont_id").select2({
-				  	placeholder: "Selecciona la cuenta ...",
-				  	allowClear: true
-				});
 
 
 
@@ -134,31 +159,37 @@
 				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
 			}, "Introduzca un RFC válido.");*/
 		
-			$('#editafpago').validate({
+			/*$('#creaperiodo').validate({
 				errorElement: 'div',
 				errorClass: 'help-block',
 				focusInvalid: false,
 				ignore: "",
 				rules: {
-					formpago_formpagosat_nom: {
+					ctacont_num: {
 						required: true
 					},
-					formpago_formpagosat_cod: {
+					ctacont_natur: {
 						required: true
 					},
-					formpago_ctacont_id: {
+					ctacont_f_iniciosat: {
+						required: true
+					},
+					ctacont_desc: {
 						required: true
 					}
 				},
 		
 				messages: {
-					formpago_formpagosat_nom: {
+					ctacont_num: {
 						required: "Este campo es requerido."
 					},
-					formpago_formpagosat_cod: {
+					ctacont_natur: {
 						required: "Este campo es requerido."
 					},
-					formpago_ctacont_id: {
+					ctacont_f_iniciosat: {
+						required: "Este campo es requerido."
+					},
+					ctacont_desc: {
 						required: "Este campo es requerido."
 					}
 				},
@@ -195,7 +226,8 @@
 				invalidHandler: function (form) {
 					console.log('2');
 				}
-			});
+			});*/
+
 
 		</script>
 

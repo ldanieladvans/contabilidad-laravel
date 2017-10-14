@@ -18,6 +18,8 @@ class CreatePeriod extends Migration
             $table->increments('id');
             $table->boolean('period_cerrado')->default(false);
             $table->boolean('period_de_cierre')->default(false);
+            $table->boolean('period_fecha_ini')->nullable();
+            $table->boolean('period_fecha_fin')->nullable();
             $table->timestamps();
         });
     }

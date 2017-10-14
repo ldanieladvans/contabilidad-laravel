@@ -229,6 +229,7 @@
 				});
 	        	$("#menucuentas").addClass('active');
 	        	$("#menucontabilidad").addClass('open');
+	        	$("#menucontabilidadconfig").addClass('open');
 
         	/*Inicializando selects*/
 	        	$("#ctacont_catsat_cod").select2({
