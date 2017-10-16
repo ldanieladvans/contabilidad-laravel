@@ -45,7 +45,8 @@ Route::resource('asientos', 'AsientoController');
 Route::resource('pagosrel', 'PagorelController');
 Route::resource('periodos', 'PeriodoController');
 Route::resource('ejercicios', 'EjercicioController');
-
+Route::resource('balanzas', 'BalanzaController');
+Route::resource('configs', 'ConfigController');
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/delItems', 'Controller@delItems');

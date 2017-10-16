@@ -303,6 +303,16 @@
 								</ul>
 							</li>
 
+
+							<li id="menubalanza" class="">
+								<a href="{{ route('balanzas.index') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									BALANZA
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							
 						</ul>
 					</li>
