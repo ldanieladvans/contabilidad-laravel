@@ -504,6 +504,7 @@ class ServController extends Controller
         $alldata = $request->all();
         $msg = 'Solución no encontrada';
         $status = 'Failure';
+        $size_db_virgen = 2.40;
 
         if(array_key_exists('dbname',$alldata) && isset($alldata['dbname']) && array_key_exists('megas_a_trans',$alldata) && isset($alldata['megas_a_trans'])){
             $dbname = $alldata['dbname'];
@@ -517,7 +518,7 @@ class ServController extends Controller
                 Log::info($db);
                 $sizemg_ocup = $db[0]->sizemg;
                 Log::info('ocupado: '.$sizemg_ocup);
-                $sizemg_total = DB::connection($dbname)->table('storage')->get()[0]->almacenamiento;
+                $sizemg_total = DB::connection($dbname)->table('storage')->get()[0]->almacenamiento + $size_db_virgen;
                 Log::info('total: '.$sizemg_total);
                 if (($sizemg_total - $sizemg_ocup) > $mg_a_transf)
                 {
@@ -553,7 +554,7 @@ class ServController extends Controller
 
             $dbname = $alldata['dbname'];
             $mg_a_transf = $alldata['megas_a_trans'];
-            $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
+            $sizemg_total = DB::connection($dbname)->table('storage')->get()[0]->almacenamiento;
             DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total + $mg_a_transf, date('Y-m-d H:i:s')]);
             $msg = 'Megas sumados';
             $status = 'Success';
