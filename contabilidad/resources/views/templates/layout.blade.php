@@ -108,7 +108,7 @@
 
 				<ul id="menus" class="nav nav-list">
 					<li id="menuinicio" class="">
-						<a href="index.html">
+						<a href="{{ route('home') }}">
 							<i class="menu-icon fa fa-home"></i>
 							<span class="menu-text"> INICIO </span>
 						</a>
@@ -300,6 +300,15 @@
 
 										<b class="arrow"></b>
 									</li>
+
+									<li id="menuconfignom" class="">
+										<a href="{{ route('contconfig.index') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											CONFIGURACIÓN NÓMINA
+										</a>
+
+										<b class="arrow"></b>
+									</li>
 								</ul>
 							</li>
 
@@ -318,6 +327,31 @@
 					</li>
 
 
+					<li id="menuacciones" class="">
+						<a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-cogs"></i>
+							<span class="menu-text">
+								ACCIONES
+							</span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+
+							<li id="menusubecomp" class="">
+								<a href="{{ route('subecompindex') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									SUBIR COMPROBANTE
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
+						</ul>
+					</li>
 
 
 					<li id="menuseguridad" class="">

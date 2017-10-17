@@ -17,6 +17,10 @@ use App\IngresosProducto;
 use App\GastosProducto;
 use App\ComprobanteRel;
 use App\Provision;
+use App\ConfigConcepto;
+use App\ConfigNomina;
+use App\Cuenta;
+use App\CompProces;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -492,6 +496,93 @@ class Controller extends BaseController
         return \Response::json($response);
     }
 
+    public function confConc(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $confconc_codsat = false;
+        $confconc_tipoconcpto = false;
+        $confconc_cta_id = false;
+        $data_id = false;
+
+        if($alldata['confconc_codsat']!='false'){
+            $to_save_data['confconc_codsat'] = $alldata['confconc_codsat'];
+             $confconc_codsat = $alldata['confconc_codsat'];
+        }
+        if($alldata['confconc_tipoconcpto']!='false'){
+            $to_save_data['confconc_tipoconcpto'] = $alldata['confconc_tipoconcpto'];
+            $confconc_tipoconcpto = $alldata['confconc_tipoconcpto'];
+        }
+        if($alldata['confconc_cta_id']!='false'){
+            $to_save_data['confconc_cta_id'] = $alldata['confconc_cta_id'];
+            $confconc_cta_id = $alldata['confconc_cta_id'];
+        }
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $confconc = new ConfigConcepto($to_save_data);
+            $confconc->save();
+            $data_id = $confconc->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $confconc = ConfigConcepto::findOrFail($row_id);
+                if($confconc_codsat){
+                    $confconc->confconc_codsat = $confconc_codsat;
+                }
+                if($confconc_tipoconcpto){
+                    $confconc->confconc_tipoconcpto = $confconc_tipoconcpto;
+                }
+                if($confconc_cta_id){
+                    $confconc->confconc_cta_id = $confconc_cta_id;
+                }
+                $confconc->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                ConfigConcepto::destroy($row_id);
+            }
+        }
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
+        );
+        return \Response::json($response);
+    }
+
+
+    public function unlinkFile(Request $request)
+    {
+        $alldata = $request->all();
+        $logued_user = Auth::user();
+        $target_dir = base_path().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR;
+        $full_path = $target_dir.(string)$logued_user->id.'_'.$alldata['filename'];
+
+        $exist_file = CompProces::where('user_id',$logued_user->id)->where('filename',$alldata['filename'])->where('process',false)->get();
+
+        if(count($exist_file) > 0){
+            if (file_exists($full_path)){ 
+                unlink ($full_path); 
+            }
+            CompProces::where('user_id',$logued_user->id)->where('filename',$alldata['filename'])->where('process',false)->delete();
+        }
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok'
+        );
+        return \Response::json($response);
+    }
+
 
     private static function getBrowser($app = null)
     {
@@ -570,6 +661,7 @@ class Controller extends BaseController
             'platform' => $platform,
             'pattern' => $pattern,
         ];
+
     }
 
 

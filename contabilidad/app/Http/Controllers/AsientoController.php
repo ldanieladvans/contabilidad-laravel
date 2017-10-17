@@ -8,6 +8,7 @@ use App\Poliza;
 use App\Asiento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AsientoController extends Controller
 {
