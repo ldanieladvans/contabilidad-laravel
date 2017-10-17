@@ -18,7 +18,7 @@ class CreateBitac extends Migration
             $table->dateTime('bitac_fecha');
             $table->string('bitac_modulo')->nullable();
             $table->string('bitac_ip')->nullable();
-            $table->string('bitac_naveg')->nullable();
+            $table->text('bitac_naveg')->nullable();
             $table->string('bitac_tipo_op')->nullable();
             $table->text('bitac_msg')->nullable();
             $table->text('bitac_result')->nullable();
