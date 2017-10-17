@@ -457,5 +457,42 @@ class ServController extends Controller
         }
         return \Redirect::to('/home');
     }
+
+    public function moduser(Request $request)
+    {
+        $alldata = $request->all();
+        $msg = "Usuario modificado";
+        $status = "Success";
+        $usrs = [];
+        $dbname = '';
+
+        if(array_key_exists('usr',$alldata) && isset($alldata['usr']) && array_key_exists('dbname',$alldata) && isset($alldata['dbname'])){
+
+            $usrs = json_decode($alldata['usr']);
+            $dbname = $alldata['dbname'];
+            $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
+            $db = DB::select($query, [$dbname]);
+
+            $bitcta_tipo_op = 'update user';
+            
+            if(!empty($db)){
+
+                foreach ($usrs as $usr) {
+
+                    DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usr->name, $usr->email, date('Y-m-d H:i:s'), $usr->users_cuentaid]);
+                    
+                    //$bitcta_msg = 'Usuario '.$usr->name. ' actualizado desde cuenta';
+                    
+                }
+            }
+        }
+
+        $response = array(
+        'status' => $status,
+        'msg' => $msg);
+
+        return \Response::json($response);
+
+    }
     
 }

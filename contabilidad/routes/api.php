@@ -26,3 +26,4 @@ Route::get('/getbitc', 'ServController@getbitc')->middleware('auth:api')->middle
 Route::get('/createbackp', 'ServController@createbackp')->middleware('auth:api')->middleware('changebd');
 Route::get('/loginservice', 'ServController@loginservice')->middleware('auth:api')->middleware('changebd');
 Route::get('/restorebackp', 'ServController@restorebackp')->middleware('auth:api')->middleware('changebd');
+Route::get('/moduser', 'ServController@moduser')->middleware('auth:api')->middleware('changebd');
