@@ -13,17 +13,16 @@
 
 Auth::routes();
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
+
+Route::get('/', 'HomeController@index')->name('home');
 
 
 /* mmabel routes section */
 
 /* end mmabel*/
-
-
-
 
 
 /* ldaniel routes section */
@@ -47,6 +46,15 @@ Route::resource('periodos', 'PeriodoController');
 Route::resource('ejercicios', 'EjercicioController');
 Route::resource('balanzas', 'BalanzaController');
 Route::resource('configs', 'ConfigController');
+Route::resource('contconfig', 'ContConfigController');
+
+/*Actions*/
+Route::group(['prefix' => 'acciones'], function () {
+   // Route::resource('account', 'AccountController');
+	Route::get('subecomp', 'SubeCompController@index')->name('subecompindex');
+	Route::post('subecompadd', 'SubeCompController@addComp')->name('subecompadd');
+
+});
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/delItems', 'Controller@delItems');
@@ -55,6 +63,9 @@ Route::post('/prodingr', 'Controller@prodIngr');
 Route::post('/prodgast', 'Controller@prodGast');
 Route::post('/comprel', 'Controller@compRel');
 Route::post('/provis', 'Controller@provis');
+Route::post('/confconc', 'Controller@confConc');
+Route::post('/unlinkfile', 'Controller@unlinkFile');
+Route::post('/processfile', 'SubeCompController@processFile');
 /* end ldaniel*/
 
 
@@ -66,4 +77,4 @@ Route::post('/provis', 'Controller@provis');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
