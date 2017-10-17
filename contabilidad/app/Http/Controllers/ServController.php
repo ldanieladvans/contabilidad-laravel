@@ -476,7 +476,7 @@ class ServController extends Controller
             $bitcta_tipo_op = 'update user';
             
             if(!empty($db)){
-                DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usr['name'], $usr['email'], date('Y-m-d H:i:s'), $usr['users_cuentaid']]);
+                DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usrs['name'], $usrs['email'], date('Y-m-d H:i:s'), $usrs['users_cuentaid']]);
             }
         }
 
