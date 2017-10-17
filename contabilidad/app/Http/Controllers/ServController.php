@@ -88,7 +88,7 @@ class ServController extends Controller
 
                 \Config::set('database.default', $dbname);
                 \Artisan::call('migrate', ['--database'=>$dbname]);
-                \Artisan::call('db:seed', ['--database'=>$dbname]);
+                //\Artisan::call('db:seed', ['--database'=>$dbname]);
 
                 //Creando usuario para primera conexión a contabilidad
 
@@ -155,7 +155,7 @@ class ServController extends Controller
         $alldata = $request->all();
         $msg = "Base de datos no recibida";
         $status = 0;
-        $dbname = '';
+        $dbname = ''; 
 
         if(array_key_exists('dbname',$alldata) && isset($alldata['dbname'])){
             $dbname = $alldata['dbname'];
@@ -298,7 +298,7 @@ class ServController extends Controller
         if(array_key_exists('dbname',$alldata) && isset($alldata['dbname']))
         {
             $dbname = $alldata['dbname'];
-            $bitacora = DB::connection($dbname)->select('select fecha_creacion as bitc_fecha, accion as bitcta_tipo_op, ip as bitcta_ip, modulo as bitc_modulo, navegador from bitacora limit 20');  
+            $bitacora = DB::connection($dbname)->select('select bitac_fecha, bitac_tipo_op, bitac_ip, bitac_modulo, bitac_naveg from bitac limit 20');  
 
             if (count($bitacora) > 0)
             {
@@ -345,6 +345,7 @@ class ServController extends Controller
     }
 
     public function restorebackp(Request $request)
+    
     {
     	$alldata = $request->all();
         $status = 'failure';

@@ -20,7 +20,7 @@ class User extends Authenticatable implements HasRoleAndPermissionContract
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'usrc_nick', 'usrc_tel', 'usrc_activo', 'usrc_pic', 'usrc_type', 'pass_changed'
+        'name', 'email', 'password', 'usrc_nick', 'usrc_tel', 'usrc_activo', 'usrc_pic', 'usrc_type', 'pass_changed', 'users_cuentaid'
     ];
 
     /**
@@ -31,6 +31,12 @@ class User extends Authenticatable implements HasRoleAndPermissionContract
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->connection = \Session::get('selected_database','mysql');
+    }
 
     public function bitacoras()
     {
