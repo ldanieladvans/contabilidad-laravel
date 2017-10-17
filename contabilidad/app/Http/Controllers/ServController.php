@@ -514,6 +514,7 @@ class ServController extends Controller
 
             if (!empty($db))
             {
+                Log::info($db);
                 $sizemg_ocup = $db->sizemg;
                 $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
                 if (($sizemg_total - $sizemg_ocup) > $mg_a_transf)
