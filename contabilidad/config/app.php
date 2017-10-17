@@ -194,7 +194,6 @@ return [
 
         Bican\Roles\RolesServiceProvider::class,
         BackupManager\Laravel\Laravel5ServiceProvider::class,
-        App\Providers\SftpServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
