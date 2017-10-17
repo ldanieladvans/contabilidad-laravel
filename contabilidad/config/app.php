@@ -195,6 +195,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        BackupManager\Laravel\Laravel55ServiceProvider::class,
 
     ],
 
