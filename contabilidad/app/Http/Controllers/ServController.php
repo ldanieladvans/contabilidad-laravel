@@ -135,6 +135,12 @@ class ServController extends Controller
                 }
                 DB::connection($dbname)->table('storage')->insert(['vigencia'=>$f_corte, 'almacenamiento'=>$megas, 'activo'=>1]);
 
+                //Guardando datos generales de empresa
+                if(array_key_exists('rfc',$alldata) && isset($alldata['rfc']) && array_key_exists('rfc_nom',$alldata) && isset($alldata['rfc_nom'])){
+                    DB::connection($dbname)->table('emp')->insert(['emp_rfc'=>$alldata['rfc'], 'emp_nom'=>$alldata['rfc_nom']]);
+                }
+                
+
 
                 //\Config::set('database.default', \Session::get('selected_database','mysql'));
             }
