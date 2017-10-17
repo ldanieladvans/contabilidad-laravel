@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 
 /* mmabel routes section */
+Route::get('/msl/{dbname}/{hashValue}/', 'ServController@makeSecureLogin');
 
 /* end mmabel*/
 
