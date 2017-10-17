@@ -468,7 +468,7 @@ class ServController extends Controller
 
         if(array_key_exists('usr',$alldata) && isset($alldata['usr']) && array_key_exists('dbname',$alldata) && isset($alldata['dbname'])){
 
-            $usrs = json_decode($alldata['usr']);
+            $usrs = $alldata['usr'];
             $dbname = $alldata['dbname'];
             $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?";
             $db = DB::select($query, [$dbname]);
@@ -476,14 +476,7 @@ class ServController extends Controller
             $bitcta_tipo_op = 'update user';
             
             if(!empty($db)){
-
-                foreach ($usrs as $usr) {
-
-                    DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usr->name, $usr->email, date('Y-m-d H:i:s'), $usr->users_cuentaid]);
-                    
-                    //$bitcta_msg = 'Usuario '.$usr->name. ' actualizado desde cuenta';
-                    
-                }
+                DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usr['name'], $usr['email'], date('Y-m-d H:i:s'), $usr['users_cuentaid']]);
             }
         }
 
