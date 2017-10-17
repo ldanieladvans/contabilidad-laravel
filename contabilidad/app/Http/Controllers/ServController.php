@@ -518,9 +518,9 @@ class ServController extends Controller
                 Log::info($db);
                 $sizemg_ocup = $db[0]->sizemg;
                 Log::info('ocupado: '.$sizemg_ocup);
-                $sizemg_total = DB::connection($dbname)->table('storage')->get()[0]->almacenamiento + $size_db_virgen;
+                $sizemg_total = DB::connection($dbname)->table('storage')->get()[0]->almacenamiento;
                 Log::info('total: '.$sizemg_total);
-                if (($sizemg_total - $sizemg_ocup) > $mg_a_transf)
+                if (($sizemg_total - $sizemg_ocup) + $size_db_virgen > $mg_a_transf)
                 {
                     DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total - $mg_a_transf, date('Y-m-d H:i:s')]);
                     $msg = 'Megas restados';
