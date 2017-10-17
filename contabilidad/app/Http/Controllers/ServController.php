@@ -455,7 +455,7 @@ class ServController extends Controller
             }
 
         }
-        return \Redirect::to('/dashboard');
+        return \Redirect::to('/home');
     }
     
 }
