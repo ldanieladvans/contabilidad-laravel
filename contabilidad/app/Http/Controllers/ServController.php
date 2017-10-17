@@ -518,7 +518,7 @@ class ServController extends Controller
                 $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
                 if (($sizemg_total - $sizemg_ocup) > $mg_a_transf)
                 {
-                    DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total - $mg_a_transf, date('Y-m-d H:i:s'));
+                    DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total - $mg_a_transf, date('Y-m-d H:i:s')]);
                     $msg = 'Megas restados';
                     $status = 'Success';
                 }
