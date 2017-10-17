@@ -124,6 +124,17 @@ class ServController extends Controller
                 //Insertando primer usuario de base de datos de contabilidad, enviado por cuenta
                 $firstusr_id = DB::connection($dbname)->table('users')->insertGetId(['name'=>$name, 'users_cuentaid'=>$id_cuenta,'email'=>$email, 'password'=>$pass]);
 
+                //Poblando la tabla storage
+                $f_corte = '';
+                $megas = 0;
+                if(array_key_exists('f_corte',$alldata) && isset($alldata['f_corte'])){
+                    $f_corte = $alldata['f_corte'];
+                }
+                if(array_key_exists('megas',$alldata) && isset($alldata['megas'])){
+                    $megas = $alldata['megas'];
+                }
+                DB::connection($dbname)->table('storage')->insert(['vigencia'=>$f_corte, 'almacenamiento'=>$megas, 'activo'=>1]);
+
 
                 //\Config::set('database.default', \Session::get('selected_database','mysql'));
             }
@@ -478,6 +489,72 @@ class ServController extends Controller
             if(!empty($db)){
                 DB::connection($dbname)->update('update users set name = ?, email = ?, updated_at = ? where users_cuentaid = ?', [$usrs['name'], $usrs['email'], date('Y-m-d H:i:s'), $usrs['users_cuentaid']]);
             }
+        }
+
+        $response = array(
+        'status' => $status,
+        'msg' => $msg);
+
+        return \Response::json($response);
+
+    }
+
+    public function restarmg(Request $request)
+    {
+        $alldata = $request->all();
+        $msg = 'Solución no encontrada';
+        $status = 'Failure';
+
+        if(array_key_exists('dbname',$alldata) && isset($alldata['dbname']) && array_key_exists('megas_a_trans',$alldata) && isset($alldata['megas_a_trans'])){
+            $dbname = $alldata['dbname'];
+            $mg_a_transf = $alldata['megas_a_trans'];
+
+            $query = "SELECT SUM(ROUND(((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024 ), 2)) AS sizemg FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?";
+            $db = DB::select($query, [$dbname]);
+
+            if (!empty($db))
+            {
+                $sizemg_ocup = $db->sizemg;
+                $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
+                if (($sizemg_total - $sizemg_ocup) > $mg_a_transf)
+                {
+                    DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total - $mg_a_transf, date('Y-m-d H:i:s'));
+                    $msg = 'Megas restados';
+                    $status = 'Success';
+                }
+                else
+                {
+                    $msg = 'Falta de disponibilidad';
+                }
+                
+            }
+
+        }
+
+        $response = array(
+        'status' => $status,
+        'msg' => $msg);
+
+        return \Response::json($response);
+
+    }
+
+    public function sumarmg(Request $request)
+    {
+        $alldata = $request->all();
+        $msg = 'Datos no encontrados';
+        $status = 'Failure';
+
+        if(array_key_exists('dbname',$alldata) && isset($alldata['dbname']) && array_key_exists('megas_a_trans',$alldata) && isset($alldata['megas_a_trans']))
+        {
+
+            $dbname = $alldata['dbname'];
+            $mg_a_transf = $alldata['megas_a_trans'];
+            $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
+            DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total + $mg_a_transf, date('Y-m-d H:i:s'));
+            $msg = 'Megas sumados';
+            $status = 'Success';
+           
         }
 
         $response = array(

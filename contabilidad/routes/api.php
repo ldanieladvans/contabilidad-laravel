@@ -27,3 +27,5 @@ Route::get('/createbackp', 'ServController@createbackp')->middleware('auth:api')
 Route::get('/loginservice', 'ServController@loginservice')->middleware('auth:api')->middleware('changebd');
 Route::get('/restorebackp', 'ServController@restorebackp')->middleware('auth:api')->middleware('changebd');
 Route::get('/moduser', 'ServController@moduser')->middleware('auth:api')->middleware('changebd');
+Route::get('/restarmg', 'ServController@restarmg')->middleware('auth:api')->middleware('changebd');
+Route::get('/sumarmg', 'ServController@sumarmg')->middleware('auth:api')->middleware('changebd');
