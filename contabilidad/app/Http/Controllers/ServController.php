@@ -219,7 +219,7 @@ class ServController extends Controller
         if(array_key_exists('usr',$alldata) && isset($alldata['usr']))
         {
             $usr = $alldata['usr'];
-            $usr_id = DB::connection($dbname)->table('users')->insertGetId(['name'=>$usr['name'], 'email'=>$usr['email'], 'users_tel'=>$usr['users_tel'], 'users_cuentaid'=>$usr['id_cuenta'], 'created_at'=>date('Y-m-d H:i:s')]);
+            $usr_id = DB::connection($dbname)->table('users')->insertGetId(['name'=>$usr['name'], 'email'=>$usr['email'], 'usrc_tel'=>$usr['users_tel'], 'users_cuentaid'=>$usr['id_cuenta'], 'created_at'=>date('Y-m-d H:i:s')]);
 
            if(array_key_exists('roles',$alldata) && isset($alldata['roles']))
            {
