@@ -551,7 +551,7 @@ class ServController extends Controller
             $dbname = $alldata['dbname'];
             $mg_a_transf = $alldata['megas_a_trans'];
             $sizemg_total = DB::connection($dbname)->table('storage')->get()->almacenamiento;
-            DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total + $mg_a_transf, date('Y-m-d H:i:s'));
+            DB::connection($dbname)->update('update storage set almacenamiento = ?, updated_at = ?', [$sizemg_total + $mg_a_transf, date('Y-m-d H:i:s')]);
             $msg = 'Megas sumados';
             $status = 'Success';
            
