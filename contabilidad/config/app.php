@@ -193,7 +193,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Bican\Roles\RolesServiceProvider::class,
-        BackupManager\Laravel\Laravel5ServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
