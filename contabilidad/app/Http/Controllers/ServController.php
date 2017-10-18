@@ -472,7 +472,7 @@ class ServController extends Controller
             }
 
         }
-        return \Redirect::to('/home');
+        return \Redirect::to('/');
     }
 
     public function moduser(Request $request)
