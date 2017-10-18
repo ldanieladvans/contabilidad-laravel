@@ -11,6 +11,8 @@ use App\Comprobante;
 use App\ComprobanteRel;
 use App\Nomina;
 use App\Provision;
+use App\Cliente;
+use App\Proveedor;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Lib\XML2Array;
@@ -103,12 +105,32 @@ class SubeCompController extends Controller
         		if(array_key_exists('cfdi:Emisor', $xml_array['cfdi:Comprobante'])){
         			if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Emisor'])){
         				$comprobante->comp_rfc_emisor = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+        				if($alldata['comptype'] == 'ingreso'){
+        					$cliente = new Cliente();
+        					$cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
+        					$cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+
+        					$search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
+        					if(count($search_cliente) == 0){
+        						$cliente->save();
+        					}
+        				}
     				}
     			}
 
     			if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
     				if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Receptor'])){
         				$comprobante->comp_rfc_receptor = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+        				if($alldata['comptype'] == 'egreso'){
+        					$proveedor = new Proveedor();
+        					$proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
+        					$proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+
+        					$search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
+        					if(count($search_proveedor) == 0){
+        						$proveedor->save();
+        					}
+        				}
     				}
     			}
 
