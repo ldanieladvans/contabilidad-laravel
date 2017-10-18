@@ -139,7 +139,11 @@
         
         <script type="text/javascript">
 
-        
+        var comptype = 'ingreso';
+
+        $("#tipo_comprobante").change(function(){
+        	comptype = this.value;
+        });
 
         function processFiles(){
         	var result = confirm("¿Está seguro que desea procesar estos archivos?");
@@ -148,7 +152,7 @@
                 $.ajax({
                     url: '/processfile',
                     type: 'POST',
-                    data: {_token: CSRF_TOKEN},
+                    data: {_token: CSRF_TOKEN,comptype:comptype},
                     dataType: 'JSON',
                     success: function (data) {
                         window.location.href = window.location.href;
