@@ -8,7 +8,7 @@ class CompProces extends Model
 {
     protected $table = "comp_proces";
 
-    protected $fillable = ['user_id','filename','process'];
+    protected $fillable = ['user_id','filename','process','process_fecha','filetype'];
 
     public function __construct(array $attributes = [])
     {

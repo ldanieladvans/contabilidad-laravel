@@ -22,6 +22,7 @@ class CreateCompProcessTable extends Migration
             $table->string('filename')->nullable();
             $table->boolean('process')->default(false);
             $table->dateTime('process_fecha')->nullable();
+            $table->string('filetype')->nullable();
         });
     }
 
