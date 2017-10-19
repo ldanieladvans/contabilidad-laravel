@@ -310,10 +310,8 @@
 													<div class="form-group">
 														<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_forma_contab">Forma de contabilización:</label>
 							                          	<select class="js-example-basic-single js-states form-control" name="cliente_forma_contab" id="cliente_forma_contab" style="width: 60%; display: none;">
-							                            	<option value="">Seleccione ...</option>
-							                            	@foreach($cliente_forma_contab as $cfc)
-								                            	<option value="{{ $cfc->id }}" {{$cliente->cliente_forma_contab == $cfc->id ? 'selected':''}}>{{ $cfc->id }}</option>
-								                            @endforeach
+							                            		<option value="cliente" {{$cliente->cliente_forma_contab == 'cliente' ? 'selected':''}}>Cliente</option>
+								                            	<option value="tipcliente" {{$cliente->cliente_forma_contab == 'tipcliente' ? 'selected':''}}>Tipo de Cliente</option>
 							                          	</select>
 							                        </div>
 												</td>

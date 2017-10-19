@@ -19,7 +19,7 @@ class CreateFormapago extends Migration
             $table->increments('id');
             $table->string('formpago_formpagosat_cod');
             $table->string('formpago_formpagosat_nom');
-            $table->integer('formpago_ctacont_id')->unsigned();
+            $table->integer('formpago_ctacont_id')->unsigned()->nullable();
             $table->foreign('formpago_ctacont_id')->references('id')->on('ctacont');
             $table->timestamps();
         });

@@ -54,7 +54,7 @@ Route::group(['prefix' => 'acciones'], function () {
    // Route::resource('account', 'AccountController');
 	Route::get('subecomp', 'SubeCompController@index')->name('subecompindex');
 	Route::post('subecompadd', 'SubeCompController@addComp')->name('subecompadd');
-
+	Route::get('configcont', 'ConfigContController@index')->name('configcontindex');
 });
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

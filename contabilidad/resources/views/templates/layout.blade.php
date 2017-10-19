@@ -341,6 +341,15 @@
 
 						<ul class="submenu">
 
+							<li id="menuconfigwizard" class="">
+								<a href="{{ route('configcontindex') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									CONFIGURAR CONTABILIDAD
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 							<li id="menusubecomp" class="">
 								<a href="{{ route('subecompindex') }}">
 									<i class="menu-icon fa fa-caret-right"></i>
