@@ -16,6 +16,7 @@ class Cuenta extends Model
     {
         parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
+        $this->initJournal('MXN');
     }
 
     public function balanzas()
