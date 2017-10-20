@@ -342,7 +342,7 @@
 						<ul class="submenu">
 
 							<li id="menuconfigwizard" class="">
-								<a href="{{ route('configcontindex') }}">
+								<a href="{{ route('configcontindex',1) }}">
 									<i class="menu-icon fa fa-caret-right"></i>
 									CONFIGURAR CONTABILIDAD
 								</a>
