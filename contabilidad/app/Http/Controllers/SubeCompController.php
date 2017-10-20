@@ -109,7 +109,7 @@ class SubeCompController extends Controller
         					$cliente = new Cliente();
         					$cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
         					$cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
-
+                            $cliente->cliente_tipcliente_id = 1;
         					$search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
         					if(count($search_cliente) == 0){
         						$cliente->save();
@@ -125,7 +125,7 @@ class SubeCompController extends Controller
         					$proveedor = new Proveedor();
         					$proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
         					$proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
-
+                            $proveedor->proveed_tipprov_id = 1;
         					$search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
         					if(count($search_proveedor) == 0){
         						$proveedor->save();

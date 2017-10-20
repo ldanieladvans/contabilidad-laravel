@@ -84,9 +84,11 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="polz_tipopolz">Tipo:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="polz_tipopolz" name="polz_tipopolz" data-placeholder="Seleccione el tipo de póliza ..." style="width: 83%; display: none;">
-                            	<!-- TODO -->
-                            	<option value="tpolz1" {{$poliza->polz_tipopolz == 'tpolz1' ? 'selected':''}}>Tipo Póliza 1</option>
-                            	<option value="tpolz2" {{$poliza->polz_tipopolz == 'tpolz2' ? 'selected':''}}>Tipo Póliza 2</option>
+                            	<option value="ingreso" {{$poliza->polz_tipopolz == 'ingreso' ? 'selected':''}}>Ingreso</option>
+                            	<option value="egreso" {{$poliza->polz_tipopolz == 'egreso' ? 'selected':''}}>Egreso</option>
+                            	<option value="diario" {{$poliza->polz_tipopolz == 'diario' ? 'selected':''}}>Diario</option>
+                            	<option value="orden" {{$poliza->polz_tipopolz == 'orden' ? 'selected':''}}>Orden</option>
+                            	<option value="estadistica" {{$poliza->polz_tipopolz == 'estadistica' ? 'selected':''}}>Estadística</option>
 							</select>
 						</div>
 

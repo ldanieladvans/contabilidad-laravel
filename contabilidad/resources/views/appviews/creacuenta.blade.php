@@ -61,7 +61,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_catsat_cod" name="ctacont_catsat_cod" data-placeholder="Seleccione la cuenta SAT..." style="width: 83%; display: none;">
 								@foreach($ctacont_catsat_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+	                            	<option value="{{ $tp->cat_sat_codigo_agrupador }}">{{ $tp->cat_sat_codigo_agrupador }} - {{ $tp->cat_sat_codigo_agrupador }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -69,9 +69,13 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ctacont_tipocta_cod">Código tipo cuenta SAT:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_tipocta_cod" name="ctacont_tipocta_cod" data-placeholder="Seleccione el tipo de cuenta SAT..." style="width: 83%; display: none;">
-								@foreach($ctacont_tipocta_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
-	                            @endforeach
+								<option value="activo">Activo</option>
+                            	<option value="pasivo">Pasivo</option>
+                            	<option value="capital">Capital</option>
+                            	<option value="ingresos">Ingresos</option>
+                            	<option value="gastos">Gastos</option>
+                            	<option value="orden">Orden</option>
+                            	<option value="resultados">Resultados</option>
 							</select>
 						</div>
 					</div>
@@ -80,8 +84,18 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ctacont_tiposubcta_id">Tipo Subcuenta:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_tiposubcta_id" name="ctacont_tiposubcta_id" data-placeholder="Seleccione el tipo de subcuenta ..." style="width: 83%; display: none;">
-								@foreach($ctacont_tiposubcta_id as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+								<!--<option value="activo_a_corto_plazo">Activo a corto plazo</option>
+                            	<option value="activo_a_largo_plazo">Activo a largo plazo</option>
+                            	<option value="pasivo_a_corto_plazo">Pasivo a corto plazo</option>
+                            	<option value="pasivo_a_largo_plazo">Pasivo a largo plazo</option>
+                            	<option value="capital_contable">Capital contable</option>
+                            	<option value="ingresos">Ingresos</option>
+                            	<option value="costos">Costos</option>
+                            	<option value="gastos">Gastos</option>
+                            	<option value="resultado_integral_de_financiamiento">Resultado integral de financiamiento</option>
+                            	<option value="cuentas_de_orden">Cuentas de orden</option>-->
+                            	@foreach($ctacont_tiposubcta_id as $tp)
+	                            	<option value="{{ $tp->ip }}">{{ $tp->tiposubcta_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -89,7 +103,6 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ctacont_natur">Naturaleza:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_natur" name="ctacont_natur" data-placeholder="Seleccione la naturaleza de la cuenta ..." style="width: 83%; display: none;">
-									<option value="">Seleccione ...</option>
 	                            	<option value="credit">Acreedora</option>
 	                            	<option value="debit">Deudora</option>
 							</select>
