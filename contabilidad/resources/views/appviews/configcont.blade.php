@@ -42,6 +42,8 @@
 @endsection
 
 @section('variable_content')
+
+	<input type="hidden" name="step" id="step" value="{{$wstep}}">
 	<div class="row">
 		<div class="widget-box">
 			<div class="widget-header widget-header-blue widget-header-flat">
@@ -55,22 +57,22 @@
 					<div id="fuelux-wizard-container">
 						<div>
 							<ul class="steps">
-								<li data-step="1" class="active">
+								<li data-step="1" class="{{$wstep == 1 ? 'active':''}}">
 									<span class="step">1</span>
+									<span class="title">Plan Contable</span>
+								</li>
+
+								<li data-step="2" class="{{$wstep == 2 ? 'active':''}}">
+									<span class="step">2</span>
 									<span class="title">Cuentas para clientes</span>
 								</li>
 
-								<li data-step="2">
-									<span class="step">2</span>
+								<li data-step="3" class="{{$wstep == 3 ? 'active':''}}">
+									<span class="step">3</span>
 									<span class="title">Cuentas para proveedores</span>
 								</li>
 
-								<li data-step="3">
-									<span class="step">3</span>
-									<span class="title">Plan contable</span>
-								</li>
-
-								<li data-step="4">
+								<li data-step="4" class="{{$wstep == 4 ? 'active':''}}">
 									<span class="step">4</span>
 									<span class="title">Confirmación</span>
 								</li>
@@ -79,311 +81,427 @@
 
 						<hr />
 
-						<div class="step-content pos-rel">
-							<div class="step-pane active" data-step="1">
-								<h3 class="lighter block green">Enter the following information</h3>
+						
+							<div class="step-content pos-rel">
+								<div class="step-pane active {{$wstep == 1 ? '':'hidden'}}" data-step="1">
+									<h3 class="lighter block green">Configure el plan contable a usar</h3>
+									<form class="form-horizontal" id="validation-form" method="post" action="{{ route('configpc') }}" enctype="multipart/form-data">
+										{{ csrf_field() }}
 
-								<form class="form-horizontal" id="validation-form" method="get">
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">Email Address:</label>
+										<div class="form-group">
+											<label class="control-label col-md-3 col-sm-3 col-xs-12" for="default_pc">Quiere usar el plan contable por defecto ?: </label>
+											    <div class="col-md-2 col-sm-2 col-xs-12">
+											    	<label>
+														<input name="default_pc" id="default_pc" class="ace ace-switch" type="checkbox"/>
+														<span class="lbl" data-lbl="Si&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No"></span>
+													</label>
+												</div>
 
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<input type="email" name="email" id="email" class="col-xs-12 col-sm-6" />
-											</div>
 										</div>
-									</div>
 
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="password">Password:</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />
-											</div>
-										</div>
-									</div>
-
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="password2">Confirm Password:</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<input type="password" name="password2" id="password2" class="col-xs-12 col-sm-4" />
-											</div>
-										</div>
-									</div>
-
-									<div class="hr hr-dotted"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="name">Company Name:</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<input type="text" id="name" name="name" class="col-xs-12 col-sm-5" />
-											</div>
-										</div>
-									</div>
-
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="phone">Phone Number:</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="input-group">
-												<span class="input-group-addon">
-													<i class="ace-icon fa fa-phone"></i>
-												</span>
-
-												<input type="tel" id="phone" name="phone" />
-											</div>
-										</div>
-									</div>
-
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="url">Company URL:</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<input type="url" id="url" name="url" class="col-xs-12 col-sm-8" />
-											</div>
-										</div>
-									</div>
-
-									<div class="hr hr-dotted"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right">Subscribe to</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div>
-												<label>
-													<input name="subscription" value="1" type="checkbox" class="ace" />
-													<span class="lbl"> Latest news and announcements</span>
-												</label>
+										<div class="form-group" id="excelpccontainer">
+											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="excel_link">Descargue la plantilla:</label>
+										    <div class="col-md-1 col-sm-1 col-xs-12">
+										    	<a href='/downloadpc'>Aquí</a>
 											</div>
 
-											<div>
-												<label>
-													<input name="subscription" value="2" type="checkbox" class="ace" />
-													<span class="lbl"> Product offers and discounts</span>
-												</label>
+											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="excel_link">Llene la plantilla y súbala:</label>
+										    <div class="col-md-1 col-sm-1 col-xs-12">
+										    	<input type="file" name="file" id="file">
 											</div>
 										</div>
-									</div>
 
-									<div class="space-2"></div>
+									</form>
 
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right">Gender</label>
+								</div>
 
-										<div class="col-xs-12 col-sm-9">
-											<div>
-												<label class="line-height-1 blue">
-													<input name="gender" value="1" type="radio" class="ace" />
-													<span class="lbl"> Male</span>
-												</label>
-											</div>
+								<div class="step-pane" data-step="2">
+									<div>
+										<form class="form-horizontal" id="fclients" method="post" action="{{ route('configpcclients') }}" >
+											{{ csrf_field() }}
+											<table width="100%">
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_anticp_client_id">Cuenta de anticipo:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_anticp_client_id" id="cliente_cta_anticp_client_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->cliente_cta_anticp_client_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
 
-											<div>
-												<label class="line-height-1 blue">
-													<input name="gender" value="2" type="radio" class="ace" />
-													<span class="lbl"> Female</span>
-												</label>
-											</div>
-										</div>
-									</div>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_isr_reten_cob_id">Cuenta de isr retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_cob_id" id="cliente_cta_isr_reten_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->cliente_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
 
-									<div class="hr hr-dotted"></div>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ingreso_id">Cuenta de ingreso:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ingreso_id" id="cliente_cta_ingreso_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $cci)
+									                            	<option value="{{ $cci->id }}" {{$confimodel->cliente_cta_ingreso_id == $cci->id ? 'selected':''}}>{{ $cci->ctacont_catsat_cod }} - {{ $cci->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_desc_id">Cuenta de descuento:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccd)
+									                            	<option value="{{ $ccd->id }}" {{$confimodel->cliente_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_traslad_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_x_cob_id" id="cliente_cta_iva_traslad_x_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccitxc)
+									                            	<option value="{{ $ccitxc->id }}" {{$confimodel->cliente_cta_iva_traslad_x_cob_id == $ccitxc->id ? 'selected':''}}>{{ $ccitxc->ctacont_catsat_cod }} - {{ $ccitxc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_traslad_cob_id">Cuenta IVA trasladado cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_traslad_cob_id" id="cliente_cta_iva_traslad_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccitc)
+									                            	<option value="{{ $ccitc->id }}" {{$confimodel->cliente_cta_iva_traslad_cob_id == $ccitc->id ? 'selected':''}}>{{ $ccitc->ctacont_catsat_cod }} - {{ $ccitc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_reten_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_x_cob_id" id="cliente_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccirxc)
+									                            	<option value="{{ $ccirxc->id }}" {{$confimodel->cliente_cta_iva_reten_x_cob_id == $ccirxc->id ? 'selected':''}}>{{ $ccirxc->ctacont_catsat_cod }} - {{ $ccirxc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_reten_cob_id">Cuenta IVA trasladado cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_cob_id" id="cliente_cta_iva_reten_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccirc)
+									                            	<option value="{{ $ccirc->id }}" {{$confimodel->cliente_cta_iva_reten_cob_id == $ccirc->id ? 'selected':''}}>{{ $ccirc->ctacont_catsat_cod }} - {{ $ccirc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_isr_reten_id">Cuenta ISR retenido:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_id" id="cliente_cta_isr_reten_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->cliente_cta_isr_reten_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_por_cobrar_id">Cuenta por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->cliente_cta_por_cobrar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
 
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="state">State</label>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ieps_por_cobrar_id">Cuenta IEPS por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_por_cobrar_id" id="cliente_cta_ieps_por_cobrar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->cliente_cta_ieps_por_cobrar_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_ieps_cobrado_id">Cuenta IEPS cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_cobrado_id" id="cliente_cta_ieps_cobrado_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->cliente_cta_ieps_cobrado_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
 
-										<div class="col-xs-12 col-sm-9">
-											<select id="state" name="state" class="select2" data-placeholder="Click to Choose...">
-												<option value="">&nbsp;</option>
-												<option value="AL">Alabama</option>
-												<option value="AK">Alaska</option>
-												<option value="AZ">Arizona</option>
-												<option value="AR">Arkansas</option>
-												<option value="CA">California</option>
-												<option value="CO">Colorado</option>
-												<option value="CT">Connecticut</option>
-												<option value="DE">Delaware</option>
-												<option value="FL">Florida</option>
-												<option value="GA">Georgia</option>
-												<option value="HI">Hawaii</option>
-												<option value="ID">Idaho</option>
-												<option value="IL">Illinois</option>
-												<option value="IN">Indiana</option>
-												<option value="IA">Iowa</option>
-												<option value="KS">Kansas</option>
-												<option value="KY">Kentucky</option>
-												<option value="LA">Louisiana</option>
-												<option value="ME">Maine</option>
-												<option value="MD">Maryland</option>
-												<option value="MA">Massachusetts</option>
-												<option value="MI">Michigan</option>
-												<option value="MN">Minnesota</option>
-												<option value="MS">Mississippi</option>
-												<option value="MO">Missouri</option>
-												<option value="MT">Montana</option>
-												<option value="NE">Nebraska</option>
-												<option value="NV">Nevada</option>
-												<option value="NH">New Hampshire</option>
-												<option value="NJ">New Jersey</option>
-												<option value="NM">New Mexico</option>
-												<option value="NY">New York</option>
-												<option value="NC">North Carolina</option>
-												<option value="ND">North Dakota</option>
-												<option value="OH">Ohio</option>
-												<option value="OK">Oklahoma</option>
-												<option value="OR">Oregon</option>
-												<option value="PA">Pennsylvania</option>
-												<option value="RI">Rhode Island</option>
-												<option value="SC">South Carolina</option>
-												<option value="SD">South Dakota</option>
-												<option value="TN">Tennessee</option>
-												<option value="TX">Texas</option>
-												<option value="UT">Utah</option>
-												<option value="VT">Vermont</option>
-												<option value="VA">Virginia</option>
-												<option value="WA">Washington</option>
-												<option value="WV">West Virginia</option>
-												<option value="WI">Wisconsin</option>
-												<option value="WY">Wyoming</option>
-											</select>
-										</div>
-									</div>
 
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="platform">Platform</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<select class="input-medium" id="platform" name="platform">
-													<option value="">------------------</option>
-													<option value="linux">Linux</option>
-													<option value="windows">Windows</option>
-													<option value="mac">Mac OS</option>
-													<option value="ios">iOS</option>
-													<option value="android">Android</option>
-												</select>
-											</div>
-										</div>
-									</div>
-
-									<div class="space-2"></div>
-
-									<div class="form-group">
-										<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="comment">Comment</label>
-
-										<div class="col-xs-12 col-sm-9">
-											<div class="clearfix">
-												<textarea class="input-xlarge" name="comment" id="comment"></textarea>
-											</div>
-										</div>
-									</div>
-
-									<div class="space-8"></div>
-
-									<div class="form-group">
-										<div class="col-xs-12 col-sm-4 col-sm-offset-3">
-											<label>
-												<input name="agree" id="agree" type="checkbox" class="ace" />
-												<span class="lbl"> I accept the policy</span>
-											</label>
-										</div>
-									</div>
-								</form>
-							</div>
-
-							<div class="step-pane" data-step="2">
-								<div>
-									<div class="alert alert-success">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-
-										<strong>
-											<i class="ace-icon fa fa-check"></i>
-											Well done!
-										</strong>
-
-										You successfully read this important alert message.
-										<br />
-									</div>
-
-									<div class="alert alert-danger">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-
-										<strong>
-											<i class="ace-icon fa fa-times"></i>
-											Oh snap!
-										</strong>
-
-										Change a few things up and try submitting again.
-										<br />
-									</div>
-
-									<div class="alert alert-warning">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-										<strong>Warning!</strong>
-
-										Best check yo self, you're not looking too good.
-										<br />
-									</div>
-
-									<div class="alert alert-info">
-										<button type="button" class="close" data-dismiss="alert">
-											<i class="ace-icon fa fa-times"></i>
-										</button>
-										<strong>Heads up!</strong>
-
-										This alert needs your attention, but it's not super important.
-										<br />
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ieps_reten_por_cobrar_id">Cuenta IEPS retenido por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_reten_por_cobrar_id" id="cliente_cta_ieps_reten_por_cobrar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->cliente_cta_ieps_reten_por_cobrar_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_ieps_reten_cobrado_id">Cuenta IEPS retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_reten_cobrado_id" id="cliente_cta_ieps_reten_cobrado_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->cliente_cta_ieps_reten_cobrado_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+											</table>
+										</form>
 									</div>
 								</div>
-							</div>
 
-							<div class="step-pane" data-step="3">
-								<div class="center">
-									<h3 class="blue lighter">This is step 3</h3>
+								<div class="step-pane" data-step="3">
+									<form class="form-horizontal" id="validation-form-provs" method="post" action="{{ route('configpcprovs') }}" >
+										{{ csrf_field() }}
+										<table width="100%">
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_anticp_prov_id">Cuenta de anticipo:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_anticp_prov_id" id="proveed_cta_anticp_prov_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->proveed_cta_anticp_prov_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_isr_reten_cob_id">Cuenta de isr retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_cob_id" id="proveed_cta_isr_reten_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->proveed_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_egreso_id">Cuenta de egreso:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_egreso_id" id="proveed_cta_egreso_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $cci)
+									                            	<option value="{{ $cci->id }}" {{$confimodel->proveed_cta_egreso_id == $cci->id ? 'selected':''}}>{{ $cci->ctacont_catsat_cod }} - {{ $cci->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_desc_id">Cuenta de descuento:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_desc_id" id="proveed_cta_desc_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccd)
+									                            	<option value="{{ $ccd->id }}" {{$confimodel->proveed_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_iva_acredit_x_cob_id">Cuenta IVA acreditado por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_acredit_x_cob_id" id="proveed_cta_iva_acredit_x_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccitxc)
+									                            	<option value="{{ $ccitxc->id }}" {{$confimodel->proveed_cta_iva_acredit_x_cob_id == $ccitxc->id ? 'selected':''}}>{{ $ccitxc->ctacont_catsat_cod }} - {{ $ccitxc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_iva_acredit_cob_id">Cuenta IVA acreditado cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_acredit_cob_id" id="proveed_cta_iva_acredit_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccitc)
+									                            	<option value="{{ $ccitc->id }}" {{$confimodel->proveed_cta_iva_acredit_cob_id == $ccitc->id ? 'selected':''}}>{{ $ccitc->ctacont_catsat_cod }} - {{ $ccitc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_iva_reten_x_cob_id">Cuenta IVA retenido por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_reten_x_cob_id" id="proveed_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccirxc)
+									                            	<option value="{{ $ccirxc->id }}" {{$confimodel->proveed_cta_iva_reten_x_cob_id == $ccirxc->id ? 'selected':''}}>{{ $ccirxc->ctacont_catsat_cod }} - {{ $ccirxc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_iva_reten_cob_id">Cuenta IVA retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_iva_reten_cob_id" id="proveed_cta_iva_reten_cob_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccirc)
+									                            	<option value="{{ $ccirc->id }}" {{$confimodel->proveed_cta_iva_reten_cob_id == $ccirc->id ? 'selected':''}}>{{ $ccirc->ctacont_catsat_cod }} - {{ $ccirc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_isr_reten_id">Cuenta ISR retenido:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_id" id="proveed_cta_isr_reten_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->proveed_cta_isr_reten_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_por_pagar_id">Cuenta por pagar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_por_pagar_id" id="proveed_cta_por_pagar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->proveed_cta_por_pagar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_ieps_por_cobrar_id">Cuenta IEPS por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_por_cobrar_id" id="proveed_cta_ieps_por_cobrar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->proveed_cta_ieps_por_cobrar_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_ieps_cobrado_id">Cuenta IEPS cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_cobrado_id" id="proveed_cta_ieps_cobrado_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->proveed_cta_ieps_cobrado_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+
+
+												<tr>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_ieps_reten_por_cobrar_id">Cuenta IEPS retenido por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_reten_por_cobrar_id" id="proveed_cta_ieps_reten_por_cobrar_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccir)
+									                            	<option value="{{ $ccir->id }}" {{$confimodel->proveed_cta_ieps_reten_por_cobrar_id == $ccir->id ? 'selected':''}}>{{ $ccir->ctacont_catsat_cod }} - {{ $ccir->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+													<td width="50%">
+														<div class="form-group">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_ieps_reten_cobrado_id">Cuenta IEPS retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_reten_cobrado_id" id="proveed_cta_ieps_reten_cobrado_id" style="width: 60%; display: none;">
+								                            	<option value="">Seleccione ...</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->proveed_cta_ieps_reten_cobrado_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+									                            @endforeach
+								                          	</select>
+								                        </div>
+													</td>
+												</tr>
+											</table>
+									</form>
+								</div>
+
+								<div class="step-pane" data-step="4">
+									<form class="form-horizontal" id="validation-form-finish" method="post" action="{{ route('configpcfinish') }}" >
+										{{ csrf_field() }}
+										<div class="center">
+											<h3 class="green">Confirmar Configuración</h3>
+											Si confirma la configuración se aplicarán los cambios. Asegúrese de tener todo correcto.
+										</div>
+									</form>
+									
 								</div>
 							</div>
-
-							<div class="step-pane" data-step="4">
-								<div class="center">
-									<h3 class="green">Congrats!</h3>
-									Your product is ready to ship! Click finish to continue!
-								</div>
-							</div>
-						</div>
+						
 					</div>
 
 					<hr />
 					<div class="wizard-actions">
 						<button class="btn btn-prev">
 							<i class="ace-icon fa fa-arrow-left"></i>
-							Prev
+							Anterior
 						</button>
 
 						<button class="btn btn-success btn-next" data-last="Finish">
-							Next
+							Siguiente
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
 					</div>
@@ -410,21 +528,202 @@
         
         <script type="text/javascript">
 
+        $.each(document.getElementById("menus").getElementsByTagName("li"), function( index, value ) {
+		  value.classList.remove("active");
+		});
+    	$("#menuconfigwizard").addClass('active');
+    	$("#menuacciones").addClass('open');
+
+		/*Clientes*/
+		$("#cliente_cta_ingreso_id").select2({
+		  	placeholder: "Selecciona la cuenta de ingreso",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_desc_id").select2({
+		  	placeholder: "Selecciona la cuenta de descuento",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_iva_traslad_x_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA trasladado por cobrar",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_iva_traslad_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA trasladado cobrado",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_iva_reten_x_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA retenido por cobrar",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_iva_reten_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA retenido cobrado",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_isr_reten_id").select2({
+		  	placeholder: "Selecciona la cuenta de ISR retenido",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_por_cobrar_id").select2({
+		  	placeholder: "Selecciona la cuenta por cobrar",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_anticp_client_id").select2({
+		  	placeholder: "Selecciona la cuenta de anticipo",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_isr_reten_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de isr retenido cobrado",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_ieps_por_cobrar_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps por cobrar",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_ieps_cobrado_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps cobrado",
+		  	allowClear: true
+		});
+
+
+		$("#cliente_cta_ieps_reten_por_cobrar_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps retenido por cobrar",
+		  	allowClear: true
+		});
+
+		$("#cliente_cta_ieps_reten_cobrado_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps retenido cobrado",
+		  	allowClear: true
+		});
+
+
+		/*Proveedores*/
+		$("#proveed_cta_egreso_id").select2({
+		  	placeholder: "Selecciona la cuenta de egreso",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_desc_id").select2({
+		  	placeholder: "Selecciona la cuenta de descuento",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_iva_acredit_x_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA acreditado por cobrar",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_iva_acredit_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA acreditado cobrado",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_iva_reten_x_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA retenido por cobrar",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_iva_reten_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de IVA retenido cobrado",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_isr_reten_id").select2({
+		  	placeholder: "Selecciona la cuenta de ISR retenido",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_por_pagar_id").select2({
+		  	placeholder: "Selecciona la cuenta por pagar",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_anticp_prov_id").select2({
+		  	placeholder: "Selecciona la cuenta de anticipo",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_isr_reten_cob_id").select2({
+		  	placeholder: "Selecciona la cuenta de isr retenido cobrado",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_ieps_por_cobrar_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps por cobrar",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_ieps_cobrado_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps cobrado",
+		  	allowClear: true
+		});
+
+
+		$("#proveed_cta_ieps_reten_por_cobrar_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps retenido por cobrar",
+		  	allowClear: true
+		});
+
+		$("#proveed_cta_ieps_reten_cobrado_id").select2({
+		  	placeholder: "Selecciona la cuenta de ieps retenido cobrado",
+		  	allowClear: true
+		});
+
+
+        console.log(document.getElementById('step').value);
+
 			$('#fuelux-wizard-container')
 			.ace_wizard({
-				//step: 2 //optional argument. wizard will jump to step "2" at first
+				step: parseInt(document.getElementById('step').value) //optional argument. wizard will jump to step "2" at first
 				//buttons: '.wizard-actions:eq(0)'
 			})
 			.on('actionclicked.fu.wizard' , function(e, info){
 				console.log(info);
-				if(info.step == 1) {
-					if(!$('#validation-form').valid()) e.preventDefault();
+				if(info.direction=='previous'){
+					window.location.href = info.step - 1;
+				}else{
+					if(info.step == 1) {
+						//if(!$('#validation-form').valid()) e.preventDefault();
+						$('#loadingmodal').modal('show');
+						$('#validation-form').submit();
+					}else if(info.step == 2){
+						if(!$('#fclients').valid()){
+							e.preventDefault();
+						}else{
+							console.log('bb');
+							$('#loadingmodal').modal('show');
+							$('#fclients').submit();
+						}
+					}else if(info.step == 3){
+						if(!$('#validation-form-provs').valid()){
+							e.preventDefault();
+						}else{
+							$('#loadingmodal').modal('show');
+							$('#validation-form-provs').submit();
+						}
+
+					}else{
+						$('#loadingmodal').modal('show');
+						$('#validation-form-finish').submit();
+					}
 				}
+				
 			})
-			//.on('changed.fu.wizard', function() {
-			//})
+			.on('changed.fu.wizard', function(e, info) {
+				console.log(info);
+			})
 			.on('finished.fu.wizard', function(e) {
-				bootbox.dialog({
+				/*bootbox.dialog({
 					message: "Thank you! Your information was successfully saved!", 
 					buttons: {
 						"success" : {
@@ -432,81 +731,114 @@
 							"className" : "btn-sm btn-primary"
 						}
 					}
-				});
-			}).on('stepclick.fu.wizard', function(e){
-				//e.preventDefault();//this will prevent clicking and selecting steps
+				});*/
+				$('#loadingmodal').modal('show');
+				$('#validation-form-finish').submit();
+			}).on('stepclicked.fu.wizard', function(e){
+				e.preventDefault();//this will prevent clicking and selecting steps
 			});
 
-			$.mask.definitions['~']='[+-]';
+			/*$.mask.definitions['~']='[+-]';
 				$('#phone').mask('(999) 999-9999');
 			
 				jQuery.validator.addMethod("phone", function (value, element) {
 					return this.optional(element) || /^\(\d{3}\) \d{3}\-\d{4}( x\d{1,6})?$/.test(value);
-				}, "Enter a valid phone number.");
+				}, "Enter a valid phone number.");*/
 			
-				$('#validation-form').validate({
+				$('#fclients').validate({
 					errorElement: 'div',
 					errorClass: 'help-block',
 					focusInvalid: false,
 					ignore: "",
 					rules: {
-						email: {
-							required: true,
-							email:true
-						},
-						password: {
-							required: true,
-							minlength: 5
-						},
-						password2: {
-							required: true,
-							minlength: 5,
-							equalTo: "#password"
-						},
-						name: {
+						cliente_cta_ingreso_id: {
 							required: true
 						},
-						phone: {
-							required: true,
-							phone: 'required'
-						},
-						url: {
-							required: true,
-							url: true
-						},
-						comment: {
+						cliente_cta_desc_id: {
 							required: true
 						},
-						state: {
+						cliente_cta_iva_traslad_x_cob_id: {
 							required: true
 						},
-						platform: {
+						cliente_cta_iva_traslad_cob_id: {
 							required: true
 						},
-						subscription: {
+						cliente_cta_iva_reten_x_cob_id: {
 							required: true
 						},
-						gender: {
-							required: true,
+						cliente_cta_iva_reten_cob_id: {
+							required: true
 						},
-						agree: {
-							required: true,
+						cliente_cta_isr_reten_id: {
+							required: true
+						},
+						cliente_cta_por_cobrar_id: {
+							required: true
+						},
+						cliente_cta_anticp_client_id: {
+							required: true
+						},
+						cliente_cta_isr_reten_cob_id: {
+							required: true
+						},
+						cliente_cta_ieps_por_cobrar_id: {
+							required: true
+						},
+						cliente_cta_ieps_cobrado_id: {
+							required: true
+						},
+						cliente_cta_ieps_reten_por_cobrar_id: {
+							required: true
+						},
+						cliente_cta_ieps_reten_cobrado_id: {
+							required: true
 						}
+
 					},
 			
 					messages: {
-						email: {
-							required: "Please provide a valid email.",
-							email: "Please provide a valid email."
+						cliente_cta_ingreso_id: {
+							required: "Este campo es requerido"
 						},
-						password: {
-							required: "Please specify a password.",
-							minlength: "Please specify a secure password."
+						cliente_cta_desc_id: {
+							required: "Este campo es requerido"
 						},
-						state: "Please choose state",
-						subscription: "Please choose at least one option",
-						gender: "Please choose gender",
-						agree: "Please accept our policy"
+						cliente_cta_iva_traslad_x_cob_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_iva_traslad_cob_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_iva_reten_x_cob_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_iva_reten_cob_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_isr_reten_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_por_cobrar_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_anticp_client_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_isr_reten_cob_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_ieps_por_cobrar_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_ieps_cobrado_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_ieps_reten_por_cobrar_id: {
+							required: "Este campo es requerido"
+						},
+						cliente_cta_ieps_reten_cobrado_id: {
+							required: "Este campo es requerido"
+						}
 					},
 			
 			
@@ -535,6 +867,136 @@
 					},
 			
 					submitHandler: function (form) {
+						form.submit();
+					},
+					invalidHandler: function (form) {
+					}
+				});
+
+
+				$('#validation-form-provs').validate({
+					errorElement: 'div',
+					errorClass: 'help-block',
+					focusInvalid: false,
+					ignore: "",
+					rules: {
+						proveed_cta_egreso_id: {
+							required: true
+						},
+						proveed_cta_desc_id: {
+							required: true
+						},
+						proveed_cta_iva_acredit_x_cob_id: {
+							required: true
+						},
+						proveed_cta_iva_acredit_cob_id: {
+							required: true
+						},
+						proveed_cta_iva_reten_x_cob_id: {
+							required: true
+						},
+						proveed_cta_iva_reten_cob_id: {
+							required: true
+						},
+						proveed_cta_isr_reten_id: {
+							required: true
+						},
+						proveed_cta_por_pagar_id: {
+							required: true
+						},
+						proveed_cta_anticp_prov_id: {
+							required: true
+						},
+						proveed_cta_isr_reten_cob_id: {
+							required: true
+						},
+						proveed_cta_ieps_por_cobrar_id: {
+							required: true
+						},
+						proveed_cta_ieps_cobrado_id: {
+							required: true
+						},
+						proveed_cta_ieps_reten_por_cobrar_id: {
+							required: true
+						},
+						proveed_cta_ieps_reten_cobrado_id: {
+							required: true
+						}
+						
+					},
+			
+					messages: {
+						proveed_cta_egreso_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_desc_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_iva_acredit_x_cob_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_iva_acredit_cob_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_iva_reten_x_cob_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_iva_reten_cob_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_isr_reten_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_por_pagar_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_anticp_prov_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_isr_reten_cob_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_ieps_por_cobrar_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_ieps_cobrado_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_ieps_reten_por_cobrar_id: {
+							required: "Este campo es requerido"
+						},
+						proveed_cta_ieps_reten_cobrado_id: {
+							required: "Este campo es requerido"
+						}
+					},
+			
+			
+					highlight: function (e) {
+						$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+					},
+			
+					success: function (e) {
+						$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+						$(e).remove();
+					},
+			
+					errorPlacement: function (error, element) {
+						if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+							var controls = element.closest('div[class*="col-"]');
+							if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+							else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+						}
+						else if(element.is('.select2')) {
+							error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+						}
+						else if(element.is('.chosen-select')) {
+							error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+						}
+						else error.insertAfter(element.parent());
+					},
+			
+					submitHandler: function (form) {
+						form.submit();
 					},
 					invalidHandler: function (form) {
 					}

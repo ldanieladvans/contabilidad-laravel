@@ -54,8 +54,16 @@ Route::group(['prefix' => 'acciones'], function () {
    // Route::resource('account', 'AccountController');
 	Route::get('subecomp', 'SubeCompController@index')->name('subecompindex');
 	Route::post('subecompadd', 'SubeCompController@addComp')->name('subecompadd');
-	Route::get('configcont', 'ConfigContController@index')->name('configcontindex');
+	Route::get('configcont/{step}', 'ConfigContController@index')->name('configcontindex');
 });
+
+Route::get('/downloadpc' , 'ConfigContController@downloadFile');
+
+Route::post('/configpc' , 'ConfigContController@configPc')->name('configpc');
+Route::post('/configpcclients' , 'ConfigContController@configPcClients')->name('configpcclients');
+Route::post('/configpcprovs' , 'ConfigContController@configPcProvs')->name('configpcprovs');
+Route::post('/configpcfinish' , 'ConfigContController@configPcFinish')->name('configpcfinish');
+
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/delItems', 'Controller@delItems');
