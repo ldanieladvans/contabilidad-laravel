@@ -20,4 +20,9 @@ class Provision extends Model
     {
     	return $this->belongsTo('App\Comprobante','provis_comp_id');
     }
+
+    public function impuestos()
+    {
+        return $this->hasMany('App\ProvisionImpuestos','provisimp_provis_id');
+    }
 }

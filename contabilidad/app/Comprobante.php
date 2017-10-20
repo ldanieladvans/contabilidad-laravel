@@ -53,7 +53,7 @@ class Comprobante extends Model
         });
     }
 
-    public function contabIngreso($comp_id, $xml_array, $importada)
+    public function contabIngreso($comp_id, $provis_id, $xml_array, $importada)
     {
         $cta_x_cob = 1;
         $cta_ing = 1;
@@ -69,12 +69,6 @@ class Comprobante extends Model
         $cta_isr_reten_cob = 1;
         $cta_ieps_cob = 1;
         $cta_ieps_reten_cob = 1;
-
-        $monto_iva_trasl_x_cob = 0;
-        $monto_iva_reten_x_cob = 0;
-        $monto_isr_reten_x_cob = 0;
-        $monto_ieps_x_cob = 0;
-        $monto_ieps_reten_x_cob = 0;
 
         $comp_atributos = $xml_array['cfdi:Comprobante']['@attributes'];
 
@@ -131,35 +125,42 @@ class Comprobante extends Model
             $period_id = $period[0]->id;
         }
 
-        $pol_id = $this->crearPoliza($comp_id, 'diario', $comp_atributos['total'], $comp_atributos['fecha'], $importada, 'POL/DIA/', $conc_pol, $period_id);
+        $pol_id = $this->crearPoliza($comp_id, 'diario', $comp_atributos['total'], $fecha, $importada, 'POL/DIA/', $conc_pol, $period_id);
 
 
         //Generando asiento de cuenta por cobrar
         $this->crearAsiento($pol_id, 'AST/XCOB/', $comp_atributos['total'], $conc_pol, "debe", $cta_x_cob);
 
-        //Generando asiento de INGRESO
+        //Generando asiento de ingreso
         $this->crearAsiento($pol_id, 'AST/ING/', $comp_atributos['subTotal'], $conc_pol, "haber", $cta_ing);
-        
-        //Generando asientos de impuestos
-        //Generando asientos de impuestos
-        $impuestos = $this->contabImp($pol_id, $conc_pol, $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], 'haber', 'debe', $cta_iva_trasl_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob);
 
-       
-        //Generando asiento de descuento
+        //Generando asiento de descuento en caso de aplicar
         if (array_key_exists('Descuento',$comp_atributos) && isset($comp_atributos['Descuento']))
         {
             $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['Descuento'], $conc_pol, "debe", $cta_desc);
+        }
+        
+        //Generando asientos de impuestos en caso de aplicar
+        $impuestos = [];
+        if (array_key_exists('cfdi:Impuestos',$xml_array['cfdi:Comprobante']) && isset($xml_array['cfdi:Comprobante']['cfdi:Impuestos']))
+        {
+            $impuestos = $this->contabImp($pol_id, $conc_pol, $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], 'haber', 'debe', $cta_iva_trasl_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob);
+        }
+
+        //Actualizando impuestos de provisión
+        if (count($impuestos) > 0)
+        {
+            $this->actImpProv($provis_id, $impuestos);
         }
 
         //Verificando si fue pagada en una sola exhibición
         if ($comp_atributos['MetodoPago'] == 'PUE')
         {
-            $polpago_id = $this->crearPoliza($comp_id, 'ingreso', $comp_atributos['total'], $comp_atributos['fecha'], $importada, 'POL/ING/', $conc_pol, $period_id);
+            $polpago_id = $this->crearPoliza($comp_id, 'ingreso', $comp_atributos['total'], $fecha, $importada, 'POL/ING/', $conc_pol, $period_id);
 
             //Generando abono de cuenta por cobrar
-            $this->crearAsiento($polpago_id, 'AST/COB/', $comp_atributos['total'], $conc_pol, "haber", $cta_x_cob);
+            $this->crearAsiento($polpago_id, 'AST/XCOB/', $comp_atributos['total'], $conc_pol, "haber", $cta_x_cob);
             
-
             //Generando asiento de entrada de dinero
             $forma_pago_cod = $comp_atributos['FormaPago'];
             $forma_pago = \FormaPago::where('formpago_formpagosat_cod', '=', $forma_pago_cod)->get();
@@ -168,14 +169,17 @@ class Comprobante extends Model
             {
                 $cta_pago_id = $forma_pago[0]->formpago_ctacont_id;
             }
-            $this->crearAsiento($polpago_id, 'AST/PAG/', $comp_atributos['total'], $conc_pol, "debe", $cta_pago_id);
+            $this->crearAsiento($polpago_id, 'AST/COB/', $comp_atributos['total'], $conc_pol, "debe", $cta_pago_id);
 
             //Generando asientos de reclasificación de impuestos
-            $this->contabReclasifImp($pol_id, $conc_pol, $impuestos, 'debe', 'haber', $cta_iva_trasl_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob, $cta_iva_trasl_cob, $cta_ieps_cob, $cta_isr_reten_cob, $cta_iva_reten_cob, $cta_ieps_reten_cob);
+            if (count($impuestos) > 0)
+            {
+                $this->contabReclasifImp($polpago_id, $conc_pol, $impuestos, 'debe', 'haber', $cta_iva_trasl_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob, $cta_iva_trasl_cob, $cta_ieps_cob, $cta_isr_reten_cob, $cta_iva_reten_cob, $cta_ieps_reten_cob);
+            }
         }
     }
 
-    public function contabEgreso($comp_id, $xml_array, $importada)
+    public function contabEgreso($comp_id, $provis_id, $xml_array, $importada)
     {
         $cta_x_pag = 1;
         $cta_gast = 1;
@@ -191,12 +195,6 @@ class Comprobante extends Model
         $cta_isr_reten_cob = 1;
         $cta_ieps_cob = 1;
         $cta_ieps_reten_cob = 1;
-
-        $monto_iva_acred_x_cob = 0;
-        $monto_iva_reten_x_cob = 0;
-        $monto_isr_reten_x_cob = 0;
-        $monto_ieps_x_cob = 0;
-        $monto_ieps_reten_x_cob = 0;
 
         $comp_atributos = $xml_array['cfdi:Comprobante']['@attributes'];
 
@@ -253,7 +251,7 @@ class Comprobante extends Model
             $period_id = $period[0]->id;
         }
 
-        $pol_id = $this->crearPoliza($comp_id, 'diario', $comp_atributos['total'], $comp_atributos['fecha'], $importada, 'POL/DIA/', $conc_pol, $period_id);
+        $pol_id = $this->crearPoliza($comp_id, 'diario', $comp_atributos['total'], $fecha, $importada, 'POL/DIA/', $conc_pol, $period_id);
 
         //Generando asiento de cuenta por pagar
         $this->crearAsiento($pol_id, 'AST/XPAG/', $comp_atributos['total'], $conc_pol, "haber", $cta_x_pag);
@@ -261,22 +259,32 @@ class Comprobante extends Model
         //Generando asiento de gasto
         $this->crearAsiento($pol_id, 'AST/GST/', $comp_atributos['subTotal'], $conc_pol, "debe", $cta_gast);
 
-        //Generando asientos de impuestos
-        $impuestos = $this->contabImp($pol_id, $conc_pol, $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], 'debe', 'haber', $cta_iva_acred_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob);
-
-        //Generando asiento de descuento
+        //Generando asiento de descuento en caso de aplicar
         if (array_key_exists('Descuento',$comp_atributos) && isset($comp_atributos['Descuento']))
         {
             $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['Descuento'], $conc_pol, "haber", $cta_desc);
+        }
+        
+        //Generando asientos de impuestos
+        $impuestos = [];
+        if (array_key_exists('cfdi:Impuestos',$xml_array['cfdi:Comprobante']) && isset($xml_array['cfdi:Comprobante']['cfdi:Impuestos']))
+        {
+            $impuestos = $this->contabImp($pol_id, $conc_pol, $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], 'debe', 'haber', $cta_iva_acred_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob);
+        }
+
+        //Actualizando impuestos de provisión
+        if (count($impuestos) > 0)
+        {
+            $this->actImpProv($provis_id, $impuestos);
         }
 
         //Verificando si fue pagada en una sola exhibición
         if ($comp_atributos['MetodoPago'] == 'PUE')
         {
-            $polpago_id = $this->crearPoliza($comp_id, 'egreso', $comp_atributos['total'], $comp_atributos['fecha'], $importada, 'POL/EGR/', $conc_pol, $period_id);
+            $polpago_id = $this->crearPoliza($comp_id, 'egreso', $comp_atributos['total'], $fecha, $importada, 'POL/EGR/', $conc_pol, $period_id);
 
             //Generando cargo de cuenta por pagar
-            $this->crearAsiento($polpago_id, 'AST/PAG/', $comp_atributos['total'], $conc_pol, "debe", $cta_x_pag);
+            $this->crearAsiento($polpago_id, 'AST/XPAG/', $comp_atributos['total'], $conc_pol, "debe", $cta_x_pag);
             
             //Generando asiento de salida de dinero
             $forma_pago_cod = $comp_atributos['FormaPago'];
@@ -289,13 +297,19 @@ class Comprobante extends Model
             $this->crearAsiento($polpago_id, 'AST/PAG/', $comp_atributos['total'], $conc_pol, "haber", $cta_pago_id);
 
             //Generando asientos de reclasificación de impuestos
-            $this->contabReclasifImp($pol_id, $conc_pol, $impuestos, 'haber', 'debe', $cta_iva_acred_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob, $cta_iva_acred_cob, $cta_ieps_cob, $cta_isr_reten_cob, $cta_iva_reten_cob, $cta_ieps_reten_cob);
+            if (count($impuestos) > 0)
+            {
+                $this->contabReclasifImp($polpago_id, $conc_pol, $impuestos, 'haber', 'debe', $cta_iva_acred_x_cob, $cta_ieps_x_cob, $cta_isr_reten_x_cob, $cta_iva_reten_x_cob, $cta_ieps_reten_x_cob, $cta_iva_acred_cob, $cta_ieps_cob, $cta_isr_reten_cob, $cta_iva_reten_cob, $cta_ieps_reten_cob);
+            }
         }
+    }
 
+    public function contabCobro($comp_id, $array_pagos_id, $xml_array, $importada)
+    {
+        
     }
 
     
-
     public function contabImp($pol_id, $conc_pol, $nodo_imp, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob)
     {
         $impuestos = [];
@@ -409,6 +423,59 @@ class Comprobante extends Model
         }
 
         return $impuestos;
+    }
+
+    public function actImpProv($provis_id, $impuestos)
+    {
+        foreach ($impuestos as $key => $value) {
+            $provimp = new \ProvisionImpuestos();
+            switch ($key) {
+                case 'ivaxcob':
+                    $provimp->provisimp_cod = 't';
+                    $provimp->provisimp_cod = '002';
+                    $provimp->provisimp_monto = $value;
+                    $provimp->provisimp_provis_id = $provis_id;
+                    $provimp->save();
+                    
+                    break;
+
+                case 'ivarxcob':
+                    $provimp->provisimp_cod = 'r';
+                    $provimp->provisimp_cod = '002';
+                    $provimp->provisimp_monto = $value;
+                    $provimp->provisimp_provis_id = $provis_id;
+                    $provimp->save();
+                    break;
+
+                case 'isrrxcob':
+                    $provimp->provisimp_cod = 'r';
+                    $provimp->provisimp_cod = '001';
+                    $provimp->provisimp_monto = $value;
+                    $provimp->provisimp_provis_id = $provis_id;
+                    $provimp->save();
+                    break;
+
+                case 'iepsxcob':
+                    $provimp->provisimp_cod = 't';
+                    $provimp->provisimp_cod = '003';
+                    $provimp->provisimp_monto = $value;
+                    $provimp->provisimp_provis_id = $provis_id;
+                    $provimp->save();
+                    break;
+
+                case 'iepsrxcob':
+                    $provimp->provisimp_cod = 'r';
+                    $provimp->provisimp_cod = '003';
+                    $provimp->provisimp_monto = $value;
+                    $provimp->provisimp_provis_id = $provis_id;
+                    $provimp->save();
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
     }
 
 
