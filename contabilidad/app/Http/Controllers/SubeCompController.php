@@ -81,8 +81,8 @@ class SubeCompController extends Controller
               'allow_self_signed' => true
               )
             ));
-            Log::info($xml_array);
-        	$soap = new SoapClient($wsdl,array('stream_context' => $context));
+            
+        	/*$soap = new SoapClient($wsdl,array('stream_context' => $context));
         	$params = ['credential' => $API_KEY,'cfdi' => $cfdi];
         	$data = $soap->__soapCall("validar", $params);
 
@@ -90,9 +90,10 @@ class SubeCompController extends Controller
 
         	$xmlResult = $XML2Array->createArray(trim($result['Acuse']));
 
-        	Log::info($result);
+        	Log::info($result);*/
 
-        	if ($result['Code'] == "207") {
+        	//if ($result['Code'] == "207") {
+            if (true) {
         		$comprobante = new Comprobante();
         		if(array_key_exists('cfdi:Complemento', $xml_array['cfdi:Comprobante'])){
         			if(array_key_exists('tfd:TimbreFiscalDigital', $xml_array['cfdi:Comprobante']['cfdi:Complemento'])){
@@ -105,15 +106,15 @@ class SubeCompController extends Controller
         		if(array_key_exists('cfdi:Emisor', $xml_array['cfdi:Comprobante'])){
         			if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Emisor'])){
         				$comprobante->comp_rfc_emisor = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
-        				if($alldata['comptype'] == 'ingreso'){
-        					$cliente = new Cliente();
-        					$cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
-        					$cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
-                            $cliente->cliente_tipcliente_id = 1;
-        					$search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
-        					if(count($search_cliente) == 0){
-        						$cliente->save();
-        					}
+        				if($alldata['comptype'] == 'egreso'){
+                            $proveedor = new Proveedor();
+                            $proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
+                            $proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+                            $proveedor->proveed_tipprov_id = 1;
+                            $search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
+                            if(count($search_proveedor) == 0){
+                                $proveedor->save();
+                            }
         				}
     				}
     			}
@@ -121,15 +122,15 @@ class SubeCompController extends Controller
     			if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
     				if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Receptor'])){
         				$comprobante->comp_rfc_receptor = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
-        				if($alldata['comptype'] == 'egreso'){
-        					$proveedor = new Proveedor();
-        					$proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
-        					$proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
-                            $proveedor->proveed_tipprov_id = 1;
-        					$search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
-        					if(count($search_proveedor) == 0){
-        						$proveedor->save();
-        					}
+        				if($alldata['comptype'] == 'ingreso'){
+        					$cliente = new Cliente();
+                            $cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
+                            $cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+                            $cliente->cliente_tipcliente_id = 1;
+                            $search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
+                            if(count($search_cliente) == 0){
+                                $cliente->save();
+                            }
         				}
     				}
     			}
@@ -194,6 +195,7 @@ class SubeCompController extends Controller
         		$ef->save();
 
         		//TODO Contabilizar
+                Log::info($xml_array);
                 $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $alldata['comptype']);
         	}else{
         		if (file_exists($full_path)){ 

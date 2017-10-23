@@ -19,7 +19,7 @@ class CreateAsiento extends Migration
             $table->string('asiento_concepto')->nullable();
             $table->double('asiento_debe', 15, 8);
             $table->double('asiento_haber', 15, 8);
-            $table->string('asiento_folio_ref');
+            $table->string('asiento_folio_ref')->nullable();
             $table->boolean('asiento_activo')->default(true);
             $table->timestamps();
         });

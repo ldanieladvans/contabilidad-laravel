@@ -7,6 +7,7 @@ use App\Pago;
 use App\Cuenta;
 use App\Poliza;
 use App\Comprobante;
+use App\Periodo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,7 +44,8 @@ class PolizaController extends Controller
     public function create()
     {
         //TODO Buscar tipo de poliza
-        return view('appviews.creapoliza',['polz_period_id'=>[]]);
+        $periodos = Periodo::all();
+        return view('appviews.creapoliza',['polz_period_id'=>$periodos]);
     }
 
     /**
@@ -114,7 +116,8 @@ class PolizaController extends Controller
     {
         //TODO Buscar tipo de poliza
         $poliza = Poliza::findOrFail($id);
-        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>[]]);
+        $periodos = Periodo::all();
+        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>$periodos]);
     }
 
     /**

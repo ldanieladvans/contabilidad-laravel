@@ -29,7 +29,7 @@ class AsientoController extends Controller
         $asientos_list = array();
         $asientos_contador = 0;
         foreach ($asientos as $as) {
-            $asientos_list[$asientos_contador] = ['ID'=>$as->id,'asiento_concepto'=>$as->asiento_concepto,'asiento_debe'=>$as->asiento_debe,'asiento_haber'=>$as->asiento_haber,'asiento_folio_ref'=>$as->asiento_folio_ref,'asiento_ctacont_id'=>$as->cuenta->ctacont_num,'asiento_polz_id'=>$as->poliza->polz_folio];
+            $asientos_list[$asientos_contador] = ['ID'=>$as->id,'asiento_concepto'=>$as->asiento_concepto,'asiento_debe'=>$as->asiento_debe,'asiento_haber'=>$as->asiento_haber,'asiento_folio_ref'=>$as->asiento_folio_ref,'asiento_ctacont_id'=>$as->cuenta->ctacont_num.'-'.$as->cuenta->ctacont_desc,'asiento_polz_id'=>$as->poliza->polz_folio];
             $asientos_contador ++;
         }
         return view('appviews.listaasientos',['asientos'=>json_encode($asientos_list)]);

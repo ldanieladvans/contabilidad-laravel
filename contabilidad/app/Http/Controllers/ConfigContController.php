@@ -106,6 +106,7 @@ class ConfigContController extends Controller
 	        	}
 
 	        	$cuenta->save();
+                $cuenta->initJournal('MXN');
 			}
 
         }
@@ -249,6 +250,8 @@ class ConfigContController extends Controller
         $tipcl->tipcliente_cta_ieps_reten_por_cobrar_id = $confimodel->cliente_cta_ieps_reten_por_cobrar_id;
         $tipcl->tipcliente_cta_ieps_reten_cobrado_id = $confimodel->cliente_cta_ieps_reten_cobrado_id;
 
+        $tipcl->tipcliente_concpto_polz = 'Concepto';
+
         $tipcl->save();
 
         $tiprov = false;
@@ -276,6 +279,8 @@ class ConfigContController extends Controller
         $tiprov->tipprov_cta_ieps_cobrado_id = $confimodel->proveed_cta_ieps_cobrado_id;
         $tiprov->tipprov_cta_ieps_reten_por_cobrar_id = $confimodel->proveed_cta_ieps_reten_por_cobrar_id;
         $tiprov->tipprov_cta_ieps_reten_cobrado_id = $confimodel->proveed_cta_ieps_reten_cobrado_id;
+
+        $tiprov->tipprov_concpto_polz = 'Concepto';
 
 		$tiprov->save();
 

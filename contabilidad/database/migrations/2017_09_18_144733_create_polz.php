@@ -18,7 +18,7 @@ class CreatePolz extends Migration
             $table->increments('id');
             $table->string('polz_tipopolz');
             $table->date('polz_fecha');
-            $table->string('polz_folio');
+            $table->string('polz_folio')->nullable();
             $table->string('polz_concepto');
             $table->double('polz_importe', 15, 8);
             $table->boolean('polz_aprobado')->default(false);

@@ -96,7 +96,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="polz_period_id" name="polz_period_id" data-placeholder="Seleccione el período ..." style="width: 83%; display: none;">
 									@foreach($polz_period_id as $tp)
-		                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+		                            	<option value="{{ $tp->id }}">{{ $tp->period_fecha_ini }} - {{ $tp->period_fecha_fin }}</option>
 		                            @endforeach
 							</select>
 						</div>

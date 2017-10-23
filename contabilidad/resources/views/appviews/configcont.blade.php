@@ -197,7 +197,7 @@
 												<tr>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_reten_x_cob_id">Cuenta IVA trasladado por cobrar:</label>
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_iva_reten_x_cob_id">Cuenta IVA retenido por cobrar:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_x_cob_id" id="cliente_cta_iva_reten_x_cob_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccirxc)
@@ -208,7 +208,7 @@
 													</td>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_reten_cob_id">Cuenta IVA trasladado cobrado:</label>
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_iva_reten_cob_id">Cuenta IVA retenido cobrado:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_iva_reten_cob_id" id="cliente_cta_iva_reten_cob_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccirc)

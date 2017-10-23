@@ -117,6 +117,8 @@ class TipoProveedorSeeder extends Seeder
         $tproveedor->tipprov_cta_ieps_reten_por_cobrar_id = $tipprov_cta_ieps_reten_por_cobrar_id;
         $tproveedor->tipprov_cta_ieps_reten_cobrado_id = $tipprov_cta_ieps_reten_cobrado_id;
 
+        $tproveedor->tipprov_concpto_polz = 'Concepto';
+
         $tproveedor->save();
     }
 }

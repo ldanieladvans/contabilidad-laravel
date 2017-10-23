@@ -118,6 +118,8 @@ class TipoClienteSeeder extends Seeder
         $tcliente->tipcliente_cta_ieps_reten_por_cobrar_id = $tipcliente_cta_ieps_reten_por_cobrar_id;
         $tcliente->tipcliente_cta_ieps_reten_cobrado_id = $tipcliente_cta_ieps_reten_cobrado_id;
 
+        $tcliente->tipcliente_concpto_polz = 'Concepto';
+
         $tcliente->save();
     }
 }
