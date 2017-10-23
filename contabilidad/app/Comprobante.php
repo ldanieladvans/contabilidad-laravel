@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Comprobante extends Model
 {
@@ -77,6 +78,8 @@ class Comprobante extends Model
                 $cuentas['cta_isr_reten_cob'] = $cliente->cliente_cta_isr_reten_cob_id ? $cliente->cliente_cta_isr_reten_cob_id : 1;
                 $cuentas['cta_ieps_cob'] = $cliente->cliente_cta_ieps_cobrado_id ? $cliente->cliente_cta_ieps_cobrado_id : 1;
                 $cuentas['cta_ieps_reten_cob'] = $cliente->cliente_cta_ieps_reten_cobrado_id ? $cliente->cliente_cta_ieps_reten_cobrado_id : 1;
+                $cuentas['forma_contab'] = 'cliente';
+                $cuentas['forma_contab_id'] = $cliente->id;
             }
             else
             {
@@ -97,6 +100,8 @@ class Comprobante extends Model
                 $cuentas['cta_isr_reten_cob'] = $tipcliente_concpto_polz->tipcliente_cta_isr_reten_cob_id ? $tipcliente_concpto_polz->tipcliente_cta_isr_reten_cob_id : 1;
                 $cuentas['cta_ieps_cob'] = $tipcliente_concpto_polz->tipcliente_cta_ieps_cobrado_id ? $tipcliente_concpto_polz->tipcliente_cta_ieps_cobrado_id : 1;
                 $cuentas['cta_ieps_reten_cob'] = $tipcliente_concpto_polz->tipcliente_cta_ieps_reten_cobrado_id ? $tipcliente_concpto_polz->tipcliente_cta_ieps_reten_cobrado_id : 1;
+                $cuentas['forma_contab'] = 'tipocliente';
+                $cuentas['forma_contab_id'] = $tip_client->id;
             }
         }
         else
@@ -120,6 +125,8 @@ class Comprobante extends Model
                 $cuentas['cta_isr_reten_cob']= $proveedor->proveed_cta_isr_reten_cob_id ? $proveedor->proveed_cta_isr_reten_cob_id : 1;
                 $cuentas['cta_ieps_cob']= $proveedor->proveed_cta_ieps_cobrado_id ? $proveedor->proveed_cta_ieps_cobrado_id : 1;
                 $cuentas['cta_ieps_reten_cob']= $proveedor->proveed_cta_ieps_reten_cobrado_id ? $proveedor->proveed_cta_ieps_reten_cobrado_id : 1;
+                $cuentas['forma_contab'] = 'proveedor';
+                $cuentas['forma_contab_id'] = $proveedor->id;
 
             }
             else
@@ -141,6 +148,8 @@ class Comprobante extends Model
                 $cuenta['cta_isr_reten_cob']= $tip_prov->tipprov_cta_isr_reten_cob_id ? $tip_prov->tipprov_cta_isr_reten_cob_id : 1;
                 $cuenta['cta_ieps_cob']= $tip_prov->tipprov_cta_ieps_cobrado_id ? $tip_prov->tipprov_cta_ieps_cobrado_id : 1;
                 $cuenta['cta_ieps_reten_cob']= $tip_prov->tipprov_cta_ieps_reten_cobrado_id ? $tip_prov->tipprov_cta_ieps_reten_cobrado_id : 1;
+                $cuentas['forma_contab'] = 'tipoproveedor';
+                $cuentas['forma_contab_id'] = $tip_prov->id;
             }
         }
     }
@@ -195,20 +204,35 @@ class Comprobante extends Model
         
         $comp_atributos = $xml_array['cfdi:Comprobante']['@attributes'];
 
+        //Obteniendo cuentas y configuraciones para contabilización
         $cuentas = $this->getCuentas($rfc, $partner);
+        Log::info($cuentas);
         
         //Identificando período
         $fecha = $comp_atributos['fecha'];
         $period_id = $this->getPeriodo($fecha);
+        if (!$period_id)
+        {
+            $period_id = 1;
+        }
+
+        Log::info('Periodo '.$period_id);
         
         //Generando póliza de diario
         $pol_id = $this->crearPoliza($comp_id, 'diario', $comp_atributos['total'], $fecha, $importada, 'POL/DIA/', $cuentas['conc_pol'], $period_id);
 
+        Log::info('Genero poliza de diario');
+
         //Generando asiento de puente (cuenta por cobrar o por pagar)
         $this->crearAsiento($pol_id, $foliopuente, $comp_atributos['total'], $cuentas['conc_pol'], $apunte, $cuentas['cta_puente'], $period_id);
 
+        Log::info('Genero asiento de cuenta por cobrar o pagar');
+
         //Generando asiento nominal (de ingreso o gasto)
-        $this->crearAsiento($pol_id, $folionominal, $comp_atributos['subTotal'], $cuentas['conc_pol'], $apunte1, $cuentas['cta_nominal'], $period_id);
+        $conceptos = $xml_array['cfdi:Comprobante']['cfdi:Conceptos']['cfdi:Concepto'];
+        $this->contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id);
+
+        Log::info('Genero asiento de ingreso o gasto');
 
         //Generando asiento de descuento en caso de aplicar
         if (array_key_exists('Descuento',$comp_atributos) && isset($comp_atributos['Descuento']))
@@ -222,6 +246,8 @@ class Comprobante extends Model
         {
             $impuestos = $this->contabImp($pol_id, $cuentas['conc_pol'], $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], $apunte1, $apunte, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $period_id);
         }
+
+        Log::info('Genero asientos de impuestos');
 
         //Actualizando impuestos de provisión
         if (count($impuestos) > 0)
@@ -250,6 +276,78 @@ class Comprobante extends Model
                 $this->contabReclasifImp($polpago_id, $cuentas['conc_pol'], $impuestos, $apunte, $apunte1, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $cuentas['cta_iva_trasl_cob'], $cuentas['cta_ieps_cob'], $cuentas['cta_isr_reten_cob'], $cuentas['cta_iva_reten_cob'], $cuentas['cta_ieps_reten_cob'], $period_id);
             }
         }
+    }
+
+    public function contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id)
+    {
+        $forma_contab = $cuentas['forma_contab'];
+        $cuentas_nominales = [];
+        if ($tipo == 'ingreso')
+        {
+            $folio = 'AST/ING';
+            $apunte = 'haber';
+            
+            if ($forma_contab == 'cliente')
+            {
+                $cuentas_ingreso = \IngresosProducto::where('prodingr_cliente_id','=',$cuentas['forma_contab_id'])->get();
+            }
+            else
+            {
+                $cuentas_ingreso = \IngresosProducto::where('prodingr_tipcliente_id','=',$cuentas['forma_contab_id'])->get();
+            }
+
+            foreach ($cuentas_ingreso as $cta) {
+                $cuentas_nominales[$cta->prodingr_cod_prod] = $cta->prodingr_cta_ingr_id;
+            }
+
+        }
+        else
+        {
+            $folio = 'AST/GST';
+            $apunte = 'debe';
+            if ($forma_contab == 'proveedor')
+            {
+                $cuentas_gastos = \GastosProducto::where('prodgast_proveed_id','=',$cuentas['forma_contab_id'])->get();
+            }
+            else
+            {
+                $cuentas_gastos = \GastosProducto::where('prodgast_tipprov_id','=',$cuentas['forma_contab_id'])->get();
+            }
+
+            foreach ($cuentas_gastos as $cta) {
+                $cuentas_nominales[$cta->prodgast_cod_prod] = $cta->prodgast_cta_gast_id;
+            }
+
+        }
+
+        $cta_nom = $cuentas['cta_nominal'];
+
+        if (count($conceptos) > 1)
+        {
+            foreach ($conceptos as $concepto) {
+                $claveProdServ = $concepto['ClaveProdServ'];
+
+                if (array_key_exists($claveProdServ, $cuentas_nominales))
+                {
+                    $cta_nom = $cuentas_nominales[$claveProdServ];
+                }
+
+                $this->crearAsiento($pol_id, $folio, $concepto['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id);
+            }
+        }
+        else
+        {
+            $claveProdServ = $conceptos['ClaveProdServ'];
+
+                if (array_key_exists($claveProdServ, $cuentas_nominales))
+                {
+                    $cta_nom = $cuentas_nominales[$claveProdServ];
+                }
+
+                $this->crearAsiento($pol_id, $folio, $concepto['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id);
+
+        }
+
     }
 
     public function contabPago($comp_id, $array_pagos, $rfc, $importada, $tipo)
@@ -298,6 +396,8 @@ class Comprobante extends Model
                     if (count($provis) > 0)
                     {
                         $provis = $provis[0];
+                        $provis_monto = $provis->provis_monto;
+                        $porcentaje_pagado = round($doc->pagorel_monto_pag / $provis_monto, 2);
                         $provis_impuestos = \ProvisionImpuestos::where('provisimp_provis_id','=',$provis->id)->get();
                         $impuestos = [];
 
@@ -306,11 +406,11 @@ class Comprobante extends Model
                             {
                                 switch ($imp->provisimp_cod) {
                                     case '002':
-                                        $impuestos['ivaxcob'] = $imp->provisimp_monto;
+                                        $impuestos['ivaxcob'] = $imp->provisimp_monto * $porcentaje_pagado;
                                         break;
 
                                     case '003':
-                                        $impuestos['iepsxcob'] = $imp->provisimp_monto;
+                                        $impuestos['iepsxcob'] = $imp->provisimp_monto * $porcentaje_pagado;
                                         break;
                                     
                                     default:
@@ -322,15 +422,15 @@ class Comprobante extends Model
                             {
                                 switch ($imp->provisimp_cod) {
                                     case '001':
-                                        $impuestos['isrrxcob'] = $imp->provisimp_monto;
+                                        $impuestos['isrrxcob'] = $imp->provisimp_monto * $porcentaje_pagado;
                                         break;
 
                                     case '002':
-                                        $impuestos['ivarxcob'] = $imp->provisimp_monto;
+                                        $impuestos['ivarxcob'] = $imp->provisimp_monto * $porcentaje_pagado;
                                         break;
 
                                     case '003':
-                                        $impuestos['iepsrxcob'] = $imp->provisimp_monto;
+                                        $impuestos['iepsrxcob'] = $imp->provisimp_monto * $porcentaje_pagado;
                                         break;
                                     
                                     default:
@@ -577,7 +677,7 @@ class Comprobante extends Model
         $asiento->asiento_folio_ref = $folio.$asiento->id;
         $asiento->save();
 
-        $this->updateBalanza($cta_id, $period_id, $monto, $direc);
+        //$this->updateBalanza($cta_id, $period_id, $monto, $direc);
 
     }
 
