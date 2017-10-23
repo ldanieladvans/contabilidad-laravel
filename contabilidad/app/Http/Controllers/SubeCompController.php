@@ -172,6 +172,8 @@ class SubeCompController extends Controller
     						$provision->provis_comp_id = $comprobante->id;
     					}
     					$provision->save();
+
+                        
     				}
     			}
 
@@ -192,6 +194,7 @@ class SubeCompController extends Controller
         		$ef->save();
 
         		//TODO Contabilizar
+                $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $alldata['comptype']);
         	}else{
         		if (file_exists($full_path)){ 
 	                unlink ($full_path); 
