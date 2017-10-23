@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoSubCuentaSeeder::class);       
         $this->call(FormaPagoSeeder::class);
         $this->call(CuentaSeeder::class);
+        $this->call(EjercicioSeeder::class);
+        $this->call(PeriodoSeeder::class);
+
         $this->call(CpMexSeeder::class);
         $this->call(seed_user::class);
     }

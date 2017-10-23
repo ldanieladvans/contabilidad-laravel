@@ -31,13 +31,13 @@
 
 @section('page_header_content')
 	<div class="page-header">
-	    @if (Session::has('message'))
-            <div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                </button>
-                <strong>{{ Session::get('message') }}</strong>
-            </div>
-        @endif
+	    
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" id="compalertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <strong>Asegurese que los comprobantes que suba se correspondan con su tipo</strong>
+        </div>
+        
 	</div>
 @endsection
 
