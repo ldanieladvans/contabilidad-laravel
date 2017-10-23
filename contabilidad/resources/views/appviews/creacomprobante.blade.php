@@ -81,20 +81,25 @@
 
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="comp_tipocomp">Tipo de Complemento:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="comp_tipocomp">Tipo de Comprobante:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="comp_tipocomp" name="comp_tipocomp" data-placeholder="Seleccione el tipo de complemento ..." style="width: 83%; display: none;">
-                            	<!-- TODO -->
-                            	<option value="tcomp1">Tipo Complemento 1</option>
-                            	<option value="tcomp2">Tipo Complemento 2</option>
+							<select class="js-example-basic-single js-states form-control" id="comp_tipocomp" name="comp_tipocomp" data-placeholder="Seleccione el tipo de comprobante ..." style="width: 83%; display: none;">
+                            	<option value="ingreso">Ingreso</option>
+                            	<option value="egreso">Egreso</option>
+                            	<option value="pago">Pago</option>
+                            	<option value="nomina">Nómina</option>
 							</select>
 						</div>
 
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="comp_complmto">Complemento:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="comp_complmto" name="comp_complmto" data-placeholder="Seleccione el período ..." style="width: 83%; display: none;">
-								<option value="comp1">Complemento 1</option>
-                            	<option value="comp1">Complemento 2</option>
+							<select class="js-example-basic-single js-states form-control" id="comp_complmto" name="comp_complmto" data-placeholder="Seleccione el complemento ..." style="width: 83%; display: none;">
+								<option value="CompNac">Complemento Nacional</option>
+                            	<option value="CompNalOt">Complemento Nacional Otro</option>
+                            	<option value="CompExt">Complemento Extra</option>
+                            	<option value="Cheque">Cheque</option>
+                            	<option value="Transferencia">Transferencia</option>
+                            	<option value="OtrMetodoPago">Otro Metodo de Pago</option>
 							</select>
 						</div>
 					</div>
