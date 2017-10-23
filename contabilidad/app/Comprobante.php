@@ -152,21 +152,21 @@ class Comprobante extends Model
             {
                 $tip_prov = TipoProveedor::find($proveedor->proveed_tipprov_id);
 
-                $cuenta['cta_puente']= $tip_prov->tipprov_cta_por_pagar_id ? $tip_prov->tipprov_cta_por_pagar_id : 1;
-                $cuenta['cta_nominal']= $tip_prov->tipprov_cta_egreso_id ? $tip_prov->tipprov_cta_egreso_id : 1;
-                $cuenta['cta_iva_trasl_x_cob']= $tip_prov->tipprov_cta_iva_acredit_x_cob_id ? $tip_prov->tipprov_cta_iva_acredit_x_cob_id : 1;
-                $cuenta['cta_iva_reten_x_cob']= $tip_prov->tipprov_cta_iva_reten_x_cob_id ? $tip_prov->tipprov_cta_iva_reten_x_cob_id : 1;
-                $cuenta['cta_isr_reten_x_cob']= $tip_prov->tipprov_cta_isr_reten_id ? $tip_prov->tipprov_cta_isr_reten_id : 1;
-                $cuenta['cta_desc']= $tip_prov->tipprov_cta_desc_id ? $tip_prov->tipprov_cta_desc_id : 1;
-                $cuenta['cta_ieps_x_cob']= $tip_prov->tipprov_cta_ieps_por_cobrar_id ? $tip_prov->tipprov_cta_ieps_por_cobrar_id : 1;
-                $cuenta['cta_ieps_reten_x_cob']= $tip_prov->tipprov_cta_ieps_reten_por_cobrar_id ? $tip_prov->tipprov_cta_ieps_reten_por_cobrar_id : 1;
-                $cuenta['conc_pol']= $tip_prov->tipprov_concepto_polz ? $tip_prov->tipprov_concepto_polz : '';
+                $cuentas['cta_puente']= $tip_prov->tipprov_cta_por_pagar_id ? $tip_prov->tipprov_cta_por_pagar_id : 1;
+                $cuentas['cta_nominal']= $tip_prov->tipprov_cta_egreso_id ? $tip_prov->tipprov_cta_egreso_id : 1;
+                $cuentas['cta_iva_trasl_x_cob']= $tip_prov->tipprov_cta_iva_acredit_x_cob_id ? $tip_prov->tipprov_cta_iva_acredit_x_cob_id : 1;
+                $cuentas['cta_iva_reten_x_cob']= $tip_prov->tipprov_cta_iva_reten_x_cob_id ? $tip_prov->tipprov_cta_iva_reten_x_cob_id : 1;
+                $cuentas['cta_isr_reten_x_cob']= $tip_prov->tipprov_cta_isr_reten_id ? $tip_prov->tipprov_cta_isr_reten_id : 1;
+                $cuentas['cta_desc']= $tip_prov->tipprov_cta_desc_id ? $tip_prov->tipprov_cta_desc_id : 1;
+                $cuentas['cta_ieps_x_cob']= $tip_prov->tipprov_cta_ieps_por_cobrar_id ? $tip_prov->tipprov_cta_ieps_por_cobrar_id : 1;
+                $cuentas['cta_ieps_reten_x_cob']= $tip_prov->tipprov_cta_ieps_reten_por_cobrar_id ? $tip_prov->tipprov_cta_ieps_reten_por_cobrar_id : 1;
+                $cuentas['conc_pol']= $tip_prov->tipprov_concpto_polz ? $tip_prov->tipprov_concpto_polz : '';
 
-                $cuenta['cta_iva_trasl_cob']= $tip_prov->tipprov_cta_iva_acredit_cob_id ? $tip_prov->tipprov_cta_iva_acredit_cob_id : 1;
-                $cuenta['cta_iva_reten_cob']= $tip_prov->tipprov_cta_iva_reten_cob_id ? $tip_prov->tipprov_cta_iva_reten_cob_id : 1;
-                $cuenta['cta_isr_reten_cob']= $tip_prov->tipprov_cta_isr_reten_cob_id ? $tip_prov->tipprov_cta_isr_reten_cob_id : 1;
-                $cuenta['cta_ieps_cob']= $tip_prov->tipprov_cta_ieps_cobrado_id ? $tip_prov->tipprov_cta_ieps_cobrado_id : 1;
-                $cuenta['cta_ieps_reten_cob']= $tip_prov->tipprov_cta_ieps_reten_cobrado_id ? $tip_prov->tipprov_cta_ieps_reten_cobrado_id : 1;
+                $cuentas['cta_iva_trasl_cob']= $tip_prov->tipprov_cta_iva_acredit_cob_id ? $tip_prov->tipprov_cta_iva_acredit_cob_id : 1;
+                $cuentas['cta_iva_reten_cob']= $tip_prov->tipprov_cta_iva_reten_cob_id ? $tip_prov->tipprov_cta_iva_reten_cob_id : 1;
+                $cuentas['cta_isr_reten_cob']= $tip_prov->tipprov_cta_isr_reten_cob_id ? $tip_prov->tipprov_cta_isr_reten_cob_id : 1;
+                $cuentas['cta_ieps_cob']= $tip_prov->tipprov_cta_ieps_cobrado_id ? $tip_prov->tipprov_cta_ieps_cobrado_id : 1;
+                $cuentas['cta_ieps_reten_cob']= $tip_prov->tipprov_cta_ieps_reten_cobrado_id ? $tip_prov->tipprov_cta_ieps_reten_cobrado_id : 1;
                 $cuentas['forma_contab'] = 'tipoproveedor';
                 $cuentas['forma_contab_id'] = $tip_prov->id;
             }
@@ -210,9 +210,9 @@ class Comprobante extends Model
         $apunte = 'debe';
         $apunte1 = 'haber';
         $partner = 'cliente';
-        $foliopuente = 'AST/XCOB';
-        $folionominal = 'AST/ING';
-        $foliopago = 'POL/ING';
+        $foliopuente = 'AST/XCOB/';
+        $folionominal = 'AST/ING/';
+        $foliopago = 'POL/ING/';
         $rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
 
         if ($tipo == 'egreso')
@@ -220,11 +220,13 @@ class Comprobante extends Model
             $apunte = 'haber';
             $apunte1 = 'debe';
             $partner = 'proveedor';
-            $foliopuente = 'AST/XPAG';
-            $folionominal = 'AST/GST';
-            $foliopago = 'POL/EGR';
+            $foliopuente = 'AST/XPAG/';
+            $folionominal = 'AST/GST/';
+            $foliopago = 'POL/EGR/';
             $rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
         }
+
+        Log::info('tipo de comp '.$partner);
 
         
         $comp_atributos = $xml_array['cfdi:Comprobante']['@attributes'];
@@ -309,7 +311,7 @@ class Comprobante extends Model
         $cuentas_nominales = [];
         if ($tipo == 'ingreso')
         {
-            $folio = 'AST/ING';
+            $folio = 'AST/ING/';
             $apunte = 'haber';
             
             if ($forma_contab == 'cliente')
@@ -328,7 +330,7 @@ class Comprobante extends Model
         }
         else
         {
-            $folio = 'AST/GST';
+            $folio = 'AST/GST/';
             $apunte = 'debe';
             if ($forma_contab == 'proveedor')
             {
@@ -382,17 +384,17 @@ class Comprobante extends Model
     public function contabPago($comp_id, $array_pagos, $rfc, $importada, $tipo)
     {
         $partner = 'cliente';
-        $foliopol = 'POL/ING';
-        $foliopago = 'AST/COB';
-        $foliopuente = 'AST/XCOB';
+        $foliopol = 'POL/ING/';
+        $foliopago = 'AST/COB/';
+        $foliopuente = 'AST/XCOB/';
         $apunte = 'debe';
         $apunte1 = 'haber';
         if ($tipo == 'egreso')
         {
             $partner = 'proveedor';
-            $foliopol = 'POL/EGR';
-            $foliopago = 'AST/PAG';
-            $foliopuente = 'AST/XPAG';
+            $foliopol = 'POL/EGR/';
+            $foliopago = 'AST/PAG/';
+            $foliopuente = 'AST/XPAG/';
             $apunte = 'haber';
             $apunte1 = 'debe';
         }
@@ -706,15 +708,15 @@ class Comprobante extends Model
 
             if ($direc == 'debe')
             {
-                $cuenta->journal->debitDollars($monto);
-                $asiento->asiento_debe = $monto;
+                $cuenta->journal->debitDollars((float)$monto);
+                $asiento->asiento_debe = (float)$monto;
                 $asiento->asiento_haber = 0;
             }
             else
             {
-                $cuenta->journal->creditDollars($monto);
+                $cuenta->journal->creditDollars((float)$monto);
                 $asiento->asiento_debe = 0;
-                $asiento->asiento_haber = $monto;
+                $asiento->asiento_haber = (float)$monto;
             }
 
             $asiento->asiento_concepto = $conc;
@@ -726,13 +728,13 @@ class Comprobante extends Model
         }
         
 
-        $this->updateBalanza($cuenta, $period_id, $monto, $direc);
+        $this->updateBalanza($cuenta, $period_id, (float)$monto, $direc);
 
     }
 
     public function insertarBalanza($cuenta, $period_id)
     {
-        $saldo_ini = $cuenta->journal->getCurrentBalanceInDollars();
+        $saldo_ini = $cuenta->journal->getBalanceInDollars() * -1;
         $balanza = new Balanza();
         $balanza->blnza_saldo_inicial = $saldo_ini;
         $balanza->blnza_cargos = 0;
@@ -740,6 +742,7 @@ class Comprobante extends Model
         $balanza->blnza_saldo_final = $saldo_ini;
         $balanza->blnza_period_id = $period_id;
         $balanza->blnza_ctacont_id = $cuenta->id;
+        $balanza->save();
     }
 
     public function updateBalanza($cuenta, $period_id, $monto, $direc)
@@ -757,7 +760,7 @@ class Comprobante extends Model
                 $blz->blnza_abonos += $monto;
             }
 
-            $blz->blnza_saldo_final = $cuenta->journal->getCurrentBalanceInDollars();
+            $blz->blnza_saldo_final = $cuenta->journal->getBalanceInDollars() * -1;
             $blz->save();
         }
     }
@@ -780,12 +783,6 @@ class Comprobante extends Model
         $pol->comprobantes()->attach([$comp_id]);
 
         return $pol->id;
-
-    }
-
-    public function updateBalanza($cta_id, $period_id, $monto, $apunte)
-    {
-        //TODO ACTUALIZAR BALANZA POR CADA ASIENTO CONTABLE
 
     }
     

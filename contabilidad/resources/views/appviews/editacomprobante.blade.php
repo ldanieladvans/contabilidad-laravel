@@ -231,12 +231,21 @@
 									</div>
 
 									<div id="pols" class="tab-pane fade">
-
 										<div class="form-group">
-										<label for="polizas">Pólizas: </label>
+											<label for="opolizas">Pólizas: </label>
+											<select multiple="multiple" class="js-example-basic-multiple" id="opolizas" name="opolizas[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;" disabled>
+												@foreach($polizas as $pls)
+													<option value="{{$pls->id}}" {{$comprobante->tienePoliza($pls->id) ? 'selected':''}}>{{$pls->polz_folio}}</option>
+												@endforeach
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="polizas">Agregar Pólizas: </label>
 											<select multiple="multiple" class="js-example-basic-multiple" id="polizas" name="polizas[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;">
 												@foreach($polizas as $pls)
-													<option value="{{$pls->id}}" {{$comprobante->tienePoliza($pls->id) ? 'selected':''}}>{{$pls->polz_concepto}}</option>
+													@if(!$comprobante->tienePoliza($pls->id))
+														<option value="{{$pls->id}}">{{$pls->polz_folio}}</option>
+													@endif
 												@endforeach
 											</select>
 										</div>
@@ -314,6 +323,11 @@
 				$("#polizas").select2({
 				  	placeholder: "Seleccione las pólizas ...",
 				  	allowClear: true,
+				  	multiple: true
+				});
+
+				$("#opolizas").select2({
+				  	placeholder: "Pólizas ...",
 				  	multiple: true
 				});
 

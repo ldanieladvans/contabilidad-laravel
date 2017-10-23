@@ -103,7 +103,7 @@
 		
 	</div>
 
-	<div class="row">
+	<!--<div class="row">
 
 			<label class="control-label col-md-2 col-sm-2 col-xs-12" for="tipo_comprobante">Tipo de Comprobante:</label>
 			<div class="col-md-10 col-sm-10 col-xs-12">
@@ -115,7 +115,7 @@
 				</select>
 			</div>
 		
-	</div>
+	</div>-->
 
 	<div class="ln_solid"></div>
 
@@ -141,9 +141,9 @@
 
         var comptype = 'ingreso';
 
-        $("#tipo_comprobante").change(function(){
+        /*$("#tipo_comprobante").change(function(){
         	comptype = this.value;
-        });
+        });*/
 
         function processFiles(){
         	var result = confirm("¿Está seguro que desea procesar estos archivos?");
@@ -152,7 +152,7 @@
                 $.ajax({
                     url: '/processfile',
                     type: 'POST',
-                    data: {_token: CSRF_TOKEN,comptype:comptype},
+                    data: {_token: CSRF_TOKEN},
                     dataType: 'JSON',
                     success: function (data) {
                         window.location.href = window.location.href;
@@ -170,10 +170,10 @@
 	        	$("#menusubecomp").addClass('active');
 	        	$("#menuacciones").addClass('open');
 
-        	$("#tipo_comprobante").select2({
+        	/*$("#tipo_comprobante").select2({
 			  	placeholder: "Selecciona el tipo de comprobante ...",
 			  	allowClear: true
-			});
+			});*/
 
 			
         	

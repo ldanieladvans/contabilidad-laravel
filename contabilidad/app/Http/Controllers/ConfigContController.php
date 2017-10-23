@@ -106,7 +106,7 @@ class ConfigContController extends Controller
 	        	}
 
 	        	$cuenta->save();
-                $cuenta->initJournal('MXN');
+                $cuenta->initJournal();
 			}
 
         }

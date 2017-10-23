@@ -117,7 +117,8 @@
 				            },
 				            {
 				                dataField: "blnza_period_id",
-				                caption: 'Periodo'
+				                caption: 'Periodo',
+				                groupIndex: 0
 				            },
 				            {
 				                dataField: "blnza_saldo_inicial",
@@ -154,12 +155,14 @@
 				                summaryType: "sum",
 				                valueFormat: "currency",
 				                showInGroupFooter: true,
+				                displayFormat: "Total: {0}",
 				                alignByColumn: true
 				            }, {
 				                column: "blnza_cargos",
 				                summaryType: "sum",
 				                valueFormat: "currency",
 				                showInGroupFooter: true,
+				                displayFormat: "Total: {0}",
 				                alignByColumn: true
 				            }, {
 				                column: "blnza_abonos",

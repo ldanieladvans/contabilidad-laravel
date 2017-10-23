@@ -57,6 +57,8 @@ class SubeCompController extends Controller
         $exist_file = CompProces::where('user_id',$logued_user->id)->where('process',false)->get();
         $target_dir = base_path().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR;
 
+        $arr_tpago = ['I'=>'ingreso','E'=>'egreso','P'=>'pago','N'=>'nomina','T'=>'Otro'];
+
 
         foreach ($exist_file as $ef) {
         	$full_path = $target_dir.(string)$ef->user_id.'_'.$ef->filename;
@@ -64,9 +66,7 @@ class SubeCompController extends Controller
 			$doc->load(realpath($target_dir.(string)$ef->user_id.'_'.$ef->filename));
 
 			$comp_espago = false;
-			if($alldata['comptype']=='pago'){
-				$comp_espago = true;
-			}
+			
 			
 			$API_KEY = "6ba7d84839ee22fdfed979f78f0bbb78";
 			$xml = $doc->saveXML();
@@ -81,6 +81,15 @@ class SubeCompController extends Controller
               'allow_self_signed' => true
               )
             ));
+
+            if($xml_array['cfdi:Comprobante']['@attributes']){
+                if(array_key_exists('TipoDeComprobante', $xml_array['cfdi:Comprobante']['@attributes'])){
+                    $alldata['comptype'] = $arr_tpago[$xml_array['cfdi:Comprobante']['@attributes']['TipoDeComprobante']];
+                    if($alldata['comptype']=='pago'){
+                        $comp_espago = true;
+                    }
+                }
+            }
             
         	/*$soap = new SoapClient($wsdl,array('stream_context' => $context));
         	$params = ['credential' => $API_KEY,'cfdi' => $cfdi];
