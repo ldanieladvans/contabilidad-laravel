@@ -188,7 +188,7 @@ class Comprobante extends Model
         $foliopuente = 'AST/XCOB';
         $folionominal = 'AST/ING';
         $foliopago = 'POL/ING';
-        $rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['rfc'];
+        $rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
 
         if ($tipo == 'egreso')
         {
@@ -198,7 +198,7 @@ class Comprobante extends Model
             $foliopuente = 'AST/XPAG';
             $folionominal = 'AST/GST';
             $foliopago = 'POL/EGR';
-            $rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['rfc'];
+            $rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
         }
 
         
