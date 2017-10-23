@@ -18,6 +18,7 @@ use App\Provision;
 use App\ProvisionImpuestos;
 use App\Asiento;
 use App\Poliza;
+use App\Balanza;
 
 class Comprobante extends Model
 {
@@ -538,7 +539,7 @@ class Comprobante extends Model
             if (array_key_exists('cfdi:Retencion',$nodo_imp['cfdi:Retenciones']) && isset($nodo_imp['cfdi:Retenciones']['cfdi:Retencion']))
             {
                 $retenciones = $nodo_imp['cfdi:Retenciones']['cfdi:Retencion'];
-                if (count($retenciones) > 1)
+                if (count($retenciones) > 2)
                 {
                     foreach ($retenciones as $retencion) {
                         
@@ -693,31 +694,72 @@ class Comprobante extends Model
     public function crearAsiento($pol_id, $folio, $monto, $conc, $direc, $cta_id, $period_id)
     {
         $cuenta = Cuenta::find($cta_id);
-        //$cuenta->initJournal('MXN');
-        $asiento = new Asiento;
-        if ($direc == 'debe')
+        if ($cuenta)
         {
-            $cuenta->journal->debitDollars($monto);
-            $asiento->asiento_debe = $monto;
-            $asiento->asiento_haber = 0;
+            $asiento = new Asiento;
+            $cuentas_en_blz = Balanza::where('blnza_period_id','=',$period_id)->where('blnza_ctacont_id', '=', $cta_id)->get();
+
+            if (count($cuentas_en_blz) == 0)
+            {
+                $this->insertarBalanza($cuenta, $period_id);
+            }
+
+            if ($direc == 'debe')
+            {
+                $cuenta->journal->debitDollars($monto);
+                $asiento->asiento_debe = $monto;
+                $asiento->asiento_haber = 0;
+            }
+            else
+            {
+                $cuenta->journal->creditDollars($monto);
+                $asiento->asiento_debe = 0;
+                $asiento->asiento_haber = $monto;
+            }
+
+            $asiento->asiento_concepto = $conc;
+            $asiento->asiento_ctacont_id = $cta_id;
+            $asiento->asiento_polz_id = $pol_id;
+            $asiento->save();
+            $asiento->asiento_folio_ref = $folio.$asiento->id;
+            $asiento->save();
         }
-        else
+        
+
+        $this->updateBalanza($cuenta, $period_id, $monto, $direc);
+
+    }
+
+    public function insertarBalanza($cuenta, $period_id)
+    {
+        $saldo_ini = $cuenta->journal->getCurrentBalanceInDollars();
+        $balanza = new Balanza();
+        $balanza->blnza_saldo_inicial = $saldo_ini;
+        $balanza->blnza_cargos = 0;
+        $balanza->blnza_abonos = 0;
+        $balanza->blnza_saldo_final = $saldo_ini;
+        $balanza->blnza_period_id = $period_id;
+        $balanza->blnza_ctacont_id = $cuenta->id;
+    }
+
+    public function updateBalanza($cuenta, $period_id, $monto, $direc)
+    {
+        $cuenta_blz = Balanza::where('blnza_period_id','=',$period_id)->where('blnza_ctacont_id', '=', $cuenta->id)->get();
+        if (count($cuenta_blz) > 0)
         {
-            $cuenta->journal->creditDollars($monto);
-            $asiento->asiento_debe = 0;
-            $asiento->asiento_haber = $monto;
+            $blz = $cuenta_blz[0];
+            if ($direc == 'debe')
+            {
+                $blz->blnza_cargos += $monto;
+            }
+            else
+            {
+                $blz->blnza_abonos += $monto;
+            }
+
+            $blz->blnza_saldo_final = $cuenta->journal->getCurrentBalanceInDollars();
+            $blz->save();
         }
-
-
-        $asiento->asiento_concepto = $conc;
-        $asiento->asiento_ctacont_id = $cta_id;
-        $asiento->asiento_polz_id = $pol_id;
-        $asiento->save();
-        $asiento->asiento_folio_ref = $folio.$asiento->id;
-        $asiento->save();
-
-        //$this->updateBalanza($cta_id, $period_id, $monto, $direc);
-
     }
 
     public function crearPoliza($comp_id, $tipo, $monto, $fecha, $importada, $folio, $conc, $period_id)
