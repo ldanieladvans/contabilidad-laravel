@@ -4,6 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use App\Cliente;
+use App\TipoCliente;
+use App\Proveedor;
+use App\TipoProveedor;
+use App\Periodo;
+use App\FormaPago;
+use App\Cuenta;
+use App\IngresosProducto;
+use App\GastosProducto;
+use App\Pagorel;
+use App\Provision;
+use App\ProvisionImpuestos;
+use App\Asiento;
+use App\Poliza;
 
 class Comprobante extends Model
 {
@@ -59,7 +73,7 @@ class Comprobante extends Model
         $cuentas = [];
         if ($tipo == 'cliente')
         {
-            $clientes = \Cliente::where('cliente_rfc', '=', $rfc)->get();
+            $clientes = Cliente::where('cliente_rfc', '=', $rfc)->get();
             $cliente = $clientes[0];
             if ($cliente->cliente_forma_contab == 'cliente')
             {
@@ -83,7 +97,7 @@ class Comprobante extends Model
             }
             else
             {
-                $tip_client = \TipoCliente::find($cliente->cliente_tipcliente_id);
+                $tip_client = TipoCliente::find($cliente->cliente_tipcliente_id);
 
                 $cuentas['cta_puente'] = $tip_client->tipcliente_cta_por_cobrar_id ? $tip_client->tipcliente_cta_por_cobrar_id : 1;
                 $cuentas['cta_nominal'] = $tip_client->tipcliente_cta_ingreso_id ? $tip_client->tipcliente_cta_ingreso_id : 1;
@@ -106,7 +120,7 @@ class Comprobante extends Model
         }
         else
         {
-            $proveedores = \Proveedor::where('proveed_rfc', '=', $rfc)->get();
+            $proveedores = Proveedor::where('proveed_rfc', '=', $rfc)->get();
             $proveedor = $proveedores[0];
             if ($proveedor->proveed_forma_contab == 'proveedor')
             {
@@ -131,7 +145,7 @@ class Comprobante extends Model
             }
             else
             {
-                $tip_prov = \TipoProveedor::find($proveedor->proveed_tipprov_id);
+                $tip_prov = TipoProveedor::find($proveedor->proveed_tipprov_id);
 
                 $cuenta['cta_puente']= $tip_prov->tipprov_cta_por_pagar_id ? $tip_prov->tipprov_cta_por_pagar_id : 1;
                 $cuenta['cta_nominal']= $tip_prov->tipprov_cta_egreso_id ? $tip_prov->tipprov_cta_egreso_id : 1;
@@ -156,7 +170,7 @@ class Comprobante extends Model
 
     public function getPeriodo($fecha)
     {
-        $period = \Periodo::where($fecha, '>=', 'period_fecha_ini')->where($fecha, '<=', 'period_fecha_fin')->get();
+        $period = Periodo::where($fecha, '>=', 'period_fecha_ini')->where($fecha, '<=', 'period_fecha_fin')->get();
         $period_id = 1;
         if (count($period) > 0)
         {
@@ -168,8 +182,8 @@ class Comprobante extends Model
 
     public function getCuentaPago($formapago)
     {
-        $forma_pago = \FormaPago::where('formpago_formpagosat_cod', '=', $formapago)->get();
-        $cta_pago_id = \Cuenta::where('ctacont_efectivo','=',true)->get()[0];
+        $forma_pago = FormaPago::where('formpago_formpagosat_cod', '=', $formapago)->get();
+        $cta_pago_id = Cuenta::where('ctacont_efectivo','=',true)->get()[0];
         if (count($forma_pago) > 0)
         {
             $cta_pago_id = $forma_pago[0]->formpago_ctacont_id;
@@ -289,11 +303,11 @@ class Comprobante extends Model
             
             if ($forma_contab == 'cliente')
             {
-                $cuentas_ingreso = \IngresosProducto::where('prodingr_cliente_id','=',$cuentas['forma_contab_id'])->get();
+                $cuentas_ingreso = IngresosProducto::where('prodingr_cliente_id','=',$cuentas['forma_contab_id'])->get();
             }
             else
             {
-                $cuentas_ingreso = \IngresosProducto::where('prodingr_tipcliente_id','=',$cuentas['forma_contab_id'])->get();
+                $cuentas_ingreso = IngresosProducto::where('prodingr_tipcliente_id','=',$cuentas['forma_contab_id'])->get();
             }
 
             foreach ($cuentas_ingreso as $cta) {
@@ -307,11 +321,11 @@ class Comprobante extends Model
             $apunte = 'debe';
             if ($forma_contab == 'proveedor')
             {
-                $cuentas_gastos = \GastosProducto::where('prodgast_proveed_id','=',$cuentas['forma_contab_id'])->get();
+                $cuentas_gastos = GastosProducto::where('prodgast_proveed_id','=',$cuentas['forma_contab_id'])->get();
             }
             else
             {
-                $cuentas_gastos = \GastosProducto::where('prodgast_tipprov_id','=',$cuentas['forma_contab_id'])->get();
+                $cuentas_gastos = GastosProducto::where('prodgast_tipprov_id','=',$cuentas['forma_contab_id'])->get();
             }
 
             foreach ($cuentas_gastos as $cta) {
@@ -382,7 +396,7 @@ class Comprobante extends Model
 
             //Generando asientos de cuentas por cobrar por cada documento relacionado dentro de pago
             //y verificando la reclasificación de impuestos por cada documento relacionado
-            $docs_rel = \Pagorel::where('pagorel_pago_id','=',$pago->id)->get();
+            $docs_rel = Pagorel::where('pagorel_pago_id','=',$pago->id)->get();
             foreach ($docs_rel as $doc) {
 
                 $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
@@ -392,13 +406,13 @@ class Comprobante extends Model
                 if (count($comp_rel) > 0)
                 {
                     $comp = $comp_rel[0];
-                    $provis = \Provision::where('provis_comp_id','=',$comp->id)->get();
+                    $provis = Provision::where('provis_comp_id','=',$comp->id)->get();
                     if (count($provis) > 0)
                     {
                         $provis = $provis[0];
                         $provis_monto = $provis->provis_monto;
                         $porcentaje_pagado = round($doc->pagorel_monto_pag / $provis_monto, 2);
-                        $provis_impuestos = \ProvisionImpuestos::where('provisimp_provis_id','=',$provis->id)->get();
+                        $provis_impuestos = ProvisionImpuestos::where('provisimp_provis_id','=',$provis->id)->get();
                         $impuestos = [];
 
                         foreach ($provis_impuestos as $imp) {
@@ -566,7 +580,7 @@ class Comprobante extends Model
     public function actImpProv($provis_id, $impuestos)
     {
         foreach ($impuestos as $key => $value) {
-            $provimp = new \ProvisionImpuestos();
+            $provimp = new ProvisionImpuestos();
             switch ($key) {
                 case 'ivaxcob':
                     $provimp->provisimp_cod = 't';
@@ -654,8 +668,8 @@ class Comprobante extends Model
 
     public function crearAsiento($pol_id, $folio, $monto, $conc, $direc, $cta_id, $period_id)
     {
-        $cuenta = \Cuenta::find($cta_id);
-        $asiento = new \Asiento;
+        $cuenta = Cuenta::find($cta_id);
+        $asiento = new Asiento;
         if ($direc == 'debe')
         {
             $cuenta->journal->debitDollars($monto);
@@ -683,7 +697,7 @@ class Comprobante extends Model
 
     public function crearPoliza($comp_id, $tipo, $monto, $fecha, $importada, $folio, $conc, $period_id)
     {
-        $pol = new \Poliza;
+        $pol = new Poliza;
         $pol->polz_concepto = $conc;
         $pol->polz_tipopolz = $tipo;
         $pol->polz_fecha = $fecha;
