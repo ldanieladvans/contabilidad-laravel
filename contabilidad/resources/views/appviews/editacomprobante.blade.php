@@ -90,17 +90,22 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="comp_tipocomp">Tipo de Complemento:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="comp_tipocomp" name="comp_tipocomp" data-placeholder="Seleccione el tipo de complemento ..." style="width: 83%; display: none;">
-                            	<!-- TODO -->
-                            	<option value="tcomp1" {{$comprobante->comp_tipocomp == 'tcomp1' ? 'selected':''}}>Tipo Complemento 1</option>
-                            	<option value="tcomp2" {{$comprobante->comp_tipocomp == 'tcomp2' ? 'selected':''}}>Tipo Complemento 2</option>
+                            	<option value="ingreso" {{$comprobante->comp_tipocomp == 'ingreso' ? 'selected':''}}>Ingreso</option>
+                            	<option value="egreso" {{$comprobante->comp_tipocomp == 'egreso' ? 'selected':''}}>Egreso</option>
+                            	<option value="pago" {{$comprobante->comp_tipocomp == 'pago' ? 'selected':''}}>Pago</option>
+                            	<option value="nomina" {{$comprobante->comp_tipocomp == 'nomina' ? 'selected':''}}>Nómina</option>
 							</select>
 						</div>
 
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="comp_complmto">Complemento:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="comp_complmto" name="comp_complmto" data-placeholder="Seleccione el período ..." style="width: 83%; display: none;">
-								<option value="comp1" {{$comprobante->comp_tipocomp == 'comp1' ? 'selected':''}}>Complemento 1</option>
-                            	<option value="comp2" {{$comprobante->comp_tipocomp == 'comp2' ? 'selected':''}}>Complemento 2</option>
+                            	<option value="CompNac" {{$comprobante->comp_tipocomp == 'CompNac' ? 'selected':''}}>Complemento Nacional</option>
+                            	<option value="CompNalOt" {{$comprobante->comp_tipocomp == 'CompNalOt' ? 'selected':''}}>Complemento Nacional Otro</option>
+                            	<option value="CompExt" {{$comprobante->comp_tipocomp == 'CompExt' ? 'selected':''}}>Complemento Extra</option>
+                            	<option value="Cheque" {{$comprobante->comp_tipocomp == 'Cheque' ? 'selected':''}}>Cheque</option>
+                            	<option value="Transferencia" {{$comprobante->comp_tipocomp == 'Transferencia' ? 'selected':''}}>Transferencia</option>
+                            	<option value="OtrMetodoPago" {{$comprobante->comp_tipocomp == 'OtrMetodoPago' ? 'selected':''}}>Otro Metodo de Pago</option>
 							</select>
 						</div>
 					</div>
