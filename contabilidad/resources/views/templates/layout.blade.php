@@ -44,10 +44,10 @@
 				</button>
 
 				<div class="navbar-header pull-left">
-					<a href="index.html" class="navbar-brand">
+					<a href="/" class="navbar-brand">
 						<small>
 							<i class="fa fa-bank"></i>
-							{{ config('app.name') }}
+							{{ config('app.name') }} - {{ Session::get('emp_name','') }} - {{ Session::get('emp_rfc','') }}
 						</small>
 					</a>
 				</div>
@@ -60,7 +60,7 @@
 								<!-- TODO Img -->
 								<img class="nav-user-photo" src="{{ Auth::user()->usrc_pic ? asset('storage/'.Auth::user()->usrc_pic) : asset('default_avatar_male.jpg')}}" alt="" />
 								<span class="user-info">
-									<small>Welcome,</small>
+									<small>Bienvenido,</small>
 									{{Auth::user()->name}}
 								</span>
 

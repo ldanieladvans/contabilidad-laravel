@@ -44,7 +44,7 @@
 				{{ Form::open(['route' => ['pagosrel.update', $pagorel->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editapagorel']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
 
-					<input type="hidden" name="pagorel_formpago_nom" id="pago_formpago_nom" value="">
+					<input type="hidden" name="pagorel_metpago_nom" id="pagorel_metpago_nom" value="">
 					<input type="hidden" name="pagorel_moneda_nom" id="pago_moneda_nom" value="">
 
 					<div class="form-group">
@@ -75,11 +75,11 @@
 
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_formpago_cod">Forma de pago SAT:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_metpago_cod">Forma de pago SAT:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="pagorel_formpago_cod" name="pagorel_formpago_cod" data-placeholder="Seleccione la forma de pago SAT ..." style="width: 83%; display: none;">
-								@foreach($pagorel_formpago_cod as $tp)
-	                            	<option value="{{ $tp->id }}" {{$pagorel->pagorel_formpago_cod == $tp->id ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
+							<select class="js-example-basic-single js-states form-control" id="pagorel_metpago_cod" name="pagorel_metpago_cod" data-placeholder="Seleccione la forma de pago SAT ..." style="width: 83%; display: none;">
+								@foreach($pagorel_metpago_cod as $tp)
+	                            	<option value="{{ $tp->id }}" {{$pagorel->pagorel_metpago_cod == $tp->id ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -242,7 +242,7 @@
 	        	$("#menucontabilidad").addClass('open');
 
         	/*Inicializando selects*/
-	        	$("#pagorel_formpago_cod").select2({
+	        	$("#pagorel_metpago_cod").select2({
 				  	placeholder: "Selecciona la forma de pago SAT ...",
 				  	allowClear: true
 				});
@@ -343,8 +343,8 @@
 			});*/
 
 
-		$('#pagorel_formpago_nom').change(function(){
-            document.getElementById('pagorel_formpago_nom').value = this.options[this.selectedIndex].text;            
+		$('#pagorel_metpago_cod').change(function(){
+            document.getElementById('pagorel_metpago_nom').value = this.options[this.selectedIndex].text;            
         });
 
         $('#pagorel_moneda_nom').change(function(){

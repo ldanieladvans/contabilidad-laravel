@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CatSatMonedasModelSeeder::class);
         $this->call(TipoSubCuentaSeeder::class);       
         $this->call(FormaPagoSeeder::class);
-        $this->call(CuentaSeeder::class);
+        //$this->call(CuentaSeeder::class); //TODO Descomentar cuando se tenga el arbol de cuenta
         $this->call(EjercicioSeeder::class);
         $this->call(PeriodoSeeder::class);
 

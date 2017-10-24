@@ -8,7 +8,7 @@ class Pagorel extends Model
 {
     protected $table = "pagorel";
 
-    protected $fillable = ['pagorel_pagado_uuid','pagorel_serie','pagorel_folio','pagorel_formpago_cod','pagorel_formpago_nom','pagorel_moneda_cod','pagorel_moneda_nom','pagorel_tipo_cambio','pagorel_numparcldad','pagorel_sald_ant','pagorel_monto_pag','pagorel_sald_nuevo','pagorel_asiento_id','pagorel_pago_id'];
+    protected $fillable = ['pagorel_pagado_uuid','pagorel_serie','pagorel_folio','pagorel_metpago_cod','pagorel_metpago_nom','pagorel_moneda_cod','pagorel_moneda_nom','pagorel_tipo_cambio','pagorel_numparcldad','pagorel_sald_ant','pagorel_monto_pag','pagorel_sald_nuevo','pagorel_asiento_id','pagorel_pago_id'];
 
     public function __construct(array $attributes = [])
     {

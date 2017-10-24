@@ -20,6 +20,7 @@ use App\Provision;
 use App\ConfigConcepto;
 use App\ConfigNomina;
 use App\Cuenta;
+use App\Empresa;
 use App\CompProces;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
@@ -29,6 +30,16 @@ use Illuminate\Support\Facades\Auth;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function getEmpObj(){
+        $emps = Empresa::all();
+        $emp_obj = false;
+        if(count($emps) > 0){
+            $emp_obj = $emps[0];
+        }
+
+        return $emp_obj;
+    }
 
     public function registeredBinnacle($request, $fname='', $fmessage='', $user_id=null, $user_name='', $controller=''){
         $user = \Auth::user();
@@ -662,6 +673,27 @@ class Controller extends BaseController
             'pattern' => $pattern,
         ];
 
+    }
+
+
+
+    public function pAsientos(Request $request)
+    {
+        $alldata = $request->all();
+        $to_save_data = array();
+
+        $row_id = false;
+        $data_id = false;
+
+        //TODO
+
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'data_id' => $data_id
+        );
+        return \Response::json($response);
     }
 
 

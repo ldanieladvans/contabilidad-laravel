@@ -8,6 +8,7 @@ use App\Cuenta;
 use App\Poliza;
 use App\Comprobante;
 use App\Periodo;
+use App\Asiento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -117,7 +118,19 @@ class PolizaController extends Controller
         //TODO Buscar tipo de poliza
         $poliza = Poliza::findOrFail($id);
         $periodos = Periodo::all();
-        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>$periodos]);
+
+        $asientos = Asiento::where('asiento_polz_id',$id)->get();
+        $asientos_list = array();
+        $asientos_contador = 0;
+
+        foreach ($asientos as $as) {
+            $asientos_list[$asientos_contador] = ['ID'=>$as->id,'asiento_concepto'=>$as->asiento_concepto,'asiento_debe'=>$as->asiento_debe,'asiento_haber'=>$as->asiento_haber,'asiento_folio_ref'=>$as->asiento_folio_ref];
+            $asientos_contador ++;
+        }
+
+        $comprobantes = Comprobante::all();
+
+        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>$periodos,'asientos'=>json_encode($asientos_list),'comprobantes'=>$comprobantes]);
     }
 
     /**
@@ -180,6 +193,12 @@ class PolizaController extends Controller
         $poliza->polz_modificada = $polz_modificada;
 
         $poliza->save();
+        $comps_sync = array();
+        if(array_key_exists('comps', $alldata)){
+            $comps_sync = $alldata['comps'];
+        }
+
+        $poliza->comprobantes()->sync($comps_sync);
 
         $fmessage = 'Se ha actualizado la póliza: '.$poliza->polz_folio;
         \Session::flash('message',$fmessage);

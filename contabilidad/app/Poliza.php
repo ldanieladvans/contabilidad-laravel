@@ -35,4 +35,16 @@ class Poliza extends Model
 
         return $this->belongsToMany('App\Comprobante','polzcomp','polzcomp_polz_id','polzcomp_comp_id');
     }
+
+    public function getComprobantes()
+    {
+        return (!$this->comprobantes) ? $this->comprobantes = $this->comprobantes()->get() : $this->comprobantes;
+    }
+
+    public function tieneComprobante($comp)
+    {
+        return $this->getComprobantes()->contains(function ($value, $key) use ($comp) {
+            return $comp == $value->id;
+        });
+    }
 }

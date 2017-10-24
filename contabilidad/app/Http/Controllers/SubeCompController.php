@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\CompProces;
 use App\Pago;
+use App\Pagorel;
 use App\Cuenta;
 use App\Poliza;
 use App\Comprobante;
@@ -13,6 +14,8 @@ use App\Nomina;
 use App\Provision;
 use App\Cliente;
 use App\Proveedor;
+use App\FormaPago;
+use App\Empresa;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Lib\XML2Array;
@@ -49,6 +52,157 @@ class SubeCompController extends Controller
     }
 
 
+    public function ingresoEgreso($xml_array,$comprobante,$type){
+
+        
+        $provision = new Provision();
+        if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante'])){
+            $provision->provis_monto = $xml_array['cfdi:Comprobante']['@attributes']['Total'];
+            $provision->provis_moneda_cod = $xml_array['cfdi:Comprobante']['@attributes']['Moneda'];
+            $provision->provis_moneda_nom = $xml_array['cfdi:Comprobante']['@attributes']['Moneda'];
+            $provision->provis_tipo_cambio = 0.0; //TODO
+            $provision->provis_metpago_cod = $xml_array['cfdi:Comprobante']['@attributes']['MetodoPago'];
+            $provision->provis_formpago_cod = $xml_array['cfdi:Comprobante']['@attributes']['FormaPago'];
+            if($comprobante->id){
+                $provision->provis_comp_id = $comprobante->id;
+            }
+            $provision->save();
+        }
+        
+
+        if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
+            foreach ($xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados'] as $key => $value) {
+                $comprel = new ComprobanteRel();
+                $comprel->comprel_tiporel_cod = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
+                $comprel->comprel_tiporel_nom = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
+                $comprel->comprel_comp_rel_uuid = $value['@attributes']['UUID'];
+                $comprel->save();
+            }
+
+        }
+
+        $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $type);
+
+    }
+
+
+    public function pago($xml_array,$comprobante,$ptype,$rfc_param){
+        $fpagos_arr = array();
+        $pagos_arr = array();
+        $fpagos = FormaPago::all();
+        foreach ($fpagos as $fpg) {
+            $fpagos_arr[$fpg->formpago_formpagosat_cod] = $fpg->formpago_formpagosat_nom;
+        }
+
+        if(array_key_exists('cfdi:Complemento', $xml_array['cfdi:Comprobante'])){
+            if(array_key_exists('pago10:Pagos', $xml_array['cfdi:Comprobante']['cfdi:Complemento'])){
+                foreach ($xml_array['cfdi:Comprobante']['cfdi:Complemento']['pago10:Pagos'] as $pkey => $pvalue) {
+                    Log::info($pvalue);
+                    if(array_key_exists('Version',$pvalue)){
+                        break;
+                    }
+                    $pattributes = $pvalue['@attributes'];
+                    
+                    $pago = new Pago();
+                    $pago->pago_monto = (float)$pattributes['Monto'];
+                    $pago->pago_fecha = date('Y-m-d H:i:s',strtotime($pattributes['FechaPago']));
+                    $pago->pago_formpago_cod = $pattributes['FormaDePagoP'];
+                    $pago->pago_formpago_nom = $fpagos_arr[$pattributes['FormaDePagoP']];
+                    $pago->pago_moneda_cod = $pattributes['MonedaP'];
+                    $pago->pago_moneda_nom = $pattributes['MonedaP'];
+
+                    if(array_key_exists('TipoCambioP',$pattributes)){
+                        $pago->pago_tipo_cambio = (float)$pattributes['TipoCambioP'];
+                    }
+
+                    if(array_key_exists('NumOperacion',$pattributes)){
+                        $pago->pago_numoperc = $pattributes['NumOperacion'];
+                    }
+
+                    if(array_key_exists('RfcEmisorCtaOrd',$pattributes)){
+                        $pago->pago_rfcemisor_ctaord = $pattributes['RfcEmisorCtaOrd'];
+                    }
+
+                    if(array_key_exists('NomBancoOrdExt',$pattributes)){
+                        $pago->pago_nombanc_ordext = $pattributes['NomBancoOrdExt'];
+                    }
+
+                    if(array_key_exists('CtaOrdenante',$pattributes)){
+                        $pago->pago_cta_ordnte = $pattributes['CtaOrdenante'];
+                    }
+
+                    if(array_key_exists('RfcEmisorCtaBen',$pattributes)){
+                        $pago->pago_rfcrecept_ctaben = $pattributes['RfcEmisorCtaBen'];
+                    }
+
+                    if(array_key_exists('CtaBeneficiario',$pattributes)){
+                        $pago->pago_cta_ben = $pattributes['CtaBeneficiario'];
+                    }
+
+                    if(array_key_exists('CertPago',$pattributes)){
+                        $pago->pago_cert_pago = $pattributes['CertPago'];
+                    }
+
+                    if(array_key_exists('SelloPago',$pattributes)){
+                        $pago->pago_sello_pago = $pattributes['SelloPago'];
+                    }
+
+                    $pago->pago_comp_id = $comprobante->id;
+                    $pago->save();
+
+                    array_push($pagos_arr,$pago);
+
+                    
+                    foreach ($pvalue['pago10:DoctoRelacionado'] as $key => $value) {
+                        if($key == '@attributes'){
+                            $pagorel = new Pagorel();
+                            $pagorel->pagorel_pagado_uuid = $value['IdDocumento'];
+                            $pagorel->pagorel_moneda_cod = $value['MonedaDR'];
+                            $pagorel->pagorel_moneda_nom = $value['MonedaDR'];
+                            $pagorel->pagorel_metpago_cod = $value['MetodoDePagoDR'];
+                            $pagorel->pagorel_metpago_nom = $value['MetodoDePagoDR']; //TODO buscar nombre en catalogo central
+                            if($pago->pago_tipo_cambio){
+                                $pagorel->pagorel_tipo_cambio = $pago->pago_tipo_cambio;
+                            }
+
+                            if(array_key_exists('NumParcialidad',$value)){
+                                $pagorel->pagorel_numparcldad = $value['NumParcialidad'];
+                            }
+
+                            $pagorel->pagorel_monto_pag = $pago->pago_monto;
+                            if(array_key_exists('ImpPagado',$value)){
+                                $pagorel->pagorel_monto_pag = (float)$value['ImpPagado'];
+                            }
+
+                            if(array_key_exists('ImpSaldoAnt',$value)){
+                                $pagorel->pagorel_sald_ant = (float)$value['ImpSaldoAnt'];
+                            }
+
+                            if(array_key_exists('ImpSaldoInsoluto',$value)){
+                                $pagorel->pagorel_sald_nuevo = (float)$value['ImpSaldoInsoluto'];
+                            }
+
+                            if(array_key_exists('Serie',$value)){
+                                $pagorel->pagorel_serie = $value['Serie'];
+                            }
+
+                            if(array_key_exists('Folio',$value)){
+                                $pagorel->pagorel_folio = $value['Folio'];
+                            }
+
+                            $pagorel->pagorel_pago_id = $pago->id;
+
+                            $pagorel->save();
+                        }
+                    }
+                }
+            }
+        }
+
+        $comprobante->contabPago($comprobante->id, $pagos_arr, $rfc_param, false, $ptype);
+    }
+
+
     public function processFile(Request $request)
     {
         $alldata = $request->all();
@@ -58,7 +212,11 @@ class SubeCompController extends Controller
         $target_dir = base_path().DIRECTORY_SEPARATOR."public".DIRECTORY_SEPARATOR;
 
         $arr_tpago = ['I'=>'ingreso','E'=>'egreso','P'=>'pago','N'=>'nomina','T'=>'Otro'];
-
+        $emp_rfc = 'none';
+        $emp_all = Empresa::all();
+        if(count($emp_all) > 0){
+            $emp_rfc = $emp_all[0]->emp_rfc;
+        }
 
         foreach ($exist_file as $ef) {
         	$full_path = $target_dir.(string)$ef->user_id.'_'.$ef->filename;
@@ -71,7 +229,8 @@ class SubeCompController extends Controller
 			$API_KEY = "6ba7d84839ee22fdfed979f78f0bbb78";
 			$xml = $doc->saveXML();
         	$xml_array = $XML2Array->createArray($xml);
-        	//$xml_to_parse = simplexml_load_file(realpath($target_dir.(string)$ef->user_id.'_'.$ef->filename));
+            Log::info($xml_array);
+            //die();
         	$wsdl = 'https://app33.advans.mx/recepcion/wsvalidador.php?wsdl';
         	$cfdi = base64_encode($xml);
         	$context = stream_context_create(array(
@@ -112,37 +271,7 @@ class SubeCompController extends Controller
         			}
         		}
 
-        		if(array_key_exists('cfdi:Emisor', $xml_array['cfdi:Comprobante'])){
-        			if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Emisor'])){
-        				$comprobante->comp_rfc_emisor = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
-        				if($alldata['comptype'] == 'egreso'){
-                            $proveedor = new Proveedor();
-                            $proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
-                            $proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
-                            $proveedor->proveed_tipprov_id = 1;
-                            $search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
-                            if(count($search_proveedor) == 0){
-                                $proveedor->save();
-                            }
-        				}
-    				}
-    			}
-
-    			if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
-    				if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Receptor'])){
-        				$comprobante->comp_rfc_receptor = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
-        				if($alldata['comptype'] == 'ingreso'){
-        					$cliente = new Cliente();
-                            $cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
-                            $cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
-                            $cliente->cliente_tipcliente_id = 1;
-                            $search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
-                            if(count($search_cliente) == 0){
-                                $cliente->save();
-                            }
-        				}
-    				}
-    			}
+        		
 
     			if($xml_array['cfdi:Comprobante']['@attributes']){
     				if(array_key_exists('Fecha', $xml_array['cfdi:Comprobante']['@attributes'])){
@@ -158,6 +287,52 @@ class SubeCompController extends Controller
     				}
     			}
 
+                if(array_key_exists('cfdi:Emisor', $xml_array['cfdi:Comprobante'])){
+                    if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Emisor'])){
+                        $comprobante->comp_rfc_emisor = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+                        $proveedor = new Proveedor();
+                        $proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
+                        $proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+                        $proveedor->proveed_tipprov_id = 1;
+                        $search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
+                        if(count($search_proveedor) == 0){
+                            $proveedor->save();
+                        }
+
+                        $cliente = new Cliente();
+                        $cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Nombre'];
+                        $cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+                        $cliente->cliente_tipcliente_id = 1;
+                        $search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'])->get();
+                        if(count($search_cliente) == 0){
+                            $cliente->save();
+                        }
+                    }
+                }
+
+                if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
+                    if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Receptor'])){
+                        $comprobante->comp_rfc_receptor = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+                        $cliente = new Cliente();
+                        $cliente->cliente_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
+                        $cliente->cliente_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+                        $cliente->cliente_tipcliente_id = 1;
+                        $search_cliente = Cliente::where('cliente_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
+                        if(count($search_cliente) == 0){
+                            $cliente->save();
+                        }
+
+                        $proveedor = new Proveedor();
+                        $proveedor->proveed_nom = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Nombre'];
+                        $proveedor->proveed_rfc = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+                        $proveedor->proveed_tipprov_id = 1;
+                        $search_proveedor = Proveedor::where('proveed_rfc',$xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'])->get();
+                        if(count($search_proveedor) == 0){
+                            $proveedor->save();
+                        }
+                    }
+                }
+
     			//TODO Validar tipo de complemento
     			$comprobante->comp_complmto = 'CompNac';
 
@@ -168,35 +343,7 @@ class SubeCompController extends Controller
     			$comprobante->comp_imp_bov = false;
 
     			$comprobante->save();
-
-    			if($alldata['comptype'] == 'ingreso' || $alldata['comptype'] == 'egreso'){
-    				$provision = new Provision();
-    				if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante'])){
-    					$provision->provis_monto = $xml_array['cfdi:Comprobante']['@attributes']['Total'];
-    					$provision->provis_moneda_cod = $xml_array['cfdi:Comprobante']['@attributes']['Moneda'];
-    					$provision->provis_moneda_nom = $xml_array['cfdi:Comprobante']['@attributes']['Moneda'];
-    					$provision->provis_tipo_cambio = 0.0; //TODO
-    					$provision->provis_metpago_cod = $xml_array['cfdi:Comprobante']['@attributes']['MetodoPago'];
-    					$provision->provis_formpago_cod = $xml_array['cfdi:Comprobante']['@attributes']['FormaPago'];
-    					if($comprobante->id){
-    						$provision->provis_comp_id = $comprobante->id;
-    					}
-    					$provision->save();
-
-                        
-    				}
-    			}
-
-    			if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
-    				foreach ($xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados'] as $key => $value) {
-    					$comprel = new ComprobanteRel();
-    					$comprel->comprel_tiporel_cod = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
-    					$comprel->comprel_tiporel_nom = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
-    					$comprel->comprel_comp_rel_uuid = $value['@attributes']['UUID'];
-    					$comprel->save();
-    				}
-
-    			}
+   			
 
         		$ef->process = true;
         		$ef->process_fecha = date("Y-m-d H:i:s");
@@ -204,8 +351,35 @@ class SubeCompController extends Controller
         		$ef->save();
 
         		//TODO Contabilizar
-                Log::info($xml_array);
-                $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $alldata['comptype']);
+                if($alldata['comptype'] == 'ingreso' || $alldata['comptype'] == 'egreso'){
+                    $this->ingresoEgreso($xml_array,$comprobante,$alldata['comptype']);
+                }else if($alldata['comptype'] == 'pago'){
+                    $rfc_emi = 'none';
+                    $rfc_rec = 'none';
+                    $rfc_param = 'none';
+                    $ptype = 'ingreso';
+                    if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
+                        if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Receptor'])){
+                            $rfc_rec = $xml_array['cfdi:Comprobante']['cfdi:Receptor']['@attributes']['Rfc'];
+                        }
+                    }
+
+                    if(array_key_exists('cfdi:Receptor', $xml_array['cfdi:Comprobante'])){
+                        if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante']['cfdi:Emisor'])){
+                            $rfc_emi = $xml_array['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['Rfc'];
+                        }
+                    }
+
+                    if(strtoupper(trim($emp_rfc)) == strtoupper(trim($rfc_emi))){
+                        $ptype = 'egreso';
+                        $rfc_param = $rfc_rec;
+                    }else{
+                        $rfc_param = $rfc_emi;
+                    }
+                    $this->pago($xml_array,$comprobante,$ptype,$rfc_param);
+                }
+
+
         	}else{
         		if (file_exists($full_path)){ 
 	                unlink ($full_path); 

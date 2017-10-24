@@ -43,7 +43,7 @@ class PagorelController extends Controller
     {
         $pagos = Pago::all();
         $asientos = Asiento::all();
-        return view('appviews.creapagorel',['pagorel_formpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
+        return view('appviews.creapagorel',['pagorel_metpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
     }
 
     /**
@@ -89,7 +89,7 @@ class PagorelController extends Controller
         $pagos = Pago::all();
         $asientos = Asiento::all();
         $pagorel = Pagorel::findOrFail($id);
-        return view('appviews.editapagorel',['pagorel'=>$pagorel,'pagorel_formpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
+        return view('appviews.editapagorel',['pagorel'=>$pagorel,'pagorel_metpago_cod'=>[],'pagorel_moneda_cod'=>[],'pagorel_pago_id'=>$pagos,'pagorel_asiento_id'=>$asientos]);
     }
 
     /**
@@ -109,11 +109,11 @@ class PagorelController extends Controller
         $pagorel->pagorel_serie = $alldata['pagorel_serie'];
         $pagorel->pagorel_folio = $alldata['pagorel_folio'];
         
-        if(array_key_exists('pagorel_formpago_cod', $alldata)){
-            $pagorel->pagorel_formpago_cod = $alldata['pagorel_formpago_cod'];
+        if(array_key_exists('pagorel_metpago_cod', $alldata)){
+            $pagorel->pagorel_formpago_cod = $alldata['pagorel_metpago_cod'];
         }
         
-        $pagorel->pagorel_formpago_nom = $alldata['pagorel_formpago_nom'];
+        $pagorel->pagorel_metpago_nom = $alldata['pagorel_metpago_nom'];
 
         if(array_key_exists('pagorel_moneda_cod', $alldata)){
             $pagorel->pagorel_moneda_cod = $alldata['pagorel_moneda_cod'];
