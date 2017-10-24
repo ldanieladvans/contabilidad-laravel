@@ -25,15 +25,10 @@ class CreatePago extends Migration
             $table->float('pago_tipo_cambio')->nullable();
             $table->string('pago_numoperc')->nullable();
             $table->string('pago_rfcemisor_ctaord')->nullable();
-            $table->string('pago_nombanc_emisor')->nullable();
             $table->string('pago_nombanc_ordext')->nullable();
             $table->string('pago_cta_ordnte')->nullable();
             $table->string('pago_rfcrecept_ctaben')->nullable();
-            $table->string('pago_banc_dest')->nullable();
-            $table->string('pago_banc_dest_ext')->nullable();
             $table->string('pago_cta_ben')->nullable();
-            $table->string('pago_numcheq')->nullable();
-            $table->string('pago_benef')->nullable();
             $table->text('pago_cert_pago')->nullable();
             $table->text('pago_sello_pago')->nullable();
             
