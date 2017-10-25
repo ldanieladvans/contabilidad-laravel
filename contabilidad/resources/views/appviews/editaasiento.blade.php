@@ -125,6 +125,13 @@
 										</a>
 									</li>
 
+									<li>
+										<a data-toggle="tab" href="#pays">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Pagos
+										</a>
+									</li>
+
 								</ul>
 
 
@@ -142,6 +149,19 @@
 													</label>
 												</div>
 
+										</div>
+										
+									</div>
+
+									<div id="pays" class="tab-pane fade">
+
+										<div class="form-group">
+										<label for="polizas">Pagos: </label>
+											<select multiple="multiple" class="js-example-basic-multiple" id="pagos" name="pagos[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;" {{ $asiento->asiento_manual ? '':'disabled' }}>
+												@foreach($pagos as $pg)
+													<option value="{{$pg->id}}" {{$asiento->tienePago($pg->id) ? 'selected':''}}>{{$pg->pago_numoperc}}</option>
+												@endforeach
+											</select>
 										</div>
 										
 									</div>
@@ -211,6 +231,12 @@
 				$("#asiento_ctacont_id").select2({
 				  	placeholder: "Seleccione la cuenta ...",
 				  	allowClear: true
+				});
+
+				$("#pagos").select2({
+				  	placeholder: "Seleccione el pago ...",
+				  	allowClear: true,
+				  	multiple: true
 				});
 
 

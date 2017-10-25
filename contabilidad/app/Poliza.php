@@ -8,7 +8,7 @@ class Poliza extends Model
 {
     protected $table = "polz";
 
-    protected $fillable = ['polz_tipopolz','polz_fecha','polz_folio','polz_concepto','polz_importe','polz_aprobado','polz_importada','polz_activo','polz_cierre','polz_modificada','polz_period_id'];
+    protected $fillable = ['polz_tipopolz','polz_fecha','polz_folio','polz_concepto','polz_importe','polz_aprobado','polz_importada','polz_activo','polz_cierre','polz_modificada','polz_period_id','polz_manual'];
 
     public function __construct(array $attributes = [])
     {

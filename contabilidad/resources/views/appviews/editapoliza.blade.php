@@ -49,6 +49,7 @@
 
                 	<input type="hidden" value="{{$asientos}}" id="asientos"/>
                 	<input type="hidden" value="{{$poliza}}" id="poliza"/>
+                	<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
 
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="polz_concepto">Concepto:</label>
@@ -159,13 +160,13 @@
 									<div id="comprobantes" class="tab-pane fade">
 										<div class="form-group">
 											<label for="opolizas">Comprobantes: </label>
-											<select multiple="multiple" class="js-example-basic-multiple" id="ocomps" name="ocomps[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;" disabled>
+											<select multiple="multiple" class="js-example-basic-multiple" id="comps" name="comps[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;" {{$poliza->polz_manual ? '':'disabled'}}>
 												@foreach($comprobantes as $pls)
 													<option value="{{$pls->id}}" {{$poliza->tieneComprobante($pls->id) ? 'selected':''}}>{{$pls->comp_uuid}}</option>
 												@endforeach
 											</select>
 										</div>
-										<!--<div class="form-group">
+										<!--<div class="form-group" {{$poliza->polz_manual ? '':'hidden'}}>
 											<label for="comps">Agregar Comprobante: </label>
 											<select multiple="multiple" class="js-example-basic-multiple" id="comps" name="comps[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;">
 												@foreach($comprobantes as $pls)
@@ -295,20 +296,21 @@
 				  	allowClear: true
 				});
 
-				/*$("#comps").select2({
+				$("#comps").select2({
 				  	placeholder: "Seleccione los comprobantes ...",
 				  	allowClear: true,
 				  	multiple: true
-				});*/
+				});
 
-				$("#ocomps").select2({
+				/*$("#ocomps").select2({
 				  	placeholder: "Comprobantes ...",
 				  	multiple: true
-				});
+				});*/
 
 
 			var asientos = jQuery.parseJSON(document.getElementById('asientos').value);
 			var poliza = jQuery.parseJSON(document.getElementById('poliza').value);
+			var cuentas = jQuery.parseJSON(document.getElementById('cuentas').value);
 
 	    	$("#gridContainerAsientos").dxDataGrid({
 		        dataSource: asientos,
@@ -317,9 +319,9 @@
 		        },
 		        editing: {
 		            mode: "row",
-		            allowUpdating: false,
-		            allowDeleting: false,
-		            allowAdding: false,
+		            allowUpdating: poliza.polz_manual,
+		            allowDeleting: poliza.polz_manual,
+		            allowAdding: poliza.polz_manual,
 		            texts:{
 		            	addRow: 'Nueva',
 		            	cancelRowChanges: 'Cancelar',
@@ -345,12 +347,19 @@
 		            },{
 		                dataField: "asiento_debe",
 		                caption: "Debe",
-		                validationRules: [{
-		                    type: "required"
-		                }]
+		                validationRules: [{ type: "required" }, { type: "numeric" }]
 		            },{
 		                dataField: "asiento_haber",
 		                caption: "Haber",
+		                validationRules: [{ type: "required" }, { type: "numeric" }]
+		            },{
+		                dataField: "asiento_ctacont_id",
+		                caption: "Cuenta",
+		                lookup: {
+		                    dataSource: cuentas,
+		                    displayExpr: "Name",
+		                    valueExpr: "ID"
+		                },
 		                validationRules: [{
 		                    type: "required"
 		                }]
@@ -373,7 +382,7 @@
 		            $.ajax({
 		                url: '/pasientos',
 		                type: 'POST',
-		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'create',row_id:'false'},
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'create',row_id:'false',asiento_concepto:e.data.asiento_concepto,asiento_folio_ref:e.data.asiento_folio_ref,asiento_debe:e.data.asiento_debe,asiento_haber:e.data.asiento_haber,asiento_ctacont_id:e.data.asiento_ctacont_id,asiento_polz_id:poliza.id},
 		                dataType: 'JSON',
 		                success: function (data) {
 		            	    $('#loadingmodal').modal('hide');
@@ -399,7 +408,7 @@
 		            $.ajax({
 		                url: '/pasientos',
 		                type: 'POST',
-		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'edit',row_id:e.key.ID},
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'edit',row_id:e.key.ID,asiento_concepto:e.key.asiento_concepto,asiento_folio_ref:e.key.asiento_folio_ref,asiento_debe:e.key.asiento_debe,asiento_haber:e.key.asiento_haber,asiento_ctacont_id:e.key.asiento_ctacont_id,asiento_polz_id:poliza.id},
 		                dataType: 'JSON',
 		                success: function (data) {
 		            	    $('#loadingmodal').modal('hide');
@@ -419,7 +428,7 @@
 		            $.ajax({
 		                url: '/pasientos',
 		                type: 'POST',
-		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'delete',row_id:e.key.ID},
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'delete',row_id:e.key.ID,asiento_concepto:e.key.asiento_concepto,asiento_folio_ref:e.key.asiento_folio_ref,asiento_debe:e.key.asiento_debe,asiento_haber:e.key.asiento_haber,asiento_ctacont_id:e.key.asiento_ctacont_id,asiento_polz_id:poliza.id},
 		                dataType: 'JSON',
 		                success: function (data) {
 		            	    $('#loadingmodal').modal('hide');

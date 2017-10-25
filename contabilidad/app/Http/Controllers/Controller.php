@@ -22,6 +22,7 @@ use App\ConfigNomina;
 use App\Cuenta;
 use App\Empresa;
 use App\CompProces;
+use App\Asiento;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -683,10 +684,81 @@ class Controller extends BaseController
         $to_save_data = array();
 
         $row_id = false;
+        $asiento_concepto = false;
+        $asiento_debe = false;
+        $asiento_haber = false;
+        $asiento_folio_ref = false;
+        $asiento_ctacont_id = false;
+        $asiento_polz_id = false;
+        $asiento_manual = true;
         $data_id = false;
 
-        //TODO
+        if($alldata['asiento_concepto']!='false'){
+            $to_save_data['asiento_concepto'] = $alldata['asiento_concepto'];
+             $asiento_concepto = $alldata['asiento_concepto'];
+        }
+        if($alldata['asiento_debe']!='false'){
+            $to_save_data['asiento_debe'] = $alldata['asiento_debe'];
+            $asiento_debe = $alldata['asiento_debe'];
+        }
+        if($alldata['asiento_haber']!='false'){
+            $to_save_data['asiento_haber'] = $alldata['asiento_haber'];
+            $asiento_haber = $alldata['asiento_haber'];
+        }
+        if($alldata['asiento_folio_ref']!='false'){
+            $to_save_data['asiento_folio_ref'] = $alldata['asiento_folio_ref'];
+            $asiento_folio_ref = $alldata['asiento_folio_ref'];
+        }
+        if($alldata['asiento_ctacont_id']!='false'){
+            $to_save_data['asiento_ctacont_id'] = $alldata['asiento_ctacont_id'];
+            $asiento_ctacont_id = $alldata['asiento_ctacont_id'];
+        }
+        if($alldata['asiento_polz_id']!='false'){
+            $to_save_data['asiento_polz_id'] = $alldata['asiento_polz_id'];
+            $asiento_polz_id = $alldata['asiento_polz_id'];
+        }
 
+        $to_save_data['asiento_manual'] = $asiento_manual;
+
+        if($alldata['row_id']!='false'){
+            $row_id = $alldata['row_id'];
+        }
+
+        if($alldata['crudmethod']=='create'){
+            $asiento = new Asiento($to_save_data);
+            $asiento->save();
+            $data_id = $asiento->id;
+        }elseif($alldata['crudmethod']=='edit'){
+            if($row_id){
+                $asiento = Asiento::findOrFail($row_id);
+                if($asiento_concepto){
+                    $asiento->asiento_concepto = $asiento_concepto;
+                }
+                if($asiento_debe){
+                    $asiento->asiento_debe = $asiento_debe;
+                }
+                if($asiento_haber){
+                    $asiento->asiento_haber = $asiento_haber;
+                }
+                if($asiento_folio_ref){
+                    $asiento->asiento_folio_ref = $asiento_folio_ref;
+                }
+                if($asiento_ctacont_id){
+                    $asiento->asiento_ctacont_id = $asiento_ctacont_id;
+                }
+                if($asiento_polz_id){
+                    $asiento->asiento_polz_id = $asiento_polz_id;
+                }
+                $asiento->save();
+
+                $data_id = $row_id;
+            }
+
+        }else{
+            if($row_id){
+                Asiento::destroy($row_id);
+            }
+        }
         
         $response = array(
             'status' => 'success',

@@ -26,7 +26,7 @@ class CreatePolz extends Migration
             $table->boolean('polz_activo')->default(true);
             $table->boolean('polz_cierre')->default(false);
             $table->boolean('polz_modificada')->default(false);
-
+            $table->boolean('polz_manual')->default(false);
             $table->timestamps();
         });
     }

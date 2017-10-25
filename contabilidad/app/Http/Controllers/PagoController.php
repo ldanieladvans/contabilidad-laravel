@@ -7,6 +7,8 @@ use App\Pago;
 use App\Cuenta;
 use App\Poliza;
 use App\Comprobante;
+use App\FormaPago;
+use App\CatSatMonedasModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,7 +45,11 @@ class PagoController extends Controller
     public function create()
     {
         
-        return view('appviews.creapago',['pago_formpago_cod'=>[],'pago_moneda_cod'=>[],'pago_polz_id'=>[],'pago_comp_id'=>[]]);
+        $fpagos = FormaPago::all();
+        $monedas = CatSatMonedasModel::all();
+        $polizas = Poliza::all();
+        $comprobantes = Comprobante::all();
+        return view('appviews.creapago',['pago_formpago_cod'=>$fpagos,'pago_moneda_cod'=>$monedas,'pago_polz_id'=>$polizas,'pago_comp_id'=>$comprobantes]);
     }
 
     /**
@@ -86,7 +92,11 @@ class PagoController extends Controller
     public function edit($id)
     {
         $pago = Pago::findOrFail($id);
-        return view('appviews.editapago',['pago'=>$pago,'pago_formpago_cod'=>[],'pago_moneda_cod'=>[],'pago_polz_id'=>[],'pago_comp_id'=>[]]);
+        $fpagos = FormaPago::all();
+        $monedas = CatSatMonedasModel::all();
+        $polizas = Poliza::all();
+        $comprobantes = Comprobante::all();
+        return view('appviews.editapago',['pago'=>$pago,'pago_formpago_cod'=>$fpagos,'pago_moneda_cod'=>$monedas,'pago_polz_id'=>$polizas,'pago_comp_id'=>$comprobantes]);
     }
 
     /**

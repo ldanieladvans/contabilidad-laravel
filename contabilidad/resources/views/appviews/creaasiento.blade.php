@@ -96,7 +96,7 @@
 							<select class="js-example-basic-single js-states form-control" id="asiento_ctacont_id" name="asiento_ctacont_id" data-placeholder="Seleccione la cuenta ..." style="width: 83%; display: none;">
 								<option value="" >Seleccione ...</option>
 								@foreach($cuentas as $cta)
-									<option value="{{ $cta->id }}" >{{ $cta->ctacont_num }}</option>
+									<option value="{{ $cta->id }}" >{{ $cta->ctacont_num }} - {{ $cta->ctacont_desc }}</option>
 								@endforeach
 							</select>
 						</div>

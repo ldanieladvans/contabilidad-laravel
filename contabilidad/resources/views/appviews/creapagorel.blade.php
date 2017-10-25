@@ -75,12 +75,11 @@
 
 
 					<div class="form-group">
-						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_metpago_cod">Forma de pago SAT:</label>
+						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pagorel_metpago_cod">Método de pago SAT:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
-							<select class="js-example-basic-single js-states form-control" id="pagorel_metpago_cod" name="pagorel_metpago_cod" data-placeholder="Seleccione la forma de pago SAT ..." style="width: 83%; display: none;">
-								@foreach($pagorel_metpago_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
-	                            @endforeach
+							<select class="js-example-basic-single js-states form-control" id="pagorel_metpago_cod" name="pagorel_metpago_cod" data-placeholder="Seleccione el método de pago SAT ..." style="width: 83%; display: none;">
+                            	<option value="PUE">PUE</option>
+                            	<option value="PPD">PPD</option>
 							</select>
 						</div>
 
@@ -88,7 +87,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="pagorel_moneda_cod" name="pagorel_moneda_cod" data-placeholder="Seleccione la moneda ..." style="width: 83%; display: none;">
 									@foreach($pagorel_moneda_cod as $tp)
-		                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+		                            	<option value="{{ trim($tp->cat_sat_monedas_codigo) }}" {{trim($tp->cat_sat_monedas_codigo) == 'MXN' ? 'selected':''}}>{{ $tp->cat_sat_monedas_nombre }}</option>
 		                            @endforeach
 							</select>
 						</div>
