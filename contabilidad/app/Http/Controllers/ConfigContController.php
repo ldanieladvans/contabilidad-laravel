@@ -155,6 +155,7 @@ class ConfigContController extends Controller
 		$confimodel->cliente_cta_ieps_cobrado_id = $alldata['cliente_cta_ieps_cobrado_id'];
 		$confimodel->cliente_cta_ieps_reten_por_cobrar_id = $alldata['cliente_cta_ieps_reten_por_cobrar_id'];
 		$confimodel->cliente_cta_ieps_reten_cobrado_id = $alldata['cliente_cta_ieps_reten_cobrado_id'];
+        $confimodel->cliente_concepto = $alldata['cliente_concepto'];
 
 		$confimodel->save();
 
@@ -202,6 +203,7 @@ class ConfigContController extends Controller
 		$confimodel->proveed_cta_ieps_cobrado_id = $alldata['proveed_cta_ieps_cobrado_id'];
 		$confimodel->proveed_cta_ieps_reten_por_cobrar_id = $alldata['proveed_cta_ieps_reten_por_cobrar_id'];
 		$confimodel->proveed_cta_ieps_reten_cobrado_id = $alldata['proveed_cta_ieps_reten_cobrado_id'];
+        $confimodel->proveedor_concepto = $alldata['proveedor_concepto'];
 
 		$confimodel->save();
 
@@ -250,7 +252,7 @@ class ConfigContController extends Controller
         $tipcl->tipcliente_cta_ieps_reten_por_cobrar_id = $confimodel->cliente_cta_ieps_reten_por_cobrar_id;
         $tipcl->tipcliente_cta_ieps_reten_cobrado_id = $confimodel->cliente_cta_ieps_reten_cobrado_id;
 
-        $tipcl->tipcliente_concpto_polz = 'Concepto';
+        $tipcl->tipcliente_concpto_polz = $confimodel->cliente_concepto ? $confimodel->cliente_concepto : 'Concepto';
 
         $tipcl->save();
 
@@ -280,7 +282,7 @@ class ConfigContController extends Controller
         $tiprov->tipprov_cta_ieps_reten_por_cobrar_id = $confimodel->proveed_cta_ieps_reten_por_cobrar_id;
         $tiprov->tipprov_cta_ieps_reten_cobrado_id = $confimodel->proveed_cta_ieps_reten_cobrado_id;
 
-        $tiprov->tipprov_concpto_polz = 'Concepto';
+        $tiprov->tipprov_concpto_polz = $confimodel->proveedor_concepto ? $confimodel->proveedor_concepto : 'Concepto';
 
 		$tiprov->save();
 

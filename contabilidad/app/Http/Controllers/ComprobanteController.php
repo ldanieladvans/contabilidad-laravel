@@ -32,7 +32,7 @@ class ComprobanteController extends Controller
         $comprobantes_list = array();
         $comprobantes_contador = 0;
         foreach ($comprobantes as $cb) {
-            $comprobantes_list[$comprobantes_contador] = ['ID'=>$cb->id,'comp_uuid'=>$cb->comp_uuid,'comp_rfc_emisor'=>$cb->comp_rfc_emisor,'comp_rfc_receptor'=>$cb->comp_rfc_receptor,'comp_f_emision'=>$cb->comp_f_emision,'comp_complmto'=>$cb->comp_complmto,'comp_tipocomp'=>$cb->comp_tipocomp];
+            $comprobantes_list[$comprobantes_contador] = ['ID'=>$cb->id,'comp_uuid'=>$cb->comp_uuid,'comp_rfc_emisor'=>$cb->comp_rfc_emisor,'comp_rfc_receptor'=>$cb->comp_rfc_receptor,'comp_f_emision'=>$cb->comp_f_emision,'comp_complmto'=>$cb->comp_complmto,'comp_tipocomp'=>$cb->comp_tipocomp,'comp_contblz'=>$cb->comp_contblz ? 'Si':'No'];
             $comprobantes_contador ++;
         }
         return view('appviews.listacomprobantes',['comprobantes'=>json_encode($comprobantes_list)]);

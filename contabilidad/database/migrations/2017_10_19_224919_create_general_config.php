@@ -65,6 +65,8 @@ class CreateGeneralConfig extends Migration
             $table->integer('cliente_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
             $table->foreign('cliente_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
 
+            $table->string('cliente_concepto')->nullable();
+
             
 
             /* Proveedores */
@@ -110,6 +112,8 @@ class CreateGeneralConfig extends Migration
 
             $table->integer('proveed_cta_ieps_reten_cobrado_id')->unsigned()->nullable();
             $table->foreign('proveed_cta_ieps_reten_cobrado_id')->references('id')->on('ctacont')->onDelete('set null');
+
+            $table->string('proveedor_concepto')->nullable();
         });
     }
 

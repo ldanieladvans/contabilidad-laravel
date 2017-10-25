@@ -16,12 +16,12 @@ class CreateProv extends Migration
     {
         Schema::create('provis', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('provis_monto', 15, 8);
-            $table->string('provis_moneda_cod');
-            $table->string('provis_moneda_nom');
-            $table->float('provis_tipo_cambio');
-            $table->string('provis_metpago_cod');
-            $table->string('provis_formpago_cod');
+            $table->double('provis_monto', 15, 8)->nullable();
+            $table->string('provis_moneda_cod')->nullable();
+            $table->string('provis_moneda_nom')->nullable();
+            $table->float('provis_tipo_cambio')->nullable();
+            $table->string('provis_metpago_cod')->nullable();
+            $table->string('provis_formpago_cod')->nullable();
             $table->timestamps();
         });
     }

@@ -76,6 +76,7 @@ Route::post('/confconc', 'Controller@confConc');
 Route::post('/unlinkfile', 'Controller@unlinkFile');
 Route::post('/processfile', 'SubeCompController@processFile');
 Route::post('/pasientos', 'Controller@pAsientos');
+Route::post('/aprpolzs', 'Controller@aprPolzs');
 /* end ldaniel*/
 
 

@@ -25,7 +25,7 @@ class Comprobante extends Model
 {
     protected $table = "comp";
 
-    protected $fillable = ['comp_uuid','comp_rfc_emisor','comp_rfc_receptor','comp_f_emision','comp_complmto','comp_tipocomp','comp_cbb_serie','comp_cbb_numfolio','comp_num_factelect','comp_taxid','comp_espago','comp_imp_bov', 'comp_version', 'comp_manual', 'comp_contblz'];
+    protected $fillable = ['comp_uuid','comp_rfc_emisor','comp_rfc_receptor','comp_f_emision','comp_complmto','comp_tipocomp','comp_cbb_serie','comp_cbb_numfolio','comp_num_factelect','comp_taxid','comp_espago','comp_imp_bov', 'comp_version', 'comp_manual', 'comp_contblz',];
 
     public function __construct(array $attributes = [])
     {
@@ -1002,7 +1002,7 @@ class Comprobante extends Model
 
         $this->updateBalanza($cuenta, $period_id, (float)$monto, $direc);
 
-        return $asiento->id
+        return $asiento->id;
 
     }
 

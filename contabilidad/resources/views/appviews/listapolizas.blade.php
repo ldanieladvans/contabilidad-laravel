@@ -50,6 +50,7 @@
 			<div id="listaContainer">
 				<div id="borrarLista" align="justify"></div>
 				<div id="editarLista" align="justify"></div>
+				<div id="aprobarPolizas" align="justify"></div>
 			</div>
 		
 		<!-- Div DataGrid -->
@@ -130,12 +131,25 @@
 				            {
 				                dataField: "polz_importe",
 				                caption: 'Importe'
+				            },
+				            {
+				                dataField: "polz_defecto",
+				                caption: 'Contabilizado con cuentas por defecto'
+				            },
+				            {
+				                dataField: "polz_sin_reclsif_imp",
+				                caption: 'Con impuestos reclasificados'
+				            },
+				            {
+				                dataField: "polz_aprobado",
+				                caption: 'Aprobada'
 				            }
 				        ],
 				        onSelectionChanged: function(selectedItems) {
 				            var data = selectedItems.selectedRowsData;
 				            deleteButton.option("disabled", !data.length);
 				            editButton.option("disabled", data.length!=1);
+				            aproveButton.option("disabled", !data.length);
 				        },
 				        sortByGroupSummaryInfo: [{
 				            summaryItem: "count"
@@ -218,6 +232,39 @@
 				        icon: 'edit',
 				        onClick: function () {
 				            window.location.href = 'polizas/'+dataGrid.getSelectedRowKeys()[0]['ID']+'/edit';
+				        }
+				    }).dxButton("instance");
+
+
+				    var aproveButton = $("#aprobarPolizas").dxButton({
+				        text: "Aprobar",
+				        disabled: true,
+				        icon: 'check',
+				        onClick: function () {
+				        	var del_list = [];
+				            //dataGrid.clearSelection();
+				            //console.log(dataGrid.getSelectedRowKeys());
+				            dataGrid.getSelectedRowKeys().forEach(function(item){
+		                        del_list.push(item['ID']);
+		                    });
+				            bootbox.confirm("¿Está seguro que quiere aprobar estas pólizas?", function(result) {
+								if(result) {
+									$('#loadingmodal').modal('show');
+						    		$.ajax({
+						                url: '/aprpolzs',
+					                	type: 'POST',
+					                	data: {_token: CSRF_TOKEN,ids:del_list,model:'Poliza'},
+						                dataType: 'JSON',
+						                success: function (data) {
+					                	    $('#loadingmodal').modal('hide');
+					                	    window.location.href = window.location.href;
+						                },
+						                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+						                    console.log(errorThrown);
+					                    }
+						            });
+								}
+							});
 				        }
 				    }).dxButton("instance");  
 				});

@@ -293,6 +293,14 @@
 								                        </div>
 													</td>
 												</tr>
+												<tr>
+													<td width="100%">
+														<div class="form-group">
+															<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_concepto">Concepto:</label>
+															<input type="text" name="cliente_concepto" id="cliente_concepto" class="col-md-10 col-sm-10 col-xs-12">
+														</div>
+													</td>
+												</tr>
 											</table>
 										</form>
 									</div>
@@ -473,6 +481,14 @@
 									                            @endforeach
 								                          	</select>
 								                        </div>
+													</td>
+												</tr>
+												<tr>
+													<td width="100%">
+														<div class="form-group">
+															<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveedor_concepto">Concepto:</label>
+															<input type="text" name="proveedor_concepto" id="proveedor_concepto" class="col-md-10 col-sm-10 col-xs-12">
+														</div>
 													</td>
 												</tr>
 											</table>

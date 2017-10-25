@@ -134,7 +134,12 @@
 				            {
 				                dataField: "comp_tipocomp",
 				                caption: 'Tipo complemento'
+				            },
+				            {
+				                dataField: "comp_contblz",
+				                caption: '¿Contabilizado?'
 				            }
+
 				        ],
 				        onSelectionChanged: function(selectedItems) {
 				            var data = selectedItems.selectedRowsData;

@@ -31,7 +31,7 @@ class PolizaController extends Controller
         $polizas_list = array();
         $polizas_contador = 0;
         foreach ($polizas as $pz) {
-            $polizas_list[$polizas_contador] = ['ID'=>$pz->id,'polz_concepto'=>$pz->polz_concepto,'polz_tipopolz'=>$pz->polz_tipopolz,'polz_fecha'=>$pz->polz_fecha,'polz_folio'=>$pz->polz_folio,'polz_importe'=>$pz->polz_importe];
+            $polizas_list[$polizas_contador] = ['ID'=>$pz->id,'polz_concepto'=>$pz->polz_concepto,'polz_tipopolz'=>$pz->polz_tipopolz,'polz_fecha'=>$pz->polz_fecha,'polz_folio'=>$pz->polz_folio,'polz_importe'=>$pz->polz_importe,'polz_defecto'=>$pz->polz_defecto ? 'Si':'No','polz_sin_reclsif_imp'=>$pz->polz_sin_reclsif_imp ? 'Si':'No','polz_aprobado'=>$pz->polz_aprobado ? 'Si':'No'];
             $polizas_contador ++;
         }
         return view('appviews.listapolizas',['polizas'=>json_encode($polizas_list)]);

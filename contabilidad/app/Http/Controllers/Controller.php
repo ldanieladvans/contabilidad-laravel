@@ -23,6 +23,7 @@ use App\Cuenta;
 use App\Empresa;
 use App\CompProces;
 use App\Asiento;
+use App\Poliza;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -764,6 +765,31 @@ class Controller extends BaseController
             'status' => 'success',
             'msg' => 'Ok',
             'data_id' => $data_id
+        );
+        return \Response::json($response);
+    }
+
+
+
+    public function aprPolzs(Request $request)
+    {
+        $alldata = $request->all();
+        $logued_user = Auth::user();
+
+        $records_counter = 0;
+
+        if(array_key_exists('ids',$alldata)){
+            Poliza::whereIn('id', $alldata['ids'])->update(['polz_aprobado' => true,'polz_sin_reclsif_imp' => false]);
+            $records_counter = count($alldata['ids']);
+        }
+
+        $fmessage = 'Se han aprovado '.$records_counter. ' registros';
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($alldata, 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '',$alldata['model']);
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok'
         );
         return \Response::json($response);
     }
