@@ -8,7 +8,7 @@ class TipoCliente extends Model
 {
     protected $table = "tipcliente";
 
-    protected $fillable = ['tipcliente_desc','tipcliente_concpto_polz','tipcliente_cta_ingreso_id','tipcliente_cta_desc_id','tipcliente_cta_iva_traslad_x_cob_id','tipcliente_cta_iva_traslad_cob_id','tipcliente_cta_iva_reten_x_cob_id','tipcliente_cta_iva_reten_cob_id','tipcliente_cta_isr_reten_id','tipcliente_cta_por_cobrar_id','tipcliente_cta_anticp_client_id','tipcliente_cta_isr_reten_cob_id','tipcliente_cta_ieps_por_cobrar_id','tipcliente_cta_ieps_cobrado_id','tipcliente_cta_ieps_reten_por_cobrar_id','tipcliente_cta_ieps_reten_cobrado_id'];
+    protected $fillable = ['tipcliente_desc','tipcliente_concpto_polz','tipcliente_cta_ingreso_id','tipcliente_cta_desc_id','tipcliente_cta_iva_traslad_x_cob_id','tipcliente_cta_iva_traslad_cob_id','tipcliente_cta_iva_reten_x_cob_id','tipcliente_cta_iva_reten_cob_id','tipcliente_cta_isr_reten_id','tipcliente_cta_por_cobrar_id','tipcliente_cta_anticp_client_id','tipcliente_cta_isr_reten_cob_id','tipcliente_cta_ieps_por_cobrar_id','tipcliente_cta_ieps_cobrado_id','tipcliente_cta_ieps_reten_por_cobrar_id','tipcliente_cta_ieps_reten_cobrado_id','tipcliente_defecto'];
 
     public function __construct(array $attributes = [])
     {

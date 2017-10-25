@@ -17,6 +17,7 @@ class CreateProvisImpuestos extends Migration
             $table->increments('id');
             $table->string('provisimp_tipo');
             $table->string('provisimp_cod');
+            $table->string('provisimp_nom')->nullable();
             $table->float('provisimp_monto');
             $table->integer('provisimp_provis_id')->unsigned()->index();
             $table->foreign('provisimp_provis_id')->references('id')->on('provis')->onDelete('cascade');

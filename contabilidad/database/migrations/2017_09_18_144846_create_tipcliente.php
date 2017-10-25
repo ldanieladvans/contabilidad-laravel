@@ -17,6 +17,7 @@ class CreateTipcliente extends Migration
             $table->increments('id');
             $table->string('tipcliente_desc')->nullable();
             $table->string('tipcliente_concpto_polz')->nullable();
+            $table->boolean('tipcliente_defecto')->default(false)->nullable();
            
             
             $table->timestamps();

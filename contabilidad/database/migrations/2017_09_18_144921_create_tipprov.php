@@ -17,6 +17,7 @@ class CreateTipprov extends Migration
             $table->increments('id');
             $table->string('tipprov_desc')->nullable();
             $table->string('tipprov_concpto_polz')->nullable();
+            $table->boolean('tipprov_defecto')->default(false)->nullable();
            
             $table->timestamps();
         });

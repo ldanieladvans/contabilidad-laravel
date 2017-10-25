@@ -34,7 +34,10 @@ class CreateComp extends Migration
             //Campo para identificar si tiene complemento de pago
             $table->boolean('comp_espago')->default(false)->nullable();
             //Campo para identificar si es importado de bóveda
-            $table->string('comp_imp_bov')->default(true)->nullable();
+            $table->boolean('comp_imp_bov')->default(false)->nullable();
+            $table->boolean('comp_manual')->default(false)->nullable();
+            $table->string('comp_version')->nullable();
+            $table->boolean('comp_contblz')->default(false)->nullable();
 
             
             $table->timestamps();

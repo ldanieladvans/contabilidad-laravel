@@ -8,7 +8,7 @@ class TipoProveedor extends Model
 {
     protected $table = "tipprov";
 
-    protected $fillable = ['tipprov_desc','tipprov_concpto_polz','tipprov_cta_egreso_id','tipprov_cta_desc_id','tipprov_cta_iva_acredit_x_cob_id','tipprov_cta_iva_acredit_cob_id','tipprov_cta_iva_reten_x_cob_id','tipprov_cta_iva_reten_cob_id','tipprov_cta_isr_reten_id','tipprov_cta_por_pagar_id','tipprov_cta_anticp_prov_id','tipprov_cta_isr_reten_cob_id','tipprov_cta_ieps_por_cobrar_id','tipprov_cta_ieps_cobrado_id','tipprov_cta_ieps_reten_por_cobrar_id','tipprov_cta_ieps_reten_cobrado_id'];
+    protected $fillable = ['tipprov_desc','tipprov_concpto_polz','tipprov_cta_egreso_id','tipprov_cta_desc_id','tipprov_cta_iva_acredit_x_cob_id','tipprov_cta_iva_acredit_cob_id','tipprov_cta_iva_reten_x_cob_id','tipprov_cta_iva_reten_cob_id','tipprov_cta_isr_reten_id','tipprov_cta_por_pagar_id','tipprov_cta_anticp_prov_id','tipprov_cta_isr_reten_cob_id','tipprov_cta_ieps_por_cobrar_id','tipprov_cta_ieps_cobrado_id','tipprov_cta_ieps_reten_por_cobrar_id','tipprov_cta_ieps_reten_cobrado_id','tipprov_defecto'];
 
     public function __construct(array $attributes = [])
     {
