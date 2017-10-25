@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 use Illuminate\Support\Facades\Log;
+use App\Empresa;
 class UserEventSubscriber
 {
 
@@ -12,6 +13,12 @@ class UserEventSubscriber
      */
     public function onUserLogin($event) {
         Log::info('TODO register some action');
+        $emps = Empresa::all();
+        if(count($emps) > 0){
+            $emp_obj = $emps[0];
+            \Session::put('emp_rfc',$emps[0]->emp_rfc);
+            \Session::put('emp_name',$emps[0]->emp_nom);
+        }
     }
 
     /**

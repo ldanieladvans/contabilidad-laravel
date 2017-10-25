@@ -8,6 +8,7 @@ use App\Cuenta;
 use App\Poliza;
 use App\Comprobante;
 use App\Periodo;
+use App\Asiento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -85,6 +86,7 @@ class PolizaController extends Controller
         $alldata['polz_activo'] = $polz_activo;
         $alldata['polz_cierre'] = $polz_cierre;
         $alldata['polz_modificada'] = $polz_modificada;
+        $alldata['polz_manual'] = true;
         $poliza = new Poliza($alldata);
         $poliza->save();
 
@@ -92,7 +94,8 @@ class PolizaController extends Controller
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
-        return redirect()->route('polizas.index');
+        //return redirect()->route('polizas.index');
+        return redirect()->route('polizas.edit',$poliza->id);
     }
 
     /**
@@ -117,7 +120,30 @@ class PolizaController extends Controller
         //TODO Buscar tipo de poliza
         $poliza = Poliza::findOrFail($id);
         $periodos = Periodo::all();
-        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>$periodos]);
+
+        $asientos = Asiento::where('asiento_polz_id',$id)->get();
+        $asientos_list = array();
+        $asientos_contador = 0;
+
+        foreach ($asientos as $as) {
+            $asientos_list[$asientos_contador] = ['ID'=>$as->id,'asiento_concepto'=>$as->asiento_concepto,'asiento_debe'=>$as->asiento_debe,'asiento_haber'=>$as->asiento_haber,'asiento_folio_ref'=>$as->asiento_folio_ref,'asiento_ctacont_id'=>$as->asiento_ctacont_id];
+            $asientos_contador ++;
+        }
+
+        $cuentas = array();
+        $cuentas_list = array();
+        $cuentas_contador = 0;
+
+        $cuentas_all = Cuenta::all();
+
+        foreach ($cuentas_all as $ca) {
+            $cuentas_list[$cuentas_contador] = ['ID'=>$ca->id,'Name'=>$ca->ctacont_num.' - '.$ca->ctacont_desc];
+            $cuentas_contador ++;
+        }
+
+        $comprobantes = Comprobante::all();
+
+        return view('appviews.editapoliza',['poliza'=>$poliza,'polz_period_id'=>$periodos,'asientos'=>json_encode($asientos_list),'comprobantes'=>$comprobantes,'cuentas'=>json_encode($cuentas_list)]);
     }
 
     /**
@@ -180,6 +206,14 @@ class PolizaController extends Controller
         $poliza->polz_modificada = $polz_modificada;
 
         $poliza->save();
+        $comps_sync = array();
+        if(array_key_exists('comps', $alldata)){
+            $comps_sync = $alldata['comps'];
+        }
+        if($poliza->polz_manual){
+            $poliza->comprobantes()->sync($comps_sync);
+        }
+        
 
         $fmessage = 'Se ha actualizado la póliza: '.$poliza->polz_folio;
         \Session::flash('message',$fmessage);

@@ -124,8 +124,6 @@ class ClienteController extends Controller
         $cuentas = array();
         $cuentas_list = array();
         $cuentas_contador = 0;
-        /*$cuentas[0]=['ID'=>1,'Name'=>'Cuenta 1'];
-        $cuentas[1]=['ID'=>2,'Name'=>'Cuenta 2'];*/
 
         $cuentas_all = Cuenta::all();
 

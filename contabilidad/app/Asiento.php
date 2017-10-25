@@ -8,7 +8,7 @@ class Asiento extends Model
 {
     protected $table = "asiento";
 
-    protected $fillable = ['asiento_concepto','asiento_debe','asiento_haber','asiento_folio_ref','asiento_activo','asiento_ctacont_id','asiento_polz_id'];
+    protected $fillable = ['asiento_concepto','asiento_debe','asiento_haber','asiento_folio_ref','asiento_activo','asiento_ctacont_id','asiento_polz_id','asiento_manual'];
 
     public function __construct(array $attributes = [])
     {
@@ -30,6 +30,18 @@ class Asiento extends Model
     public function comprobanteRel()
     {
         return $this->hasMany('App\Pagorel','pagorel_asiento_id');
+    }
+
+    public function getPagos()
+    {
+        return (!$this->comprobanteRel) ? $this->comprobanteRel = $this->comprobanteRel()->get() : $this->comprobanteRel;
+    }
+
+    public function tienePago($pago)
+    {
+        return $this->getPagos()->contains(function ($value, $key) use ($pago) {
+            return $pago == $value->id;
+        });
     }
 
 

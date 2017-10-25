@@ -81,100 +81,57 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcemisor_ctaord">RFC Emisor:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_rfcemisor_ctaord" id="pago_rfcemisor_ctaord" class="col-md-12 col-sm-12 col-xs-12"/>
-							</div>
-						</div>
 
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_nombanc_emisor">Banco RFC emisor:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_nombanc_emisor" id="pago_nombanc_emisor" class="col-md-10 col-sm-10 col-xs-12"/>
-							</div>
-						</div>
-					</div>
+
 
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_nombanc_ordext">pago_nombanc_ordext:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_nombanc_ordext">Banco:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_nombanc_ordext" id="pago_nombanc_ordext" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_nombanc_ordext" id="pago_nombanc_ordext" class="col-md-12 col-sm-12 col-xs-12" />
 							</div>
 						</div>
 
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ordnte">pago_cta_ordnte:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_cta_ordnte" id="pago_cta_ordnte" class="col-md-10 col-sm-10 col-xs-12"/>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_sello_pago">Sello:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_sello_pago" id="pago_sello_pago" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_sello_pago" id="pago_sello_pago" class="col-md-10 col-sm-10 col-xs-12" />
 							</div>
 						</div>
-
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcrecept_ctaben">pago_rfcrecept_ctaben:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_rfcrecept_ctaben" id="pago_rfcrecept_ctaben" class="col-md-10 col-sm-10 col-xs-12"/>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_banc_dest">pago_banc_dest:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_banc_dest" id="pago_banc_dest" class="col-md-12 col-sm-12 col-xs-12"/>
-							</div>
-						</div>
-
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_banc_dest_ext">pago_banc_dest_ext:</label>
-						<div class="col-md-4 col-sm-4 col-xs-12">
-							<div class="clearfix">
-								<input type="text" name="pago_banc_dest_ext" id="pago_banc_dest_ext" class="col-md-10 col-sm-10 col-xs-12"/>
-							</div>
-						</div>
+						
 					</div>
 
 
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ben">pago_cta_ben:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcemisor_ctaord">Cta. Ordenante Emisor:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_cta_ben" id="pago_cta_ben" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_rfcemisor_ctaord" id="pago_rfcemisor_ctaord" class="col-md-12 col-sm-12 col-xs-12" />
 							</div>
 						</div>
 
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_numcheq">pago_numcheq:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_rfcrecept_ctaben">Cta. Ordenante Receptor:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_numcheq" id="pago_numcheq" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_rfcrecept_ctaben" id="pago_rfcrecept_ctaben" class="col-md-10 col-sm-10 col-xs-12" />
 							</div>
 						</div>
+
+						
 					</div>
 
-
 					<div class="form-group">
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_benef">pago_benef:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ben">Cuenta Beneficiario:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_benef" id="pago_benef" class="col-md-12 col-sm-12 col-xs-12"/>
+								<input type="text" name="pago_cta_ben" id="pago_cta_ben" class="col-md-12 col-sm-12 col-xs-12" />
 							</div>
 						</div>
 
-						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cert_pago">pago_cert_pago:</label>
+						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="pago_cta_ordnte">Cuenta Ordenante:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<div class="clearfix">
-								<input type="text" name="pago_cert_pago" id="pago_cert_pago" class="col-md-10 col-sm-10 col-xs-12"/>
+								<input type="text" name="pago_cta_ordnte" id="pago_cta_ordnte" class="col-md-10 col-sm-10 col-xs-12" />
 							</div>
 						</div>
 					</div>
@@ -185,8 +142,9 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pago_formpago_cod">Forma de pago SAT:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="pago_formpago_cod" name="pago_formpago_cod" data-placeholder="Seleccione la forma de pago SAT ..." style="width: 83%; display: none;">
+								<option value="">Seleccione ...</option>
 								@foreach($pago_formpago_cod as $tp)
-	                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+	                            	<option value="{{ $tp->formpago_formpagosat_cod }}">{{ $tp->formpago_formpagosat_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -194,8 +152,9 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pago_moneda_cod">Moneda:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="pago_moneda_cod" name="pago_moneda_cod" data-placeholder="Seleccione la moneda ..." style="width: 83%; display: none;">
+									<option value="">Seleccione ...</option>
 									@foreach($pago_moneda_cod as $tp)
-		                            	<option value="{{ $tp->id }}">{{ $tp->tiposubcta_nom }}</option>
+		                            	<option value="{{ trim($tp->cat_sat_monedas_codigo) }}" {{trim($tp->cat_sat_monedas_codigo) == 'MXN' ? 'selected':''}}>{{ $tp->cat_sat_monedas_codigo }} - {{ $tp->cat_sat_monedas_nombre }}</option>
 		                            @endforeach
 							</select>
 						</div>
@@ -233,8 +192,9 @@
 											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pago_polz_id">Póliza:</label>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pago_polz_id" name="pago_polz_id" data-placeholder="Seleccione la póliza ..." style="width: 83%; display: none;">
+													<option value="">Seleccione ...</option>
 													@foreach($pago_polz_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}">{{ $tp->polz_folio }}</option>
 						                            @endforeach
 												</select>
 											</div>
@@ -242,8 +202,9 @@
 											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="pago_comp_id">Comprobante:</label>
 											<div class="col-md-4 col-sm-4 col-xs-12">
 												<select class="js-example-basic-single js-states form-control" id="pago_comp_id" name="pago_comp_id" data-placeholder="Seleccione el comprobante ..." style="width: 83%; display: none;">
+													<option value="">Seleccione ...</option>
 													@foreach($pago_comp_id as $tp)
-						                            	<option value="{{ $tp->id }}">{{ $tp->id }}</option>
+						                            	<option value="{{ $tp->id }}">{{ $tp->comp_uuid }}</option>
 						                            @endforeach
 												</select>
 											</div>

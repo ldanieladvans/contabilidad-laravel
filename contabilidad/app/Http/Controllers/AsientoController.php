@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Cuenta;
 use App\Poliza;
 use App\Asiento;
+use App\Pago;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -44,7 +45,8 @@ class AsientoController extends Controller
     {
         $polizas = Poliza::all();
         $cuentas = Cuenta::all();
-        return view('appviews.creaasiento',['polizas'=>$polizas,'cuentas'=>$cuentas]);
+        $pagos = Pago::all();
+        return view('appviews.creaasiento',['polizas'=>$polizas,'cuentas'=>$cuentas,'pagos'=>$pagos]);
     }
 
     /**
@@ -63,7 +65,7 @@ class AsientoController extends Controller
             $asiento_activo = true;
         }
         $alldata['asiento_activo'] = $asiento_activo;
-
+        $alldata['asiento_manual'] = true;
         $asiento = new Asiento($alldata);
 
         $asiento->save();
@@ -104,7 +106,8 @@ class AsientoController extends Controller
         $polizas = Poliza::all();
         $cuentas = Cuenta::all();
         $asiento = Asiento::findOrFail($id);
-        return view('appviews.editaasiento',['asiento'=>$asiento,'polizas'=>$polizas,'cuentas'=>$cuentas]);
+        $pagos = Pago::all();
+        return view('appviews.editaasiento',['asiento'=>$asiento,'polizas'=>$polizas,'cuentas'=>$cuentas,'pagos'=>$pagos]);
     }
 
     /**

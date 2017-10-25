@@ -19,8 +19,8 @@ class CreatePagorel extends Migration
             $table->string('pagorel_pagado_uuid')->nullable();
             $table->string('pagorel_serie')->nullable();
             $table->string('pagorel_folio')->nullable();
-            $table->string('pagorel_formpago_cod')->nullable();
-            $table->string('pagorel_formpago_nom')->nullable();
+            $table->string('pagorel_metpago_cod')->nullable();
+            $table->string('pagorel_metpago_nom')->nullable();
             $table->string('pagorel_moneda_cod')->nullable();
             $table->string('pagorel_moneda_nom')->nullable();
             $table->float('pagorel_tipo_cambio')->nullable();

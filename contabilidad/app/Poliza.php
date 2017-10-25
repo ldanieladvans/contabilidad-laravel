@@ -8,7 +8,8 @@ class Poliza extends Model
 {
     protected $table = "polz";
 
-    protected $fillable = ['polz_tipopolz','polz_fecha','polz_folio','polz_concepto','polz_importe','polz_aprobado','polz_importada','polz_activo','polz_cierre','polz_modificada','polz_period_id', 'polz_defecto','polz_sin_reclsif_imp'];
+    protected $fillable = ['polz_tipopolz','polz_fecha','polz_folio','polz_concepto','polz_importe','polz_aprobado','polz_importada','polz_activo','polz_cierre','polz_modificada','polz_period_id', 'polz_defecto','polz_sin_reclsif_imp','polz_manual'];
+
 
     public function __construct(array $attributes = [])
     {
@@ -34,5 +35,17 @@ class Poliza extends Model
     public function comprobantes(){
 
         return $this->belongsToMany('App\Comprobante','polzcomp','polzcomp_polz_id','polzcomp_comp_id');
+    }
+
+    public function getComprobantes()
+    {
+        return (!$this->comprobantes) ? $this->comprobantes = $this->comprobantes()->get() : $this->comprobantes;
+    }
+
+    public function tieneComprobante($comp)
+    {
+        return $this->getComprobantes()->contains(function ($value, $key) use ($comp) {
+            return $comp == $value->id;
+        });
     }
 }

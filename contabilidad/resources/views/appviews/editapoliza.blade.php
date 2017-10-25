@@ -9,6 +9,9 @@
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/daterangepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-datetimepicker.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('ac_theme/assets/css/bootstrap-colorpicker.min.css') }}" />
+	<!--<link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.spa.css') }}" />-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('DevExtreme/Sources/Lib/css/dx.common.css') }}" />
+    <link rel="dx-theme" data-theme="generic.light" href="{{ asset('DevExtreme/Sources/Lib/css/dx.light.css') }}" />
 @endsection
 
 @section('breadcrumbs')
@@ -44,6 +47,9 @@
 				{{ Form::open(['route' => ['polizas.update', $poliza->id], 'class'=>'form-horizontal form-label-left', 'method'=>'PUT', 'id'=>'editapoliza']) }}
                 	{{ Form::hidden('_method', 'PUT') }}
 
+                	<input type="hidden" value="{{$asientos}}" id="asientos"/>
+                	<input type="hidden" value="{{$poliza}}" id="poliza"/>
+                	<input type="hidden" value="{{$cuentas}}" id="cuentas"/>
 
 					<div class="form-group">
 						<label class="control-label col-xs-12 col-sm-1 col-md-1" for="polz_concepto">Concepto:</label>
@@ -121,6 +127,20 @@
 									<li class="active">
 										<a data-toggle="tab" href="#home">
 											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Asientos
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#comprobantes">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
+											Comprobantes
+										</a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#checks">
+											<i class="green ace-icon fa fa-bank bigger-120"></i>
 											Chequeos
 										</a>
 									</li>
@@ -129,7 +149,37 @@
 
 
 								<div class="tab-content">
+									
 									<div id="home" class="tab-pane fade in active">
+										<div class="form-group">
+											<div id="gridContainerAsientos"></div>
+										</div>
+									</div>
+
+
+									<div id="comprobantes" class="tab-pane fade">
+										<div class="form-group">
+											<label for="opolizas">Comprobantes: </label>
+											<select multiple="multiple" class="js-example-basic-multiple" id="comps" name="comps[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;" {{$poliza->polz_manual ? '':'disabled'}}>
+												@foreach($comprobantes as $pls)
+													<option value="{{$pls->id}}" {{$poliza->tieneComprobante($pls->id) ? 'selected':''}}>{{$pls->comp_uuid}}</option>
+												@endforeach
+											</select>
+										</div>
+										<!--<div class="form-group" {{$poliza->polz_manual ? '':'hidden'}}>
+											<label for="comps">Agregar Comprobante: </label>
+											<select multiple="multiple" class="js-example-basic-multiple" id="comps" name="comps[]" data-placeholder="Seleccione ..." style="width: 83%; display: none;">
+												@foreach($comprobantes as $pls)
+													@if(!$poliza->tieneComprobante($pls->id))
+														<option value="{{$pls->id}}">{{$pls->comp_uuid}}</option>
+													@endif
+												@endforeach
+											</select>
+										</div>-->
+									</div>
+
+
+									<div id="checks" class="tab-pane fade">
 
 										<div class="form-group">
 											<label class="control-label col-md-2 col-sm-2 col-xs-12" for="polz_aprobado">Aprobada ?: </label>
@@ -176,8 +226,7 @@
 												</label>
 											</div>
 
-										</div>
-										
+										</div>	
 									</div>
 								</div>
 							</div>
@@ -210,6 +259,8 @@
 		<script src="{{ asset('ac_theme/assets/js/select2.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/bootstrap-tag.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/bootstrap-datepicker.min.js') }}"></script>
+
+		<script src="{{ asset('DevExtreme/Sources/Lib/js/dx.all.js') }}"></script>
 		<!-- ace scripts -->
 		<script src="{{ asset('ac_theme/assets/js/ace-elements.min.js') }}"></script>
 		<script src="{{ asset('ac_theme/assets/js/ace.min.js') }}"></script>
@@ -245,86 +296,154 @@
 				  	allowClear: true
 				});
 
+				$("#comps").select2({
+				  	placeholder: "Seleccione los comprobantes ...",
+				  	allowClear: true,
+				  	multiple: true
+				});
+
+				/*$("#ocomps").select2({
+				  	placeholder: "Comprobantes ...",
+				  	multiple: true
+				});*/
 
 
+			var asientos = jQuery.parseJSON(document.getElementById('asientos').value);
+			var poliza = jQuery.parseJSON(document.getElementById('poliza').value);
+			var cuentas = jQuery.parseJSON(document.getElementById('cuentas').value);
 
-	    	/*$.mask.definitions['~']='[+-]';
-			$('#cliente_tel_contact').mask('(999) 999-9999');
-			$('#cliente_tel_contact_otro').mask('(999) 999-9999');
-			$('#cliente_tel').mask('(999) 999-9999');
-		
-			jQuery.validator.addMethod("cliente_rfc", function (value, element) {
-				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
-			}, "Introduzca un RFC válido.");*/
-		
-			/*$('#creapago').validate({
-				errorElement: 'div',
-				errorClass: 'help-block',
-				focusInvalid: false,
-				ignore: "",
-				rules: {
-					ctacont_num: {
-						required: true
-					},
-					ctacont_natur: {
-						required: true
-					},
-					ctacont_f_iniciosat: {
-						required: true
-					},
-					ctacont_desc: {
-						required: true
-					}
-				},
-		
-				messages: {
-					ctacont_num: {
-						required: "Este campo es requerido."
-					},
-					ctacont_natur: {
-						required: "Este campo es requerido."
-					},
-					ctacont_f_iniciosat: {
-						required: "Este campo es requerido."
-					},
-					ctacont_desc: {
-						required: "Este campo es requerido."
-					}
-				},
-		
-		
-				highlight: function (e) {
-					$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
-				},
-		
-				success: function (e) {
-					$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
-					$(e).remove();
-				},
-		
-				errorPlacement: function (error, element) {
-					console.log(error);
-					if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
-						var controls = element.closest('div[class*="col-"]');
-						if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
-						else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
-					}
-					else if(element.is('.select2')) {
-						error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
-					}
-					else if(element.is('.chosen-select')) {
-						error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
-					}
-					else error.insertAfter(element.parent());
-				},
-		
-				submitHandler: function (form) {
-					form.submit();
-				},
-				invalidHandler: function (form) {
-					console.log('2');
-				}
-			});*/
+	    	$("#gridContainerAsientos").dxDataGrid({
+		        dataSource: asientos,
+		        paging: {
+		            enabled: false
+		        },
+		        editing: {
+		            mode: "row",
+		            allowUpdating: poliza.polz_manual,
+		            allowDeleting: poliza.polz_manual,
+		            allowAdding: poliza.polz_manual,
+		            texts:{
+		            	addRow: 'Nueva',
+		            	cancelRowChanges: 'Cancelar',
+		            	deleteRow: 'Borrar',
+		            	editRow: 'Editar',
+		            	saveRowChanges: 'Guardar',
+		            	confirmDeleteMessage: '¿Está seguro que quiere eliminar este registro?'
+		            },
+		        }, 
+		        columns: [
+		            {
+		                dataField: "asiento_concepto",
+		                caption: "Concepto",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "asiento_folio_ref",
+		                caption: "Folio",
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            },{
+		                dataField: "asiento_debe",
+		                caption: "Debe",
+		                validationRules: [{ type: "required" }, { type: "numeric" }]
+		            },{
+		                dataField: "asiento_haber",
+		                caption: "Haber",
+		                validationRules: [{ type: "required" }, { type: "numeric" }]
+		            },{
+		                dataField: "asiento_ctacont_id",
+		                caption: "Cuenta",
+		                lookup: {
+		                    dataSource: cuentas,
+		                    displayExpr: "Name",
+		                    valueExpr: "ID"
+		                },
+		                validationRules: [{
+		                    type: "required"
+		                }]
+		            }    
+		        ],
+		        onEditingStart: function(e) {
+		            console.log("EditingStart");
+		        },
+		        onInitNewRow: function(e) {
+		            console.log("InitNewRow");
+		        },
+		        onRowInserting: function(e) {
+		            console.log("RowInserting");
+		        },
+		        onRowInserted: function(e) {
+		            console.log("RowInserted");
+
+		            $('#loadingmodal').modal('show');
+		            //TODO
+		            $.ajax({
+		                url: '/pasientos',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'create',row_id:'false',asiento_concepto:e.data.asiento_concepto,asiento_folio_ref:e.data.asiento_folio_ref,asiento_debe:e.data.asiento_debe,asiento_haber:e.data.asiento_haber,asiento_ctacont_id:e.data.asiento_ctacont_id,asiento_polz_id:poliza.id},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+
+		            console.log(e);
+		        },
+		        onRowUpdating: function(e) {
+		            console.log("RowUpdating");
+		        },
+		        onRowUpdated: function(e) {
+		            console.log("RowUpdated");
+		            console.log(e);
+		            $('#loadingmodal').modal('show');
+		            //TODO
+		            $.ajax({
+		                url: '/pasientos',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'edit',row_id:e.key.ID,asiento_concepto:e.key.asiento_concepto,asiento_folio_ref:e.key.asiento_folio_ref,asiento_debe:e.key.asiento_debe,asiento_haber:e.key.asiento_haber,asiento_ctacont_id:e.key.asiento_ctacont_id,asiento_polz_id:poliza.id},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
+		            	    e.key.ID = data.data_id;
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoving: function(e) {
+		            console.log("RowRemoving");
+		            $('#loadingmodal').modal('show');
+		            //TODO
+		            $.ajax({
+		                url: '/pasientos',
+		                type: 'POST',
+		                data: {_token: CSRF_TOKEN, asiento_polz_id:poliza.id, crudmethod:'delete',row_id:e.key.ID,asiento_concepto:e.key.asiento_concepto,asiento_folio_ref:e.key.asiento_folio_ref,asiento_debe:e.key.asiento_debe,asiento_haber:e.key.asiento_haber,asiento_ctacont_id:e.key.asiento_ctacont_id,asiento_polz_id:poliza.id},
+		                dataType: 'JSON',
+		                success: function (data) {
+		            	    $('#loadingmodal').modal('hide');
+		            	    var thisgrid = $("#gridContainerProvis").dxDataGrid('instance');
+		            	    thisgrid.refresh();
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    console.log(errorThrown);
+		                }
+		            });
+		        },
+		        onRowRemoved: function(e) {
+		            console.log("RowRemoved");
+		        }
+		    });
 
 
 		$('#pago_formpago_cod').change(function(){

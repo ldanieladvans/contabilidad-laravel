@@ -27,7 +27,7 @@ class FormaPagoController extends Controller
         $fspago_list = array();
         $fspago_contador = 0;
         foreach ($fspago as $fp) {
-            $fspago_list[$fspago_contador] = ['ID'=>$fp->id,'formpago_formpagosat_nom'=>$fp->formpago_formpagosat_nom,'formpago_formpagosat_cod'=>$fp->formpago_formpagosat_cod,'formpago_ctacont_id'=>$fp->cuenta->ctacont_num];
+            $fspago_list[$fspago_contador] = ['ID'=>$fp->id,'formpago_formpagosat_nom'=>$fp->formpago_formpagosat_nom,'formpago_formpagosat_cod'=>$fp->formpago_formpagosat_cod,'formpago_ctacont_id'=>$fp->cuenta ? $fp->cuenta->ctacont_num : ''];
             $fspago_contador ++;
         }
         return view('appviews.listafspago',['fspago'=>json_encode($fspago_list)]);

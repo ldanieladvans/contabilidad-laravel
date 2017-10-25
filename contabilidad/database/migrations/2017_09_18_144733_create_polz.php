@@ -28,6 +28,7 @@ class CreatePolz extends Migration
             $table->boolean('polz_modificada')->default(false);
             $table->boolean('polz_defecto')->default(false);
             $table->boolean('polz_sin_reclsif_imp')->default(false);
+            $table->boolean('polz_manual')->default(false);
 
             $table->timestamps();
         });
