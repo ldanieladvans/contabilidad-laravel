@@ -368,4 +368,15 @@ class Cuenta extends Model
     {
         return $this->hasMany('App\Proveedor','proveed_cta_ieps_reten_cobrado_id');
     }
+
+    //Relacion con configuracion central de empresa
+    public function empresaCuentaXCobDef()
+    {
+        return $this->hasMany('App\Empresa','emp_cuenta_x_cob_def_id');
+    }
+
+    public function empresaCuentaXPagDef()
+    {
+        return $this->hasMany('App\Empresa','emp_cuenta_x_pag_def_id');
+    }
 }

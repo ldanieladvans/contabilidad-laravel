@@ -20,6 +20,7 @@ use App\Asiento;
 use App\Poliza;
 use App\Balanza;
 use App\Pago;
+use App\Empresa;
 
 class Comprobante extends Model
 {
@@ -816,6 +817,7 @@ class Comprobante extends Model
         $foliopuente = 'AST/XCOB/';
         $apunte = 'debe';
         $apunte1 = 'haber';
+        $cuentaptedef_id = Empresa::all()[0]->emp_cuenta_x_cob_def_id;
         if ($tipo == 'egreso')
         {
             $partner = 'proveedor';
@@ -824,6 +826,7 @@ class Comprobante extends Model
             $foliopuente = 'AST/XPAG/';
             $apunte = 'haber';
             $apunte1 = 'debe';
+            $cuentaptedef_id = Empresa::all()[0]->emp_cuenta_x_pag_def_id;
         }
         
         $cuentas = $this->getCuentas($rfc, $partner);
@@ -849,18 +852,19 @@ class Comprobante extends Model
             {
                 foreach ($docs_rel as $doc) {
 
-                    $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
-                    $doc->pagorel_asiento_id = $asiento_id;
-                    $doc->save();
-
                     $comp_rel = Comprobante::where('comp_uuid','=',$doc->pagorel_pagado_uuid)->get();
-
                     if (count($comp_rel) > 0)
                     {
+                        //Generando asiento de cuenta puente que corresponde
+                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
+                        $doc->pagorel_asiento_id = $asiento_id;
+                        $doc->save();
+
                         $comp = $comp_rel[0];
                         $provis = Provision::where('provis_comp_id','=',$comp->id)->get();
                         if (count($provis) > 0)
                         {
+                            
                             $provis = $provis[0];
                             $provis_monto = $provis->provis_monto;
                             $porcentaje_pagado = round($doc->pagorel_monto_pag / $provis_monto, 2);
@@ -911,6 +915,7 @@ class Comprobante extends Model
                     }
                     else
                     {
+                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id);
                         $pol->polz_sin_reclsif_imp = true;
                         $pol->save(); 
                     }
@@ -920,7 +925,8 @@ class Comprobante extends Model
             }
             else
             {
-                $this->crearAsiento($pol_id, $foliopuente, $pago->pago_monto, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
+                
+                $this->crearAsiento($pol_id, $foliopuente, $pago->pago_monto, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id);
                 
                 $pol->polz_sin_reclsif_imp = true;
                 $pol->save();
