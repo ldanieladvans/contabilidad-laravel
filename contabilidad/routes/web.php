@@ -55,7 +55,8 @@ Route::group(['prefix' => 'acciones'], function () {
 	Route::get('subecomp', 'SubeCompController@index')->name('subecompindex');
 	Route::post('subecompadd', 'SubeCompController@addComp')->name('subecompadd');
 	Route::get('configcont/{step}', 'ConfigContController@index')->name('configcontindex');
-	Route::get('configreport', 'ReportConfigController@index')->name('configreport');
+	Route::get('reportconfigbg', 'ReportConfigController@indexBg')->name('reportconfigbg');
+	Route::get('reportconfiger', 'ReportConfigController@indexEr')->name('reportconfiger');
 });
 
 Route::get('/downloadpc' , 'ConfigContController@downloadFile');
@@ -64,6 +65,9 @@ Route::post('/configpc' , 'ConfigContController@configPc')->name('configpc');
 Route::post('/configpcclients' , 'ConfigContController@configPcClients')->name('configpcclients');
 Route::post('/configpcprovs' , 'ConfigContController@configPcProvs')->name('configpcprovs');
 Route::post('/configpcfinish' , 'ConfigContController@configPcFinish')->name('configpcfinish');
+
+Route::post('/setreportbg' , 'ReportConfigController@setReportBg')->name('setreportbg');
+Route::post('/setreporter' , 'ReportConfigController@setReportEr')->name('setreporter');
 
 /*Ajax*/
 Route::post('/getcpdata', 'Controller@getCpData');

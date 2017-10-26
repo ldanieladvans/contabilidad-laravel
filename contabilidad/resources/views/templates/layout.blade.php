@@ -359,14 +359,38 @@
 								<b class="arrow"></b>
 							</li>
 
+
 							<li id="menureportconfig" class="">
-								<a href="{{ route('configreport') }}">
+								<a href="#" class="dropdown-toggle">
 									<i class="menu-icon fa fa-caret-right"></i>
+
 									CONFIGURAR REPORTES
+									<b class="arrow fa fa-angle-down"></b>
 								</a>
 
 								<b class="arrow"></b>
+
+								<ul id="submenureportbg" class="submenu">
+									<li id="menubg" class="">
+										<a href="{{ route('reportconfigbg') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											BALANCE GENERAL
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+
+									<li id="menuer" class="">
+										<a href="{{ route('reportconfiger') }}">
+											<i class="menu-icon fa fa-caret-right"></i>
+											ESTADO DE RESULTADOS
+										</a>
+
+										<b class="arrow"></b>
+									</li>
+								</ul>
 							</li>
+
 
 						</ul>
 					</li>
