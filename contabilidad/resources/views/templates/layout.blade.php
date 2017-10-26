@@ -359,6 +359,15 @@
 								<b class="arrow"></b>
 							</li>
 
+							<li id="menureportconfig" class="">
+								<a href="{{ route('configreport') }}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									CONFIGURAR REPORTES
+								</a>
+
+								<b class="arrow"></b>
+							</li>
+
 						</ul>
 					</li>
 

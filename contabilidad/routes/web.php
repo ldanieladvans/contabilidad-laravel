@@ -55,6 +55,7 @@ Route::group(['prefix' => 'acciones'], function () {
 	Route::get('subecomp', 'SubeCompController@index')->name('subecompindex');
 	Route::post('subecompadd', 'SubeCompController@addComp')->name('subecompadd');
 	Route::get('configcont/{step}', 'ConfigContController@index')->name('configcontindex');
+	Route::get('configreport', 'ReportConfigController@index')->name('configreport');
 });
 
 Route::get('/downloadpc' , 'ConfigContController@downloadFile');

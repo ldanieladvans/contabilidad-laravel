@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cuenta;
+use App\TipoSubCuenta;
+use App\CatSatModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +44,13 @@ class CuentaController extends Controller
     {
         //TODO uncomment when connection to server available
         //$testconn = DB::connection('cat_sat')->select('select id from roles where id = ?',[1]);
-        return view('appviews.creacuenta',['ctacont_catsat_cod'=>[],'ctacont_tipocta_cod'=>[],'ctacont_tiposubcta_id'=>[]]);
+        $sat_cta = CatSatModel::all();
+        $tscuenta = TipoSubCuenta::all();
+        /*echo "<pre>";
+        print_r($tscuenta);
+        die();
+        echo "</pre>";*/
+        return view('appviews.creacuenta',['ctacont_catsat_cod'=>$sat_cta,'ctacont_ts'=>$tscuenta]);
     }
 
     /**
@@ -133,7 +141,9 @@ class CuentaController extends Controller
     public function edit($id)
     {
         $cuenta = Cuenta::findOrFail($id);
-        return view('appviews.editacuenta',['cuenta'=>$cuenta,'ctacont_catsat_cod'=>[],'ctacont_tipocta_cod'=>[],'ctacont_tiposubcta_id'=>[]]);
+        $sat_cta = CatSatModel::all();
+        $tscuenta = TipoSubCuenta::all();
+        return view('appviews.editacuenta',['cuenta'=>$cuenta,'ctacont_catsat_cod'=>$sat_cta,'ctacont_ts'=>$tscuenta]);
     }
 
     /**

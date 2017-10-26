@@ -56,7 +56,7 @@
             </td>
             <td width="50%" valign="top">
                 <h1>Balanza</h1>
-                <div class="form-group" style="background-color: #fff; color: #666666; padding-left: 10px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
+                <div class="form-group" style="background-color: #fff; color: #666666; padding-left: 10px; padding-right: 5px; padding-top: 0px; padding-bottom: 5px;">
                     <div id="balanzaLista"></div>
                 </div>
             </td>

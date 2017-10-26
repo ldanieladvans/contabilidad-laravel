@@ -61,7 +61,7 @@
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_catsat_cod" name="ctacont_catsat_cod" data-placeholder="Seleccione la cuenta SAT..." style="width: 83%; display: none;">
 								@foreach($ctacont_catsat_cod as $tp)
-	                            	<option value="{{ $tp->cat_sat_codigo_agrupador }}" {{$cuenta->ctacont_catsat_cod == $tp->id ? 'selected':''}}>{{ $tp->cat_sat_codigo_agrupador }} - {{ $tp->cat_sat_codigo_agrupador }}</option>
+	                            	<option value="{{ $tp->cat_sat_codigo_agrupador }}" {{$cuenta->ctacont_catsat_cod == $tp->cat_sat_codigo_agrupador ? 'selected':''}}>{{ $tp->cat_sat_codigo_agrupador }} - {{ $tp->cat_sat_nombre_cuenta }}</option>
 	                            @endforeach
 							</select>
 						</div>
@@ -84,19 +84,8 @@
 						<label class="control-label col-md-1 col-sm-1 col-xs-12" for="ctacont_tiposubcta_id">Tipo Subcuenta:</label>
 						<div class="col-md-4 col-sm-4 col-xs-12">
 							<select class="js-example-basic-single js-states form-control" id="ctacont_tiposubcta_id" name="ctacont_tiposubcta_id" data-placeholder="Seleccione el tipo de subcuenta ..." style="width: 83%; display: none;">
-								<!--<option value="activo_a_corto_plazo" {{$cuenta->ctacont_tiposubcta_id == 'activo_a_corto_plazo' ? 'selected':''}}>Activo a corto plazo</option>
-                            	<option value="activo_a_largo_plazo" {{$cuenta->ctacont_tiposubcta_id == 'activo_a_largo_plazo' ? 'selected':''}}>Activo a largo plazo</option>
-                            	<option value="pasivo_a_corto_plazo" {{$cuenta->ctacont_tiposubcta_id == 'pasivo_a_corto_plazo' ? 'selected':''}}>Pasivo a corto plazo</option>
-                            	<option value="pasivo_a_largo_plazo" {{$cuenta->ctacont_tiposubcta_id == 'pasivo_a_largo_plazo' ? 'selected':''}}>Pasivo a largo plazo</option>
-                            	<option value="capital_contable" {{$cuenta->ctacont_tiposubcta_id == 'capital_contable' ? 'selected':''}}>Capital contable</option>
-                            	<option value="ingresos" {{$cuenta->ctacont_tiposubcta_id == 'ingresos' ? 'selected':''}}>Ingresos</option>
-                            	<option value="costos" {{$cuenta->ctacont_tiposubcta_id == 'costos' ? 'selected':''}}>Costos</option>
-                            	<option value="gastos" {{$cuenta->ctacont_tiposubcta_id == 'gastos' ? 'selected':''}}>Gastos</option>
-                            	<option value="resultado_integral_de_financiamiento" {{$cuenta->ctacont_tiposubcta_id == 'resultado_integral_de_financiamiento' ? 'selected':''}}>Resultado integral de financiamiento</option>
-                            	<option value="cuentas_de_orden" {{$cuenta->ctacont_tiposubcta_id == 'cuentas_de_orden' ? 'selected':''}}>Cuentas de orden</option>-->
-
-                            	@foreach($ctacont_tiposubcta_id as $tp)
-	                            	<option value="{{ $tp->ip }}" {{$cuenta->ctacont_tiposubcta_id == $tp->ip ? 'selected':''}}>{{ $tp->tiposubcta_nom }}</option>
+								@foreach($ctacont_ts as $cts)
+	                            	<option value="{{ $cts->id }}" {{$cuenta->ctacont_tiposubcta_id == $cts->id ? 'selected':''}}>{{ $cts->tiposubcta_nom }}</option>
 	                            @endforeach
 							</select>
 						</div>
