@@ -19,10 +19,7 @@ class CreateEmp extends Migration
             $table->string('emp_rfc');
             $table->string('emp_nom');
             $table->string('emp_form_cta')->nullable();
-            $table->integer('emp_cuenta_x_cob_def_id')->unsigned()->nullable();
-            $table->foreign('emp_cuenta_x_cob_def_id')->references('id')->on('ctacont')->onDelete('set null');
-            $table->integer('emp_cuenta_x_pag_def_id')->unsigned()->nullable();
-            $table->foreign('emp_cuenta_x_pag_def_id')->references('id')->on('ctacont')->onDelete('set null');
+            
             $table->timestamps();
         });
     }
