@@ -254,6 +254,8 @@ class ConfigContController extends Controller
 
         $tipcl->tipcliente_concpto_polz = $confimodel->cliente_concepto ? $confimodel->cliente_concepto : 'Concepto';
 
+        $tipcl->tipcliente_defecto = true;
+
         $tipcl->save();
 
         $tiprov = false;
@@ -283,6 +285,8 @@ class ConfigContController extends Controller
         $tiprov->tipprov_cta_ieps_reten_cobrado_id = $confimodel->proveed_cta_ieps_reten_cobrado_id;
 
         $tiprov->tipprov_concpto_polz = $confimodel->proveedor_concepto ? $confimodel->proveedor_concepto : 'Concepto';
+
+        $tiprov->tipprov_defecto = true;
 
 		$tiprov->save();
 
