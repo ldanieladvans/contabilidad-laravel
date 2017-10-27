@@ -13,6 +13,85 @@ class PeriodoSeeder extends Seeder
      */
     public function run()
     {
+        
+        /*Periodos 2016*/
+        $ejercicio2016 = Ejercicio::where('ejerc_anio','2016')->get();
+        if(count($ejercicio2016) > 0){
+            $ejercicio2016 = $ejercicio2016[0]->id;
+        }
+
+        $enero2016 = new Periodo();
+        $enero2016->period_fecha_ini = date('Y-m-d',strtotime("2016-01-01"));
+        $enero2016->period_fecha_fin = date('Y-m-d',strtotime("2016-01-31"));
+        $enero2016->period_ejerc_id = $ejercicio2016;
+        $enero2016->save();
+
+        $febrero2016 = new Periodo();
+        $febrero2016->period_fecha_ini = date('Y-m-d',strtotime("2016-02-01"));
+        $febrero2016->period_fecha_fin = date('Y-m-d',strtotime("2016-02-28"));
+        $febrero2016->period_ejerc_id = $ejercicio2016;
+        $febrero2016->save();
+
+        $marzo2016 = new Periodo();
+        $marzo2016->period_fecha_ini = date('Y-m-d',strtotime("2016-03-01"));
+        $marzo2016->period_fecha_fin = date('Y-m-d',strtotime("2016-03-31"));
+        $marzo2016->period_ejerc_id = $ejercicio2016;
+        $marzo2016->save();
+
+        $abril2016 = new Periodo();
+        $abril2016->period_fecha_ini = date('Y-m-d',strtotime("2016-04-01"));
+        $abril2016->period_fecha_fin = date('Y-m-d',strtotime("2016-04-30"));
+        $abril2016->period_ejerc_id = $ejercicio2016;
+        $abril2016->save();
+
+        $mayo2016 = new Periodo();
+        $mayo2016->period_fecha_ini = date('Y-m-d',strtotime("2016-05-01"));
+        $mayo2016->period_fecha_fin = date('Y-m-d',strtotime("2016-05-31"));
+        $mayo2016->period_ejerc_id = $ejercicio2016;
+        $mayo2016->save();
+
+        $junio2016 = new Periodo();
+        $junio2016->period_fecha_ini = date('Y-m-d',strtotime("2016-06-01"));
+        $junio2016->period_fecha_fin = date('Y-m-d',strtotime("2016-06-30"));
+        $junio2016->period_ejerc_id = $ejercicio2016;
+        $junio2016->save();
+
+        $julio2016 = new Periodo();
+        $julio2016->period_fecha_ini = date('Y-m-d',strtotime("2016-07-01"));
+        $julio2016->period_fecha_fin = date('Y-m-d',strtotime("2016-07-31"));
+        $julio2016->period_ejerc_id = $ejercicio2016;
+        $julio2016->save();
+
+        $agosto2016 = new Periodo();
+        $agosto2016->period_fecha_ini = date('Y-m-d',strtotime("2016-08-01"));
+        $agosto2016->period_fecha_fin = date('Y-m-d',strtotime("2016-08-31"));
+        $agosto2016->period_ejerc_id = $ejercicio2016;
+        $agosto2016->save();
+
+        $septiembre2016 = new Periodo();
+        $septiembre2016->period_fecha_ini = date('Y-m-d',strtotime("2016-09-01"));
+        $septiembre2016->period_fecha_fin = date('Y-m-d',strtotime("2016-09-30"));
+        $septiembre2016->period_ejerc_id = $ejercicio2016;
+        $septiembre2016->save();
+
+        $octubre2016 = new Periodo();
+        $octubre2016->period_fecha_ini = date('Y-m-d',strtotime("2016-10-01"));
+        $octubre2016->period_fecha_fin = date('Y-m-d',strtotime("2016-10-31"));
+        $octubre2016->period_ejerc_id = $ejercicio2016;
+        $octubre2016->save();
+
+        $noviembre2016 = new Periodo();
+        $noviembre2016->period_fecha_ini = date('Y-m-d',strtotime("2016-11-01"));
+        $noviembre2016->period_fecha_fin = date('Y-m-d',strtotime("2016-11-30"));
+        $noviembre2016->period_ejerc_id = $ejercicio2016;
+        $noviembre2016->save();
+
+        $diciembre2016 = new Periodo();
+        $diciembre2016->period_fecha_ini = date('Y-m-d',strtotime("2016-12-01"));
+        $diciembre2016->period_fecha_fin = date('Y-m-d',strtotime("2016-12-31"));
+        $diciembre2016->period_ejerc_id = $ejercicio2016;
+        $diciembre2016->save();
+
         /*Periodos 2017*/
         $ejercicio2017 = Ejercicio::where('ejerc_anio','2017')->get();
         if(count($ejercicio2017) > 0){

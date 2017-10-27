@@ -77,6 +77,12 @@ class AsientoController extends Controller
 
         $asiento->comprobanteRel()->sync($pgs_sync);
 
+        if($asiento->asiento_debe != 0.00){
+            $asiento->cuenta->journal->debitDollars((float)$asiento->asiento_debe);
+        }else{
+            $asiento->cuenta->journal->creditDollars((float)$asiento->asiento_haber);
+        }
+
         $fmessage = 'Se ha creado el asiento: '.$asiento->asiento_folio_ref;
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($alldata, 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');

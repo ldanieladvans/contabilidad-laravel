@@ -17,6 +17,7 @@ use App\Proveedor;
 use App\TipoProveedor;
 use App\TipoSubCuenta;
 use App\GeneralConfigModel;
+use App\Empresa;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,7 @@ class ConfigContController extends Controller
         echo "<pre>";*/
         $confimodel = false;
         $allconfig = GeneralConfigModel::all();
+        $emp = false;
         if(count($allconfig) > 0){
         	$confimodel = GeneralConfigModel::findOrFail($allconfig[0]->id);
         }else{
@@ -48,7 +50,16 @@ class ConfigContController extends Controller
 
         $cuentas = Cuenta::all();
 
-        return view('appviews.configcont',['wstep'=>$step,'confimodel'=>$confimodel,'cuentas'=>$cuentas]);
+        $emps = Empresa::all();
+        if(count($emps) > 0){
+            $emp = $emps[0];
+            if(!\Session::get('emp_rfc',false)){
+                \Session::put('emp_rfc',$emp->emp_rfc);
+                \Session::put('emp_name',$emp->emp_nom);
+            }
+        }
+
+        return view('appviews.configcont',['wstep'=>$step,'confimodel'=>$confimodel,'cuentas'=>$cuentas,'emp'=>$emp]);
     }
 
     public function downloadFile(Request $request)
@@ -116,6 +127,31 @@ class ConfigContController extends Controller
     }
 
 
+    public function configPcEmp(Request $request)
+    {
+        $alldata = $request->all();
+        $logued_user = Auth::user();
+
+        $emps = Empresa::all();
+        $emp = false;
+        if(count($emps) > 0){
+            $emp = $emps[0];
+        }else{
+            $emp = new Empresa();
+        }
+
+        $emp->emp_rfc = $alldata['emp_rfc'];
+        $emp->emp_nom = $alldata['emp_nom'];
+        $emp->emp_form_cta = array_key_exists('emp_form_cta', $alldata) ? $alldata['emp_form_cta']:'';
+        $emp->emp_cuenta_x_cob_def_id = $alldata['emp_cuenta_x_cob_def_id'];
+        $emp->emp_cuenta_x_pag_def_id = $alldata['emp_cuenta_x_pag_def_id'];
+
+        $emp->save();      
+
+        return redirect()->route('configcontindex',3);
+    }
+
+
     public function configPcClients(Request $request)
     {
     	$alldata = $request->all();
@@ -160,7 +196,7 @@ class ConfigContController extends Controller
 		$confimodel->save();
 
         //return view('appviews.configcont',['wstep'=>2]);
-        return redirect()->route('configcontindex',3);
+        return redirect()->route('configcontindex',4);
     }
 
 
@@ -208,7 +244,7 @@ class ConfigContController extends Controller
 		$confimodel->save();
 
         //return view('appviews.configcont',['wstep'=>2]);
-        return redirect()->route('configcontindex',4);
+        return redirect()->route('configcontindex',5);
     }
 
     public function configPcFinish(Request $request)

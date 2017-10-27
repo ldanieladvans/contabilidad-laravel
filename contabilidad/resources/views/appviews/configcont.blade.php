@@ -64,16 +64,21 @@
 
 								<li data-step="2" class="{{$wstep == 2 ? 'active':''}}">
 									<span class="step">2</span>
-									<span class="title">Cuentas para clientes</span>
+									<span class="title">Datos de Empresa</span>
 								</li>
 
 								<li data-step="3" class="{{$wstep == 3 ? 'active':''}}">
 									<span class="step">3</span>
-									<span class="title">Cuentas para proveedores</span>
+									<span class="title">Cuentas para clientes</span>
 								</li>
 
 								<li data-step="4" class="{{$wstep == 4 ? 'active':''}}">
 									<span class="step">4</span>
+									<span class="title">Cuentas para proveedores</span>
+								</li>
+
+								<li data-step="5" class="{{$wstep == 5 ? 'active':''}}">
+									<span class="step">5</span>
 									<span class="title">Confirmación</span>
 								</li>
 							</ul>
@@ -116,6 +121,62 @@
 								</div>
 
 								<div class="step-pane" data-step="2">
+									<form class="form-horizontal" id="femp" method="post" action="{{ route('configpcemp') }}" >
+										{{ csrf_field() }}
+										<div class="form-group">
+											<label class="control-label col-xs-12 col-sm-1 col-md-1" for="emp_nom">Nombre:</label>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<div class="clearfix">
+													<input type="text" name="emp_nom" id="emp_nom" value="{{$emp ? $emp->emp_nom : ''}}" class="col-md-10 col-sm-10 col-xs-12"/>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-xs-12 col-sm-1 col-md-1" for="emp_rfc">RFC:</label>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<div class="clearfix">
+													<input type="text" name="emp_rfc" id="emp_rfc" value="{{$emp ? $emp->emp_rfc : ''}}" class="col-md-10 col-sm-10 col-xs-12"/>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-xs-12 col-sm-1 col-md-1" for="emp_form_cta">Máscara Cuentas:</label>
+											<div class="col-md-10 col-sm-10 col-xs-12">
+												<div class="clearfix">
+													<input type="text" name="emp_form_cta" id="emp_form_cta" value="{{$emp ? $emp->emp_form_cta : ''}}" class="col-md-10 col-sm-10 col-xs-12"/>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="emp_cuenta_x_cob_def_id">Cuenta por cobrar:</label>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<select class="js-example-basic-single js-states form-control" id="emp_cuenta_x_cob_def_id" name="emp_cuenta_x_cob_def_id" data-placeholder="Seleccione el tipo de cliente ..." style="width: 100%; display: none;">
+													<option value="">Seleccione ...</option>
+													@foreach($cuentas as $cxc)
+						                            	<option value="{{ $cxc->id }}" {{$emp ? ($emp->emp_cuenta_x_cob_def_id == $cxc->id ? 'selected':''):''}}>{{ $cxc->ctacont_catsat_cod }} - {{ $cxc->ctacont_desc }}</option>
+						                            @endforeach
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label col-md-1 col-sm-1 col-xs-12" for="emp_cuenta_x_pag_def_id">Cuenta por pagar:</label>
+											<div class="col-md-4 col-sm-4 col-xs-12">
+												<select class="js-example-basic-single js-states form-control" id="emp_cuenta_x_pag_def_id" name="emp_cuenta_x_pag_def_id" data-placeholder="Seleccione el tipo de cliente ..." style="width: 100%; display: none;">
+													<option value="">Seleccione ...</option>
+													@foreach($cuentas as $cxp)
+						                            	<option value="{{ $cxp->id }}" {{$emp ? ($emp->emp_cuenta_x_pag_def_id == $cxp->id ? 'selected':''):''}}>{{ $cxp->ctacont_catsat_cod }} - {{ $cxp->ctacont_desc }}</option>
+						                            @endforeach
+												</select>
+											</div>
+										</div>
+									</form>
+								</div>
+
+								<div class="step-pane" data-step="3">
 									<div>
 										<form class="form-horizontal" id="fclients" method="post" action="{{ route('configpcclients') }}" >
 											{{ csrf_field() }}
@@ -310,7 +371,7 @@
 									</div>
 								</div>
 
-								<div class="step-pane" data-step="3">
+								<div class="step-pane" data-step="4">
 									<form class="form-horizontal" id="validation-form-provs" method="post" action="{{ route('configpcprovs') }}" >
 										{{ csrf_field() }}
 										<table width="100%">
@@ -506,7 +567,7 @@
 									</form>
 								</div>
 
-								<div class="step-pane" data-step="4">
+								<div class="step-pane" data-step="5">
 									<form class="form-horizontal" id="validation-form-finish" method="post" action="{{ route('configpcfinish') }}" >
 										{{ csrf_field() }}
 										<div class="center">
@@ -560,6 +621,104 @@
 		});
     	$("#menuconfigwizard").addClass('active');
     	$("#menuacciones").addClass('open');
+
+
+
+
+    	jQuery.validator.addMethod("emp_rfc", function (value, element) {
+				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
+			}, "Introduzca un RFC válido.");
+		
+			$('#femp').validate({
+				errorElement: 'div',
+				errorClass: 'help-block',
+				focusInvalid: false,
+				ignore: "",
+				rules: {
+					emp_nom: {
+						required: true
+					},
+					emp_form_cta: {
+						required: true
+					},
+					emp_rfc: {
+						required: true,
+						emp_rfc: 'required'
+					},
+					emp_cuenta_x_cob_def_id: {
+						required: true
+					},
+					emp_cuenta_x_pag_def_id: {
+						required: true
+					}
+				},
+		
+				messages: {
+					emp_nom: {
+						required: "Este campo es requerido."
+					},
+					emp_form_cta: {
+						required: "Este campo es requerido."
+					},
+					emp_rfc: {
+						required: "Este campo es requerido."
+					},
+					emp_cuenta_x_cob_def_id: {
+						required: "Este campo es requerido."
+					},
+					emp_cuenta_x_pag_def_id: {
+						required: "Este campo es requerido."
+					}
+				},
+		
+		
+				highlight: function (e) {
+					$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+				},
+		
+				success: function (e) {
+					$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+					$(e).remove();
+				},
+		
+				errorPlacement: function (error, element) {
+					console.log(error);
+					if(element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+						var controls = element.closest('div[class*="col-"]');
+						if(controls.find(':checkbox,:radio').length > 1) controls.append(error);
+						else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+					}
+					else if(element.is('.select2')) {
+						error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+					}
+					else if(element.is('.chosen-select')) {
+						error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+					}
+					else error.insertAfter(element.parent());
+				},
+		
+				submitHandler: function (form) {
+					form.submit();
+				},
+				invalidHandler: function (form) {
+					console.log('2');
+				}
+			});
+
+
+
+		/*Empresa*/
+		$("#emp_cuenta_x_cob_def_id").select2({
+		  	placeholder: "Selecciona la cuenta por cobrar",
+		  	allowClear: true
+		});
+
+		$("#emp_cuenta_x_pag_def_id").select2({
+		  	placeholder: "Selecciona la cuenta por pagar",
+		  	allowClear: true
+		});
+
+
 
 		/*Clientes*/
 		$("#cliente_cta_ingreso_id").select2({
@@ -724,6 +883,14 @@
 						$('#loadingmodal').modal('show');
 						$('#validation-form').submit();
 					}else if(info.step == 2){
+						if(!$('#femp').valid()){
+							e.preventDefault();
+						}else{
+							console.log('bb');
+							$('#loadingmodal').modal('show');
+							$('#femp').submit();
+						}
+					}else if(info.step == 3){
 						if(!$('#fclients').valid()){
 							e.preventDefault();
 						}else{
@@ -731,7 +898,7 @@
 							$('#loadingmodal').modal('show');
 							$('#fclients').submit();
 						}
-					}else if(info.step == 3){
+					}else if(info.step == 4){
 						if(!$('#validation-form-provs').valid()){
 							e.preventDefault();
 						}else{

@@ -12,6 +12,9 @@ class EjercicioSeeder extends Seeder
      */
     public function run()
     {
+        $ejercicio2016 = new Ejercicio();
+        $ejercicio2016->ejerc_anio = '2016';
+        $ejercicio2016->save();
         $ejercicio2017 = new Ejercicio();
         $ejercicio2017->ejerc_anio = '2017';
         $ejercicio2017->save();

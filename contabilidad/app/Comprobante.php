@@ -817,6 +817,7 @@ class Comprobante extends Model
         $foliopuente = 'AST/XCOB/';
         $apunte = 'debe';
         $apunte1 = 'haber';
+        
         $cuentaptedef_id = Empresa::all()[0]->emp_cuenta_x_cob_def_id;
         if ($tipo == 'egreso')
         {

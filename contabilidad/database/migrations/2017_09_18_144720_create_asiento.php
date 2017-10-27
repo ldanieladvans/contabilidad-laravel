@@ -17,8 +17,8 @@ class CreateAsiento extends Migration
         Schema::create('asiento', function (Blueprint $table) {
             $table->increments('id');
             $table->string('asiento_concepto')->nullable();
-            $table->double('asiento_debe', 15, 8);
-            $table->double('asiento_haber', 15, 8);
+            $table->double('asiento_debe', 15, 2)->default(0.0);
+            $table->double('asiento_haber', 15, 2)->default(0.0);
             $table->string('asiento_folio_ref')->nullable();
             $table->boolean('asiento_activo')->default(true);
             $table->boolean('asiento_manual')->default(false);

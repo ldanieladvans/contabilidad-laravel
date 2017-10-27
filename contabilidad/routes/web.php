@@ -62,6 +62,7 @@ Route::group(['prefix' => 'acciones'], function () {
 Route::get('/downloadpc' , 'ConfigContController@downloadFile');
 
 Route::post('/configpc' , 'ConfigContController@configPc')->name('configpc');
+Route::post('/configpcemp' , 'ConfigContController@configPcEmp')->name('configpcemp');
 Route::post('/configpcclients' , 'ConfigContController@configPcClients')->name('configpcclients');
 Route::post('/configpcprovs' , 'ConfigContController@configPcProvs')->name('configpcprovs');
 Route::post('/configpcfinish' , 'ConfigContController@configPcFinish')->name('configpcfinish');
