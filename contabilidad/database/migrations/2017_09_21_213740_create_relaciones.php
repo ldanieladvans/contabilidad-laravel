@@ -335,6 +335,14 @@ class CreateRelaciones extends Migration
                 $table->foreign('bitac_user_id')->references('id')->on('users')->onDelete('set null');
             });
 
+         Schema::table('emp', function($table)
+            {
+                $table->integer('emp_cuenta_x_cob_def_id')->unsigned()->nullable();
+                $table->foreign('emp_cuenta_x_cob_def_id')->references('id')->on('ctacont')->onDelete('set null');
+                $table->integer('emp_cuenta_x_pag_def_id')->unsigned()->nullable();
+                $table->foreign('emp_cuenta_x_pag_def_id')->references('id')->on('ctacont')->onDelete('set null');
+            });
+
     }
 
     /**

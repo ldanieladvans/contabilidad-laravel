@@ -864,7 +864,6 @@ class Comprobante extends Model
                         $provis = Provision::where('provis_comp_id','=',$comp->id)->get();
                         if (count($provis) > 0)
                         {
-                            
                             $provis = $provis[0];
                             $provis_monto = $provis->provis_monto;
                             $porcentaje_pagado = round($doc->pagorel_monto_pag / $provis_monto, 2);
