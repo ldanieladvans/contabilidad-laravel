@@ -133,17 +133,19 @@
 								                        </div>
 													</td>
 
+
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_isr_reten_cob_id">Cuenta de isr retenido cobrado:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_cob_id" id="cliente_cta_isr_reten_cob_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_desc_id">Cuenta de descuento:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccac)
-									                            	<option value="{{ $ccac->id }}" {{$confimodel->cliente_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccd)
+									                            	<option value="{{ $ccd->id }}" {{$confimodel->cliente_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+													
 
 												</tr>
 												<tr>
@@ -158,17 +160,20 @@
 								                          	</select>
 								                        </div>
 													</td>
+
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_desc_id">Cuenta de descuento:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_desc_id" id="cliente_cta_desc_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_por_cobrar_id">Cuenta por cobrar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccd)
-									                            	<option value="{{ $ccd->id }}" {{$confimodel->cliente_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->cliente_cta_por_cobrar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+
+													
 												</tr>
 												<tr>
 													<td width="50%">
@@ -221,7 +226,7 @@
 												<tr>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_isr_reten_id">Cuenta ISR retenido:</label>
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_isr_reten_id">Cuenta ISR retenido por cobrar:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_id" id="cliente_cta_isr_reten_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccir)
@@ -230,23 +235,25 @@
 								                          	</select>
 								                        </div>
 													</td>
+													
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_por_cobrar_id">Cuenta por cobrar:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_por_cobrar_id" id="cliente_cta_por_cobrar_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_isr_reten_cob_id">Cuenta de ISR retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_isr_reten_cob_id" id="cliente_cta_isr_reten_cob_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccpc)
-									                            	<option value="{{ $ccpc->id }}" {{$confimodel->cliente_cta_por_cobrar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->cliente_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+
 												</tr>
 
 												<tr>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ieps_por_cobrar_id">Cuenta IEPS por cobrar:</label>
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="cliente_cta_ieps_por_cobrar_id">Cuenta IEPS trasladado por cobrar:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_por_cobrar_id" id="cliente_cta_ieps_por_cobrar_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccir)
@@ -257,7 +264,7 @@
 													</td>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_ieps_cobrado_id">Cuenta IEPS cobrado:</label>
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="cliente_cta_ieps_cobrado_id">Cuenta IEPS trasladado cobrado:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="cliente_cta_ieps_cobrado_id" id="cliente_cta_ieps_cobrado_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccpc)
@@ -293,15 +300,12 @@
 								                        </div>
 													</td>
 												</tr>
-												<tr>
-													<td width="100%">
-														<div class="form-group">
-															<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_concepto">Concepto:</label>
-															<input type="text" name="cliente_concepto" id="cliente_concepto" class="col-md-10 col-sm-10 col-xs-12">
-														</div>
-													</td>
-												</tr>
+
 											</table>
+											<div class="form-group">
+												<label class="control-label col-md-1 col-sm-1 col-xs-12" for="cliente_concepto">Concepto:</label>
+												<input type="text" name="cliente_concepto" id="cliente_concepto" class="col-md-11 col-sm-11 col-xs-12">
+											</div>
 										</form>
 									</div>
 								</div>
@@ -325,15 +329,19 @@
 
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_isr_reten_cob_id">Cuenta de isr retenido cobrado:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_cob_id" id="proveed_cta_isr_reten_cob_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_desc_id">Cuenta de descuento:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_desc_id" id="proveed_cta_desc_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccac)
-									                            	<option value="{{ $ccac->id }}" {{$confimodel->proveed_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccd)
+									                            	<option value="{{ $ccd->id }}" {{$confimodel->proveed_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+
+													
+
+													
 
 												</tr>
 												<tr>
@@ -348,17 +356,20 @@
 								                          	</select>
 								                        </div>
 													</td>
+
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_desc_id">Cuenta de descuento:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_desc_id" id="proveed_cta_desc_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_por_pagar_id">Cuenta por pagar:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_por_pagar_id" id="proveed_cta_por_pagar_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccd)
-									                            	<option value="{{ $ccd->id }}" {{$confimodel->proveed_cta_desc_id == $ccd->id ? 'selected':''}}>{{ $ccd->ctacont_catsat_cod }} - {{ $ccd->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccpc)
+									                            	<option value="{{ $ccpc->id }}" {{$confimodel->proveed_cta_por_pagar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+
+													
 												</tr>
 												<tr>
 													<td width="50%">
@@ -411,7 +422,7 @@
 												<tr>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_isr_reten_id">Cuenta ISR retenido:</label>
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_isr_reten_id">Cuenta ISR retenido por cobrar:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_id" id="proveed_cta_isr_reten_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccir)
@@ -420,23 +431,25 @@
 								                          	</select>
 								                        </div>
 													</td>
+													
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_por_pagar_id">Cuenta por pagar:</label>
-								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_por_pagar_id" id="proveed_cta_por_pagar_id" style="width: 60%; display: none;">
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_isr_reten_cob_id">Cuenta de ISR retenido cobrado:</label>
+								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_isr_reten_cob_id" id="proveed_cta_isr_reten_cob_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
-								                            	@foreach($cuentas as $ccpc)
-									                            	<option value="{{ $ccpc->id }}" {{$confimodel->proveed_cta_por_pagar_id == $ccpc->id ? 'selected':''}}>{{ $ccpc->ctacont_catsat_cod }} - {{ $ccpc->ctacont_desc }}</option>
+								                            	@foreach($cuentas as $ccac)
+									                            	<option value="{{ $ccac->id }}" {{$confimodel->proveed_cta_isr_reten_cob_id == $ccac->id ? 'selected':''}}>{{ $ccac->ctacont_catsat_cod }} - {{ $ccac->ctacont_desc }}</option>
 									                            @endforeach
 								                          	</select>
 								                        </div>
 													</td>
+
 												</tr>
 
 												<tr>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_ieps_por_cobrar_id">Cuenta IEPS por cobrar:</label>
+															<label class="control-label col-md-3 col-sm-3 col-xs-12" for="proveed_cta_ieps_por_cobrar_id">Cuenta IEPS trasladado por cobrar:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_por_cobrar_id" id="proveed_cta_ieps_por_cobrar_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccir)
@@ -447,7 +460,7 @@
 													</td>
 													<td width="50%">
 														<div class="form-group">
-															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_ieps_cobrado_id">Cuenta IEPS cobrado:</label>
+															<label class="control-label col-md-4 col-sm-4 col-xs-12" for="proveed_cta_ieps_cobrado_id">Cuenta IEPS trasladado cobrado:</label>
 								                          	<select class="js-example-basic-single js-states form-control" name="proveed_cta_ieps_cobrado_id" id="proveed_cta_ieps_cobrado_id" style="width: 60%; display: none;">
 								                            	<option value="">Seleccione ...</option>
 								                            	@foreach($cuentas as $ccpc)
@@ -483,15 +496,13 @@
 								                        </div>
 													</td>
 												</tr>
-												<tr>
-													<td width="100%">
-														<div class="form-group">
-															<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveedor_concepto">Concepto:</label>
-															<input type="text" name="proveedor_concepto" id="proveedor_concepto" class="col-md-10 col-sm-10 col-xs-12">
-														</div>
-													</td>
-												</tr>
+
 											</table>
+
+											<div class="form-group">
+												<label class="control-label col-md-1 col-sm-1 col-xs-12" for="proveedor_concepto">Concepto:</label>
+												<input type="text" name="proveedor_concepto" id="proveedor_concepto" class="col-md-11 col-sm-11 col-xs-12">
+											</div>
 									</form>
 								</div>
 
@@ -516,7 +527,7 @@
 							Anterior
 						</button>
 
-						<button class="btn btn-success btn-next" data-last="Finish">
+						<button class="btn btn-success btn-next" data-last="Ok">
 							Siguiente
 							<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 						</button>
@@ -582,7 +593,7 @@
 		});
 
 		$("#cliente_cta_isr_reten_id").select2({
-		  	placeholder: "Selecciona la cuenta de ISR retenido",
+		  	placeholder: "Selecciona la cuenta de ISR retenido por cobrar",
 		  	allowClear: true
 		});
 
@@ -602,12 +613,12 @@
 		});
 
 		$("#cliente_cta_ieps_por_cobrar_id").select2({
-		  	placeholder: "Selecciona la cuenta de ieps por cobrar",
+		  	placeholder: "Selecciona la cuenta de ieps trasladado por cobrar",
 		  	allowClear: true
 		});
 
 		$("#cliente_cta_ieps_cobrado_id").select2({
-		  	placeholder: "Selecciona la cuenta de ieps cobrado",
+		  	placeholder: "Selecciona la cuenta de ieps trasladado cobrado",
 		  	allowClear: true
 		});
 
@@ -675,12 +686,12 @@
 		});
 
 		$("#proveed_cta_ieps_por_cobrar_id").select2({
-		  	placeholder: "Selecciona la cuenta de ieps por cobrar",
+		  	placeholder: "Selecciona la cuenta de ieps trasladado por cobrar",
 		  	allowClear: true
 		});
 
 		$("#proveed_cta_ieps_cobrado_id").select2({
-		  	placeholder: "Selecciona la cuenta de ieps cobrado",
+		  	placeholder: "Selecciona la cuenta de ieps trasladado cobrado",
 		  	allowClear: true
 		});
 
