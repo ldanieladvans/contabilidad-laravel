@@ -31,7 +31,9 @@ class Comprobante extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+        Log::info('asasasas');
         $this->connection = \Session::get('selected_database','mysql');
+        Log::info($this->connection);
     }
 
     public function comprobantesRel()

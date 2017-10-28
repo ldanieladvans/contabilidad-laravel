@@ -12,6 +12,7 @@ use App\Nomina;
 use App\Provision;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ComprobanteController extends Controller
 {
@@ -29,6 +30,7 @@ class ComprobanteController extends Controller
     public function index()
     {
         $comprobantes = Comprobante::all();
+        Log::info($comprobantes);
         $comprobantes_list = array();
         $comprobantes_contador = 0;
         foreach ($comprobantes as $cb) {

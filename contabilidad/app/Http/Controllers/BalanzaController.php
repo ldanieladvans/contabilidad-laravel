@@ -30,7 +30,7 @@ class BalanzaController extends Controller
         $balanzas_contador = 0;
         foreach ($balanzas as $bl) {
             Log::info($bl);
-            $balanzas_list[$balanzas_contador] = ['ID'=>$bl->id,'blnza_ctacont_id'=>$bl->cuenta->ctacont_num.'-'.$bl->cuenta->ctacont_desc,'blnza_period_id'=>$bl->periodo->period_fecha_fin,'blnza_saldo_inicial'=>$bl->blnza_saldo_inicial,'blnza_cargos'=>$bl->blnza_cargos,'blnza_abonos'=>$bl->blnza_abonos,'blnza_saldo_final'=>$bl->blnza_saldo_final];
+            $balanzas_list[$balanzas_contador] = ['ID'=>$bl->id,'blnza_ctacont_id'=>$bl->cuenta ? $bl->cuenta->ctacont_num.'-'.$bl->cuenta->ctacont_desc : '','blnza_period_id'=>$bl->periodo ? $bl->periodo->period_fecha_fin : '','blnza_saldo_inicial'=>$bl->blnza_saldo_inicial,'blnza_cargos'=>$bl->blnza_cargos,'blnza_abonos'=>$bl->blnza_abonos,'blnza_saldo_final'=>$bl->blnza_saldo_final];
             $balanzas_contador ++;
         }
         return view('appviews.listabalanzas',['balanzas'=>json_encode($balanzas_list)]);

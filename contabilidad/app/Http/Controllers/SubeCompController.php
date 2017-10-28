@@ -133,6 +133,8 @@ class SubeCompController extends Controller
             $fpagos_arr[$fpg->formpago_formpagosat_cod] = $fpg->formpago_formpagosat_nom;
         }
 
+        $contabilizar = true;
+
         if(array_key_exists('cfdi:Complemento', $xml_array['cfdi:Comprobante'])){
             if(array_key_exists('pago10:Pagos', $xml_array['cfdi:Comprobante']['cfdi:Complemento'])){
                 foreach ($xml_array['cfdi:Comprobante']['cfdi:Complemento']['pago10:Pagos'] as $pkey => $pvalue) {
@@ -238,7 +240,14 @@ class SubeCompController extends Controller
             }
         }
 
-        $comprobante->contabPago($comprobante->id, $pagos_arr, $rfc_param, false, $ptype);
+        if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
+            $contabilizar = false;
+        }
+
+        if($contabilizar){
+            $comprobante->contabPago($comprobante->id, $pagos_arr, $rfc_param, false, $ptype);
+        }
+        
     }
 
 

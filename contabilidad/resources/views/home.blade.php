@@ -76,7 +76,7 @@
                     </div>
 
                     <div class="infobox-data" style="padding-left: 30px;display: table-cell;">
-                        <span class="infobox-text">Polizas sin reclasificar impuestos:</span>
+                        <span class="infobox-text">Pólizas sin reclasificar impuestos:</span>
 
                         <div class="infobox-content">
                             {{$polz_sin_reclsif_imp_count}}
@@ -108,13 +108,13 @@
 
     <table width="100%" cellpadding="10">
         <tr>
-            <td width="50%" valign="top">
+            <!--<td width="50%" valign="top">
                 <h1>Pólizas</h1>
                 <div class="form-group">
                     <div id="polizaLista"></div>
                 </div>
-            </td>
-            <td width="50%" valign="top">
+            </td>-->
+            <td width="100%" valign="top">
                 <h1>Balanza</h1>
                 <div class="form-group" style="background-color: #fff; color: #666666; padding-left: 10px; padding-right: 5px; padding-top: 0px; padding-bottom: 5px;">
                     <div id="balanzaLista"></div>
@@ -252,7 +252,8 @@
                         dataSource: data,
                         allowColumnReordering: true,
                         selection: {
-                            mode: "multiple"
+                            allowSelectAll: false,
+                            mode: "none"
                         },
                         grouping: {
                             autoExpandAll: true,

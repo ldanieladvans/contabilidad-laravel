@@ -80,6 +80,7 @@ class ChangeBD
 
         }
 
+        Log::info($dbname);
         \Config::set('database.default', $dbname);
 
        return $next($request); 
