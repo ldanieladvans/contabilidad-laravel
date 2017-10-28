@@ -10,7 +10,7 @@
             text-transform: uppercase;
             }
         .backgimg {
-            background-image: url("{{asset('assets/imgLogin.jpg')}}");
+            background-image: url("{{asset('imgLogin.jpg')}}");
 }
 
 
@@ -121,7 +121,7 @@
     </div>
 
     <div style="align-content: center;">
-         <a href="/" class="site_title"><img src="{{asset('assets/logo_advans.png')}}" alt="Advans" style="display: block; margin-top: 45%; margin-left: auto; margin-right: auto; "><b></b></a>
+         <a href="/" class="site_title"><img src="{{asset('logo_advans.png')}}" alt="Advans" style="display: block; margin-top: 45%; margin-left: auto; margin-right: auto; "><b></b></a>
     </div>
 </div>
 @endsection
