@@ -70,9 +70,9 @@
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 
 								<li>
-									<a href="profile.html">
+									<a href="{{ route('usuarios.edit',Auth::user()->id) }}">
 										<i class="ace-icon fa fa-user"></i>
-										Profile
+										Perfil
 									</a>
 								</li>
 
