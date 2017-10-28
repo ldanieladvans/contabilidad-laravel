@@ -46,6 +46,66 @@
     <input type="hidden" value="{{$polizas}}" id="polizas"/>
     <input type="hidden" value="{{$balanzas}}" id="balanzas"/>
     <!-- TODO -->
+
+    <table width="100%">
+        <tr>
+            <td width="33%">
+                <div class="infobox infobox-blue2" style="width: 350px;height: 100px;">
+                    <div class="infobox-progress" style="width: 80px;display: table-cell;">
+                        <div class="easy-pie-chart percentage" data-percent="{{$comp_percent}}" data-size="80">
+                            <span class="percent">{{$comp_percent}}</span>%
+                        </div>
+                    </div>
+
+                    <div class="infobox-data" style="padding-left: 30px;display: table-cell;">
+                        <span class="infobox-text">Comprobantes no contabilizados:</span>
+
+                        <div class="infobox-content">
+                            {{$comp_contblz_count}}
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            <td width="33%">
+                <div class="infobox infobox-blue2" style="width: 350px;height: 100px;">
+                    <div class="infobox-progress" style="width: 80px;display: table-cell;">
+                        <div class="easy-pie-chart percentage" data-percent="{{$polz_sin_reclsif_imp_percent}}" data-size="80">
+                            <span class="percent">{{$polz_sin_reclsif_imp_percent}}</span>%
+                        </div>
+                    </div>
+
+                    <div class="infobox-data" style="padding-left: 30px;display: table-cell;">
+                        <span class="infobox-text">Polizas sin reclasificar impuestos:</span>
+
+                        <div class="infobox-content">
+                            {{$polz_sin_reclsif_imp_count}}
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            <td width="33%">
+                <div class="infobox infobox-blue2" style="width: 350px;height: 100px;">
+                    <div class="infobox-progress" style="width: 80px;display: table-cell;">
+                        <div class="easy-pie-chart percentage" data-percent="{{$polz_defecto_percent}}" data-size="80">
+                            <span class="percent">{{$polz_defecto_percent}}</span>%
+                        </div>
+                    </div>
+
+                    <div class="infobox-data" style="padding-left: 30px;display: table-cell;">
+                        <span class="infobox-text">Pólizas contabilizadas con cuentas por defecto</span>
+
+                        <div class="infobox-content">
+                            {{$polz_defecto_count}}
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
     <table width="100%" cellpadding="10">
         <tr>
             <td width="50%" valign="top">
@@ -73,6 +133,7 @@
         @parent
         <script src="{{ asset('DevExtreme/Sources/Lib/js/dx.all.js') }}"></script>
         <!-- ace scripts -->
+        <script src="{{ asset('ac_theme/assets/js/jquery.easypiechart.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/ace-elements.min.js') }}"></script>
         <script src="{{ asset('ac_theme/assets/js/ace.min.js') }}"></script>
         <script type="text/javascript">
@@ -81,6 +142,22 @@
                   value.classList.remove("active");
                 });
                 $("#menuinicio").addClass('active');
+
+                $('.easy-pie-chart.percentage').each(function(){
+                    var $box = $(this).closest('.infobox');
+                    var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                    var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                    var size = parseInt($(this).data('size')) || 50;
+                    $(this).easyPieChart({
+                        barColor: barColor,
+                        trackColor: trackColor,
+                        scaleColor: false,
+                        lineCap: 'butt',
+                        lineWidth: parseInt(size/10),
+                        animate: ace.vars['old_ie'] ? false : 1000,
+                        size: size
+                    });
+                });
 
                 /* DataGrid */
                 $(function(){
