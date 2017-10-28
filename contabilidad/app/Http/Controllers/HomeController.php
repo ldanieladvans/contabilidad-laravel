@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Poliza;
 use App\Balanza;
+use App\Comprobante;
 
 class HomeController extends Controller
 {
@@ -42,6 +43,32 @@ class HomeController extends Controller
             $balanzas_contador ++;
         }
 
-        return view('home',['polizas'=>json_encode($polizas_list),'balanzas'=>json_encode($balanzas_list)]);
+
+        $compall = Comprobante::all();
+        $compall_count = count($compall);
+
+        $comp_contblz = Comprobante::where('comp_contblz',false)->get();
+        $comp_contblz_count = count($comp_contblz);
+
+        $comp_percent = 0;
+        if($compall_count != 0){
+            $comp_percent = ($comp_contblz_count / $compall_count) * 100;
+        }
+
+        $polz_sin_reclsif_imp = Poliza::where('polz_sin_reclsif_imp',true)->get();
+        $polz_sin_reclsif_imp_count = count($polz_sin_reclsif_imp);
+        $polz_sin_reclsif_imp_percent = 0;
+        if($polz_sin_reclsif_imp_count != 0){
+            $polz_sin_reclsif_imp_percent = ($polz_sin_reclsif_imp_count / count($polizas)) * 100;
+        }
+
+        $polz_defecto = Poliza::where('polz_defecto',true)->get();
+        $polz_defecto_count = count($polz_defecto);
+        $polz_defecto_percent = 0;
+        if($polz_defecto_count != 0){
+            $polz_defecto_percent = ($polz_defecto_count / count($polizas)) * 100;
+        }
+
+        return view('home',['polizas'=>json_encode($polizas_list),'balanzas'=>json_encode($balanzas_list),'comp_contblz_count'=>$comp_contblz_count,'comp_percent'=>$comp_percent,'polz_sin_reclsif_imp_count'=>$polz_sin_reclsif_imp_count,'polz_sin_reclsif_imp_percent'=>$polz_sin_reclsif_imp_percent,'polz_defecto_count'=>$polz_defecto_count,'polz_defecto_percent'=>$polz_defecto_percent]);
     }
 }

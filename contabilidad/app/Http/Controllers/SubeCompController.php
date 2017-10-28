@@ -55,7 +55,7 @@ class SubeCompController extends Controller
 
     public function ingresoEgreso($xml_array,$comprobante,$type){
 
-        
+        $contabilizar = true;
         $provision = new Provision();
         if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante'])){
             $provision->provis_monto = $xml_array['cfdi:Comprobante']['@attributes']['Total'];
@@ -72,6 +72,7 @@ class SubeCompController extends Controller
         
 
         if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
+            $contabilizar = false;
             foreach ($xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados'] as $key => $value) {
                 $comprel = new ComprobanteRel();
                 $comprel->comprel_tiporel_cod = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
@@ -82,14 +83,16 @@ class SubeCompController extends Controller
 
         }
 
-        $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $type);
+        if($contabilizar){
+            $comprobante->contabProvis($comprobante->id, $provision->id, $xml_array, true, $type);
+        }
 
     }
 
 
     public function ingresoEgreso32($xml_array,$comprobante,$type){
 
-        
+        $contabilizar = true;
         $provision = new Provision();
         if(array_key_exists('@attributes', $xml_array['cfdi:Comprobante'])){
             $provision->provis_monto = $xml_array['cfdi:Comprobante']['@attributes']['total'];
@@ -103,7 +106,8 @@ class SubeCompController extends Controller
         }
         
 
-        /*if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
+        if(array_key_exists('cfdi:CfdiRelacionados', $xml_array['cfdi:Comprobante'])){
+            $contabilizar = false;
             foreach ($xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados'] as $key => $value) {
                 $comprel = new ComprobanteRel();
                 $comprel->comprel_tiporel_cod = $xml_array['cfdi:Comprobante']['cfdi:CfdiRelacionados']['@attributes']['TipoRelacion'];
@@ -112,9 +116,11 @@ class SubeCompController extends Controller
                 $comprel->save();
             }
 
-        }*/
+        }
 
-        $comprobante->contabProvis32($comprobante->id, $provision->id, $xml_array, true, $type);
+        if($contabilizar){
+            $comprobante->contabProvis32($comprobante->id, $provision->id, $xml_array, true, $type);
+        }
 
     }
 
@@ -605,7 +611,7 @@ class SubeCompController extends Controller
 			$xml = $doc->saveXML();
         	$xml_array = $XML2Array->createArray($xml);
             Log::info($xml_array);
-            //die();
+            die();
         	$wsdl = 'https://app33.advans.mx/recepcion/wsvalidador.php?wsdl';
         	$cfdi = base64_encode($xml);
         	$context = stream_context_create(array(
