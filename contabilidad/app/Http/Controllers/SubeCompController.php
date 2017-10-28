@@ -611,7 +611,7 @@ class SubeCompController extends Controller
 			$xml = $doc->saveXML();
         	$xml_array = $XML2Array->createArray($xml);
             Log::info($xml_array);
-            die();
+            //die();
         	$wsdl = 'https://app33.advans.mx/recepcion/wsvalidador.php?wsdl';
         	$cfdi = base64_encode($xml);
         	$context = stream_context_create(array(
