@@ -628,6 +628,10 @@
     	jQuery.validator.addMethod("emp_rfc", function (value, element) {
 				return this.optional(element) || /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/.test(value);
 			}, "Introduzca un RFC válido.");
+
+    	jQuery.validator.addMethod("emp_form_cta", function (value, element) {
+				return this.optional(element) || /^[1-9]{1,}$/.test(value);
+			}, "La máscara solo debe contener números del 1 al 9.");
 		
 			$('#femp').validate({
 				errorElement: 'div',
@@ -639,7 +643,8 @@
 						required: true
 					},
 					emp_form_cta: {
-						required: true
+						required: true,
+						emp_form_cta: 'required'
 					},
 					emp_rfc: {
 						required: true,

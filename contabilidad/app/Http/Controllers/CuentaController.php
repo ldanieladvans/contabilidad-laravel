@@ -8,6 +8,7 @@ use App\TipoSubCuenta;
 use App\CatSatModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CuentaController extends Controller
 {
@@ -29,8 +30,9 @@ class CuentaController extends Controller
         $cuentas_list = array();
         $cuentas_contador = 0;
         foreach ($cuentas as $ct) {
-            $cuentas_list[$cuentas_contador] = ['ID'=>$ct->id,'ctacont_num'=>$ct->ctacont_num,'ctacont_desc'=>$ct->ctacont_desc,'ctacont_tipocta_nom'=>$ct->ctacont_tipocta_nom,'ctacont_natur'=>$ct->ctacont_natur,'ctacont_catsat_cod'=>$ct->ctacont_catsat_cod];
+            $cuentas_list[$cuentas_contador] = ['ID'=>$ct->id,'ctacont_num'=>$ct->getAccountNumberFormatted(),'ctacont_desc'=>$ct->ctacont_desc,'ctacont_tipocta_nom'=>$ct->ctacont_tipocta_nom,'ctacont_natur'=>$ct->ctacont_natur,'ctacont_catsat_cod'=>$ct->ctacont_catsat_cod];
             $cuentas_contador ++;
+            //Log::info($ct->getAccountNumberFormatted());
         }
         return view('appviews.listacuentas',['cuentas'=>json_encode($cuentas_list)]);
     }
