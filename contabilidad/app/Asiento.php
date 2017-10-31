@@ -8,7 +8,7 @@ class Asiento extends Model
 {
     protected $table = "asiento";
 
-    protected $fillable = ['asiento_concepto','asiento_debe','asiento_haber','asiento_folio_ref','asiento_activo','asiento_ctacont_id','asiento_polz_id','asiento_manual'];
+    protected $fillable = ['asiento_concepto','asiento_debe','asiento_haber','asiento_folio_ref','asiento_activo','asiento_ctacont_id','asiento_polz_id','asiento_manual','asiento_saldo_anterior','asiento_saldo_actual','asiento_fecha'];
 
     public function __construct(array $attributes = [])
     {

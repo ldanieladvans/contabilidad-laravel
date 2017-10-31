@@ -22,6 +22,9 @@ class CreateAsiento extends Migration
             $table->string('asiento_folio_ref')->nullable();
             $table->boolean('asiento_activo')->default(true);
             $table->boolean('asiento_manual')->default(false);
+            $table->date('asiento_fecha')->nullable();
+            $table->double('asiento_saldo_anterior', 15, 2)->default(0.0)->nullable();
+            $table->double('asiento_saldo_actual', 15, 2)->default(0.0)->nullable();
             $table->timestamps();
         });
     }

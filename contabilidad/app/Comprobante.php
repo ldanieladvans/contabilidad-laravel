@@ -21,6 +21,7 @@ use App\Poliza;
 use App\Balanza;
 use App\Pago;
 use App\Empresa;
+use Scottlaurent\Accounting\Models\JournalTransaction;
 
 class Comprobante extends Model
 {
@@ -258,27 +259,27 @@ class Comprobante extends Model
         Log::info('Genero poliza de diario');
 
         //Generando asiento de puente (cuenta por cobrar o por pagar)
-        $this->crearAsiento($pol_id, $foliopuente, $comp_atributos['Total'], $cuentas['conc_pol'], $apunte, $cuentas['cta_puente'], $period_id);
+        $this->crearAsiento($pol_id, $foliopuente, $comp_atributos['Total'], $cuentas['conc_pol'], $apunte, $cuentas['cta_puente'], $period_id, $fecha);
 
         Log::info('Genero asiento de cuenta por cobrar o pagar');
 
         //Generando asiento nominal (de ingreso o gasto)
         $conceptos = $xml_array['cfdi:Comprobante']['cfdi:Conceptos']['cfdi:Concepto'];
-        $this->contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id);
+        $this->contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id, $fecha);
 
         Log::info('Genero asiento de ingreso o gasto');
 
         //Generando asiento de descuento en caso de aplicar
         if (array_key_exists('Descuento',$comp_atributos) && isset($comp_atributos['Descuento']))
         {
-            $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['Descuento'], $cuentas['conc_pol'], $apunte, $cuentas['cta_desc'], $period_id);
+            $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['Descuento'], $cuentas['conc_pol'], $apunte, $cuentas['cta_desc'], $period_id, $fecha);
         }
         
         //Generando asientos de impuestos
         $impuestos = [];
         if (array_key_exists('cfdi:Impuestos',$xml_array['cfdi:Comprobante']) && isset($xml_array['cfdi:Comprobante']['cfdi:Impuestos']))
         {
-            $impuestos = $this->contabImp($pol_id, $cuentas['conc_pol'], $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], $apunte1, $apunte, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $period_id);
+            $impuestos = $this->contabImp($pol_id, $cuentas['conc_pol'], $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], $apunte1, $apunte, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $period_id, $fecha);
         }
 
         Log::info('Genero asientos de impuestos');
@@ -295,24 +296,24 @@ class Comprobante extends Model
             $polpago_id = $this->crearPoliza($comp_id, $tipo, $comp_atributos['Total'], $fecha, $importada, $foliopago, $cuentas['conc_pol'], $period_id, $cuentas['defecto']);
 
             //Generando cierre de cuenta puente
-            $this->crearAsiento($polpago_id, $foliopuente, $comp_atributos['Total'], $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
+            $this->crearAsiento($polpago_id, $foliopuente, $comp_atributos['Total'], $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id, $fecha);
             
             //Tomando cuenta para pago
             $forma_pago_cod = $comp_atributos['FormaPago'];
             $cta_pago_id = $this->getCuentaPago($forma_pago_cod);
             
             //Generando asiento de pago
-            $this->crearAsiento($polpago_id, 'AST/PAG/', $comp_atributos['Total'], $cuentas['conc_pol'], $apunte, $cta_pago_id, $period_id);
+            $this->crearAsiento($polpago_id, 'AST/PAG/', $comp_atributos['Total'], $cuentas['conc_pol'], $apunte, $cta_pago_id, $period_id, $fecha);
 
             //Generando asientos de reclasificación de impuestos
             if (count($impuestos) > 0)
             {
-                $this->contabReclasifImp($polpago_id, $cuentas['conc_pol'], $impuestos, $apunte, $apunte1, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $cuentas['cta_iva_trasl_cob'], $cuentas['cta_ieps_cob'], $cuentas['cta_isr_reten_cob'], $cuentas['cta_iva_reten_cob'], $cuentas['cta_ieps_reten_cob'], $period_id);
+                $this->contabReclasifImp($polpago_id, $cuentas['conc_pol'], $impuestos, $apunte, $apunte1, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $cuentas['cta_iva_trasl_cob'], $cuentas['cta_ieps_cob'], $cuentas['cta_isr_reten_cob'], $cuentas['cta_iva_reten_cob'], $cuentas['cta_ieps_reten_cob'], $period_id, $fecha);
             }
         }
     }
 
-    public function contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id)
+    public function contabIngresoEgreso($tipo, $conceptos, $cuentas, $pol_id, $period_id, $fecha)
     {
         $forma_contab = $cuentas['forma_contab'];
         $cuentas_nominales = [];
@@ -370,7 +371,7 @@ class Comprobante extends Model
                     $cta_nom = $cuentas_nominales[$claveProdServ];
                 }
 
-                $this->crearAsiento($pol_id, $folio, $concepto['@attributes']['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id);
+                $this->crearAsiento($pol_id, $folio, $concepto['@attributes']['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id, $fecha);
             }
         }
         else
@@ -382,13 +383,13 @@ class Comprobante extends Model
                     $cta_nom = $cuentas_nominales[$claveProdServ];
                 }
 
-                $this->crearAsiento($pol_id, $folio, $conceptos['@attributes']['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id);
+                $this->crearAsiento($pol_id, $folio, $conceptos['@attributes']['Importe'], $claveProdServ, $apunte, $cta_nom, $period_id, $fecha);
 
         }
 
     }
 
-    public function contabImp($pol_id, $conc_pol, $nodo_imp, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $period_id)
+    public function contabImp($pol_id, $conc_pol, $nodo_imp, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $period_id, $fecha)
     {
         $impuestos = [];
         
@@ -404,13 +405,13 @@ class Comprobante extends Model
                         switch ($traslado['@attributes']['Impuesto']) {
                             //IVA
                             case '002':
-                                $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslado['@attributes']['Importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslado['@attributes']['Importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id, $fecha);
                                 $impuestos['ivaxcob'] = $traslado['@attributes']['Importe'];
                                 break;
                                 
                             //IEPS
                             case '003':
-                                $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslado['@attributes']['Importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslado['@attributes']['Importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id, $fecha);
                                 $impuestos['iepsxcob'] = $traslado['@attributes']['Importe'];
                                 break;
 
@@ -424,14 +425,14 @@ class Comprobante extends Model
 
                         //IVA
                         case '002':
-                            $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslados['@attributes']['Importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslados['@attributes']['Importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id, $fecha);
                             
                             $impuestos['ivaxcob'] = $traslados['@attributes']['Importe'];
                             break;
 
                         //IEPS
                         case '003':
-                            $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslados['@attributes']['Importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslados['@attributes']['Importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id, $fecha);
 
                             $impuestos['iepsxcob'] = $traslados['@attributes']['Importe'];
                             break;
@@ -457,20 +458,20 @@ class Comprobante extends Model
                         switch ($retencion['@attributes']['Impuesto']) {
                             //ISR
                             case '001':
-                                $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id, $fecha);
 
                                 $impuestos['isrrxcob'] = $retencion['@attributes']['Importe'];
                                 break;
                             //IVA
                             case '002':
-                                $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id, $fecha);
                                
                                 $impuestos['ivarxcob'] = $retencion['@attributes']['Importe'];
                                 break;
 
                             //IEPS
                             case '003':
-                                $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retencion['@attributes']['Importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id, $fecha);
                                
                                 $impuestos['iepsrxcob'] = $retencion['@attributes']['Importe'];
                                 break;
@@ -486,20 +487,20 @@ class Comprobante extends Model
                     switch ($retenciones['@attributes']['Impuesto']) {
                         //ISR
                         case '001':
-                            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id, $fecha);
 
                             $impuestos['isrrxcob'] = $retenciones['@attributes']['Importe'];
                             break;
                         //IVA
                         case '002':
-                            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id, $fecha);
                            
                             $impuestos['ivarxcob'] = $retenciones['@attributes']['Importe'];
                             break;
 
                         //IEPS
                         case '003':
-                            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retenciones['@attributes']['Importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id, $fecha);
                             
                             $impuestos['iepsrxcob'] = $retenciones['@attributes']['Importe'];
                             break;
@@ -560,27 +561,27 @@ class Comprobante extends Model
         Log::info('Genero poliza de diario');
 
         //Generando asiento de puente (cuenta por cobrar o por pagar)
-        $this->crearAsiento($pol_id, $foliopuente, $comp_atributos['total'], $cuentas['conc_pol'], $apunte, $cuentas['cta_puente'], $period_id);
+        $this->crearAsiento($pol_id, $foliopuente, $comp_atributos['total'], $cuentas['conc_pol'], $apunte, $cuentas['cta_puente'], $period_id, $fecha);
 
         Log::info('Genero asiento de cuenta por cobrar o pagar');
 
         //Generando asiento nominal (de ingreso o gasto)
         $conceptos = $xml_array['cfdi:Comprobante']['cfdi:Conceptos']['cfdi:Concepto'];
-        $this->contabIngresoEgreso32($tipo, $conceptos, $cuentas, $pol_id, $period_id);
+        $this->contabIngresoEgreso32($tipo, $conceptos, $cuentas, $pol_id, $period_id, $fecha);
 
         Log::info('Genero asiento de ingreso o gasto');
 
         //Generando asiento de descuento en caso de aplicar
         if (array_key_exists('descuento',$comp_atributos) && isset($comp_atributos['descuento']))
         {
-            $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['descuento'], $cuentas['conc_pol'], $apunte, $cuentas['cta_desc'], $period_id);
+            $this->crearAsiento($pol_id, 'AST/DESC/', $comp_atributos['descuento'], $cuentas['conc_pol'], $apunte, $cuentas['cta_desc'], $period_id, $fecha);
         }
         
         //Generando asientos de impuestos
         $impuestos = [];
         if (array_key_exists('cfdi:Impuestos',$xml_array['cfdi:Comprobante']) && isset($xml_array['cfdi:Comprobante']['cfdi:Impuestos']))
         {
-            $impuestos = $this->contabImp32($pol_id, $cuentas['conc_pol'], $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], $apunte1, $apunte, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $period_id);
+            $impuestos = $this->contabImp32($pol_id, $cuentas['conc_pol'], $xml_array['cfdi:Comprobante']['cfdi:Impuestos'], $apunte1, $apunte, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $period_id, $fecha);
         }
 
         Log::info('Genero asientos de impuestos');
@@ -593,7 +594,7 @@ class Comprobante extends Model
 
     }
 
-    public function contabIngresoEgreso32($tipo, $conceptos, $cuentas, $pol_id, $period_id)
+    public function contabIngresoEgreso32($tipo, $conceptos, $cuentas, $pol_id, $period_id, $fecha)
     {
         $forma_contab = $cuentas['forma_contab'];
         $cuentas_nominales = [];
@@ -615,18 +616,18 @@ class Comprobante extends Model
         {
             foreach ($conceptos as $concepto) {
 
-                $this->crearAsiento($pol_id, $folio, $concepto['@attributes']['importe'], $cuentas['conc_pol'], $apunte, $cta_nom, $period_id);
+                $this->crearAsiento($pol_id, $folio, $concepto['@attributes']['importe'], $cuentas['conc_pol'], $apunte, $cta_nom, $period_id, $fecha);
             }
         }
         else
         {
 
-            $this->crearAsiento($pol_id, $folio, $conceptos['@attributes']['importe'], $cuentas['conc_pol'], $apunte, $cta_nom, $period_id);
+            $this->crearAsiento($pol_id, $folio, $conceptos['@attributes']['importe'], $cuentas['conc_pol'], $apunte, $cta_nom, $period_id, $fecha);
         }
 
     }
 
-    public function contabImp32($pol_id, $conc_pol, $nodo_imp, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $period_id)
+    public function contabImp32($pol_id, $conc_pol, $nodo_imp, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $period_id, $fecha)
     {
         $impuestos = [];
         
@@ -642,13 +643,13 @@ class Comprobante extends Model
                         switch ($traslado['@attributes']['impuesto']) {
                             //IVA
                             case 'IVA':
-                                $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslado['@attributes']['importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslado['@attributes']['importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id, $fecha);
                                 $impuestos['ivaxcob'] = $traslado['@attributes']['Importe'];
                                 break;
                                 
                             //IEPS
                             case 'IEPS':
-                                $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslado['@attributes']['importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslado['@attributes']['importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id, $fecha);
                                 $impuestos['iepsxcob'] = $traslado['@attributes']['importe'];
                                 break;
 
@@ -662,14 +663,14 @@ class Comprobante extends Model
 
                         //IVA
                         case 'IVA':
-                            $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslados['@attributes']['importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IVAXCOB/', $traslados['@attributes']['importe'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id, $fecha);
                             
                             $impuestos['ivaxcob'] = $traslados['@attributes']['importe'];
                             break;
 
                         //IEPS
                         case 'IEPS':
-                            $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslados['@attributes']['importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IEPSXCOB/', $traslados['@attributes']['importe'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id, $fecha);
 
                             $impuestos['iepsxcob'] = $traslados['@attributes']['importe'];
                             break;
@@ -695,20 +696,20 @@ class Comprobante extends Model
                         switch ($retencion['@attributes']['impuesto']) {
                             //ISR
                             case 'ISR':
-                                $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id, $fecha);
 
                                 $impuestos['isrrxcob'] = $retencion['@attributes']['importe'];
                                 break;
                             //IVA
                             case 'IVA':
-                                $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id, $fecha);
                                
                                 $impuestos['ivarxcob'] = $retencion['@attributes']['importe'];
                                 break;
 
                             //IEPS
                             case 'IEPS':
-                                $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id);
+                                $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retencion['@attributes']['importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id, $fecha);
                                
                                 $impuestos['iepsrxcob'] = $retencion['@attributes']['importe'];
                                 break;
@@ -724,20 +725,20 @@ class Comprobante extends Model
                     switch ($retenciones['@attributes']['impuesto']) {
                         //ISR
                         case 'ISR':
-                            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id, $fecha);
 
                             $impuestos['isrrxcob'] = $retenciones['@attributes']['importe'];
                             break;
                         //IVA
                         case 'IVA':
-                            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id, $fecha);
                            
                             $impuestos['ivarxcob'] = $retenciones['@attributes']['importe'];
                             break;
 
                         //IEPS
                         case 'IEPS':
-                            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id);
+                            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $retenciones['@attributes']['importe'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id, $fecha);
                             
                             $impuestos['iepsrxcob'] = $retenciones['@attributes']['importe'];
                             break;
@@ -846,7 +847,7 @@ class Comprobante extends Model
             $pago->save();
             
             //Generando asiento de pago
-            $this->crearAsiento($pol_id, $foliopago, $pago->pago_monto, $cuentas['conc_pol'], $apunte, $cuenta_pago_id, $period_id);
+            $this->crearAsiento($pol_id, $foliopago, $pago->pago_monto, $cuentas['conc_pol'], $apunte, $cuenta_pago_id, $period_id, $pago->pago_fecha);
 
             //Generando asientos de cuentas por cobrar por cada documento relacionado dentro de pago
             //y verificando la reclasificación de impuestos por cada documento relacionado
@@ -859,7 +860,7 @@ class Comprobante extends Model
                     if (count($comp_rel) > 0)
                     {
                         //Generando asiento de cuenta puente que corresponde
-                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id);
+                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentas['cta_puente'], $period_id, $pago->pago_fecha);
                         $doc->pagorel_asiento_id = $asiento_id;
                         $doc->save();
 
@@ -912,12 +913,12 @@ class Comprobante extends Model
                                 }
                             }
 
-                            $this->contabReclasifImp($pol_id, $cuentas['conc_pol'], $impuestos, $apunte, $apunte1, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $cuentas['cta_iva_trasl_cob'], $cuentas['cta_ieps_cob'], $cuentas['cta_isr_reten_cob'], $cuentas['cta_iva_reten_cob'], $cuentas['cta_ieps_reten_cob'], $period_id);
+                            $this->contabReclasifImp($pol_id, $cuentas['conc_pol'], $impuestos, $apunte, $apunte1, $cuentas['cta_iva_trasl_x_cob'], $cuentas['cta_ieps_x_cob'], $cuentas['cta_isr_reten_x_cob'], $cuentas['cta_iva_reten_x_cob'], $cuentas['cta_ieps_reten_x_cob'], $cuentas['cta_iva_trasl_cob'], $cuentas['cta_ieps_cob'], $cuentas['cta_isr_reten_cob'], $cuentas['cta_iva_reten_cob'], $cuentas['cta_ieps_reten_cob'], $period_id, $pago->pago_fecha);
                         }
                     }
                     else
                     {
-                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id);
+                        $asiento_id = $this->crearAsiento($pol_id, $foliopuente, $doc->pagorel_monto_pag, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id, $pago->pago_fecha);
                         $pol->polz_sin_reclsif_imp = true;
                         $pol->save(); 
                     }
@@ -928,7 +929,7 @@ class Comprobante extends Model
             else
             {
                 
-                $this->crearAsiento($pol_id, $foliopuente, $pago->pago_monto, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id);
+                $this->crearAsiento($pol_id, $foliopuente, $pago->pago_monto, $cuentas['conc_pol'], $apunte1, $cuentaptedef_id, $period_id, $pago->pago_fecha);
                 
                 $pol->polz_sin_reclsif_imp = true;
                 $pol->save();
@@ -938,44 +939,45 @@ class Comprobante extends Model
     }
 
 
-    public function contabReclasifImp($pol_id, $conc_pol, $impuestos, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $iva_t_a_cob, $ieps_t_a_cob, $isr_ret_cob, $iva_ret_cob, $ieps_ret_cob, $period_id)
+    public function contabReclasifImp($pol_id, $conc_pol, $impuestos, $apunte, $apunte1, $iva_t_a_xcob, $ieps_t_a_xcob, $isr_ret_xcob, $iva_ret_xcob, $ieps_ret_xcob, $iva_t_a_cob, $ieps_t_a_cob, $isr_ret_cob, $iva_ret_cob, $ieps_ret_cob, $period_id, $fecha)
     {
         if (array_key_exists('ivaxcob',$impuestos))
         {
-            $this->crearAsiento($pol_id, 'AST/IVATXCOB/', $impuestos['ivaxcob'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id);
-            $this->crearAsiento($pol_id, 'AST/IVATCOB/', $impuestos['ivaxcob'], $conc_pol, $apunte1, $iva_t_a_cob, $period_id);
+            $this->crearAsiento($pol_id, 'AST/IVATXCOB/', $impuestos['ivaxcob'], $conc_pol, $apunte, $iva_t_a_xcob, $period_id, $fecha);
+            $this->crearAsiento($pol_id, 'AST/IVATCOB/', $impuestos['ivaxcob'], $conc_pol, $apunte1, $iva_t_a_cob, $period_id, $fecha);
         }
 
         if (array_key_exists('ivarxcob',$impuestos))
         {
-            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $impuestos['ivarxcob'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id);
-            $this->crearAsiento($pol_id, 'AST/IVARTCOB/', $impuestos['ivarxcob'], $conc_pol, $apunte, $iva_ret_cob, $period_id);
+            $this->crearAsiento($pol_id, 'AST/IVARXCOB/', $impuestos['ivarxcob'], $conc_pol, $apunte1, $iva_ret_xcob, $period_id, $fecha);
+            $this->crearAsiento($pol_id, 'AST/IVARTCOB/', $impuestos['ivarxcob'], $conc_pol, $apunte, $iva_ret_cob, $period_id, $fecha);
         }
 
         if (array_key_exists('isrrxcob',$impuestos))
         {
-            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $impuestos['isrrxcob'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id);
-            $this->crearAsiento($pol_id, 'AST/ISRRCOB/', $impuestos['isrrxcob'], $conc_pol, $apunte, $isr_ret_cob, $period_id);
+            $this->crearAsiento($pol_id, 'AST/ISRRXCOB/', $impuestos['isrrxcob'], $conc_pol, $apunte1, $isr_ret_xcob, $period_id, $fecha);
+            $this->crearAsiento($pol_id, 'AST/ISRRCOB/', $impuestos['isrrxcob'], $conc_pol, $apunte, $isr_ret_cob, $period_id, $fecha);
         }
 
         if (array_key_exists('iepsxcob',$impuestos))
         {
-            $this->crearAsiento($pol_id, 'AST/IEPSTXCOB/', $impuestos['iepsxcob'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id);
-            $this->crearAsiento($pol_id, 'AST/IEPSTCOB/', $impuestos['iepsxcob'], $conc_pol, $apunte1, $ieps_t_a_cob, $period_id);
+            $this->crearAsiento($pol_id, 'AST/IEPSTXCOB/', $impuestos['iepsxcob'], $conc_pol, $apunte, $ieps_t_a_xcob, $period_id, $fecha);
+            $this->crearAsiento($pol_id, 'AST/IEPSTCOB/', $impuestos['iepsxcob'], $conc_pol, $apunte1, $ieps_t_a_cob, $period_id, $fecha);
 
         }
 
         if (array_key_exists('iepsrxcob',$impuestos))
         {
-            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $impuestos['iepsrxcob'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id);
-            $this->crearAsiento($pol_id, 'AST/IEPSRCOB/', $impuestos['iepsrxcob'], $conc_pol, $apunte, $ieps_ret_cob, $period_id);
+            $this->crearAsiento($pol_id, 'AST/IEPSRXCOB/', $impuestos['iepsrxcob'], $conc_pol, $apunte1, $ieps_ret_xcob, $period_id, $fecha);
+            $this->crearAsiento($pol_id, 'AST/IEPSRCOB/', $impuestos['iepsrxcob'], $conc_pol, $apunte, $ieps_ret_cob, $period_id, $fecha);
         }
 
     }
 
-    public function crearAsiento($pol_id, $folio, $monto, $conc, $direc, $cta_id, $period_id)
+    public function crearAsiento($pol_id, $folio, $monto, $conc, $direc, $cta_id, $period_id, $fecha)
     {
         $cuenta = Cuenta::find($cta_id);
+
         if ($cuenta)
         {
             $asiento = new Asiento;
@@ -985,6 +987,8 @@ class Comprobante extends Model
             {
                 $this->insertarBalanza($cuenta, $period_id);
             }
+
+            $saldo_anterior = $cuenta->journal->getBalanceInDollars() * -1;
 
             if ($direc == 'debe')
             {
@@ -999,9 +1003,13 @@ class Comprobante extends Model
                 $asiento->asiento_haber = (float)$monto;
             }
 
+            $saldo_actual = $cuenta->journal->getBalanceInDollars() * -1;
+
+
             $asiento->asiento_concepto = $conc;
             $asiento->asiento_ctacont_id = $cta_id;
             $asiento->asiento_polz_id = $pol_id;
+            $asiento->asiento_fecha = $fecha;
             $asiento->save();
             $asiento->asiento_folio_ref = $folio.$asiento->id;
             $asiento->save();
@@ -1073,6 +1081,79 @@ class Comprobante extends Model
         
         return $pol->id;
 
+    }
+
+
+    public function updateordeletePoliza($cuentas, $period_id)
+    {
+        $periodo = Periodo::find($period_id);
+        foreach ($cuentas as $cuenta) {
+            $this->recalcBalanza($cuenta, $periodo)
+
+        }
+    }
+
+    public function recalcBalanza($cuenta, $periodo)
+    {
+        $dbname = \Session::get('selected_database');
+
+        $balanzas = Balanza::where('blnza_period_id','=',$periodo->id)->where('blnza_ctacont_id', '=', $cuenta->id)->get();
+
+        if (count($balanzas) > 0)
+        {
+            $balanza = $balanzas[0];
+            $saldo_ini_period = $balanza->blnza_saldo_inicial;
+            
+            $this->borrarBalanzaTransac($cuenta, $periodo);
+
+            $asientos_post = Asiento::where('asiento_ctacont_id','=',$cuenta->id)->where('asiento_fecha','>=',$periodo->period_fecha_ini)->orderBy('asiento_fecha')->get();
+
+            foreach ($asientos_post as $asientop) {
+                $period_asto_id = $asientop->poliza->polz_period_id;
+                
+                $insertar_balanza = $this->is_in_balanza($asientop, $period_asto_id);
+
+                if ($insertar_balanza)
+                {
+                    $this->insertarBalanza($cuenta, $period_asto_id);
+                }
+
+                $monto = $asientop->asiento_debe;
+                $direc = 'debe';
+
+                if ($asientop->asiento_debe == 0)
+                {
+                    $monto = $asientop->asiento_haber;
+                    $direc = 'haber';
+                }
+
+                $this->updateBalanza($cuenta, $period_asto_id, $monto, $direc); 
+            }
+        }
+
+        
+
+    }
+
+    public function borrarBalanzaTransac($cuenta, $periodo)
+    {
+        DB::connection($dbname)->table('blnza')->where('blnza_ctacont_id', '=', $cuenta->id)->where('blnza_period_id', '>=', $periodo->id)->delete();
+
+            
+        DB::connection($dbname)->table('accounting_journal_transactions')->where('journal_id', '=', $cuenta->journal->id)->where('post_date', '>=', $periodo->period_fecha_ini)->delete();
+
+    }
+
+    public function is_in_balanza($cuenta, $period_id)
+    {
+        $cuentas_en_blz = Balanza::where('blnza_period_id','=',$period_id)->where('blnza_ctacont_id', '=', $cuenta->id)->get();
+
+        if (count($cuentas_en_blz) == 0)
+            {
+                return true;
+            }
+        
+        return false;
     }
     
 }
