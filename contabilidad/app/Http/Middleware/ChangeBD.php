@@ -32,10 +32,11 @@ class ChangeBD
             $arrayparams['dbname'] = $dbname;
             $cont = new Controller;
 
-            $acces_vars = $cont->getAccessToken('cuenta');
+            /*$acces_vars = $cont->getAccessToken('cuenta');
             $service_response = $cont->getAppService($acces_vars['access_token'],'verifinst',$arrayparams,'cuenta');
             Log::info('response servive '.$service_response['status']);
-            if ($service_response['status'] == 1){
+            if ($service_response['status'] == 1){*/
+            if (true){
 
                 \Session::put('selected_database',$dbname);
                 \Session::put('RFC',$alldata['login_rfc']);

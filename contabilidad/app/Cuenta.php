@@ -1,9 +1,10 @@
 <?php
 
 namespace App;
-
+use App\Empresa;
 use Illuminate\Database\Eloquent\Model;
 use Scottlaurent\Accounting\ModelTraits\AccountingJournal;
+use Illuminate\Support\Facades\Log;
 
 class Cuenta extends Model
 {
@@ -18,6 +19,77 @@ class Cuenta extends Model
         $this->connection = \Session::get('selected_database','mysql');
         //$this->initJournal('MXN');
     }
+
+    public function getAccountNumberFormatted(){
+        $account_format = '333';
+        $ac_sum = 9;
+        $ac_sum_aux = 0;
+        $empresas = Empresa::all();
+
+        foreach ($empresas as $emp) {
+            if(strlen($emp->emp_form_cta) > 0){
+                $account_format = $emp->emp_form_cta;
+            }
+        }
+
+        $returned_formatted_account = '';
+        $account_format_array = str_split($account_format);
+
+        foreach ($account_format_array as $af) {
+            $ac_sum_aux = $ac_sum_aux + (int)$af;
+        }
+
+
+
+
+        if($ac_sum_aux > 0){
+            $ac_sum = $ac_sum_aux;
+        }
+
+        $str_cta_num = (string)$this->ctacont_num;
+
+        if(strlen($str_cta_num) < $ac_sum){
+            $str_cta_num = sprintf("%0".$ac_sum."s", $str_cta_num);
+        }
+
+        
+
+        $iter_number = 0;
+        $check_number = $account_format_array[$iter_number];
+        $check_str = '';
+
+        $str_cta_num_array = str_split($str_cta_num);
+        $str_cta_num_array_reverse = array_reverse($str_cta_num_array);
+
+        /*echo "<pre>";
+        print_r($account_format_array);
+        die();
+        echo "</pre>";*/
+
+        foreach ($str_cta_num_array_reverse as $scta) {
+            if($iter_number < count($account_format_array)){
+                if(strlen($check_str) >= $check_number){
+                    $iter_number ++;
+                    if(count($account_format_array) > $iter_number){                        
+                        $check_number = $account_format_array[$iter_number];
+                        $check_str = '';
+                        $returned_formatted_account = '-'.$returned_formatted_account;
+                    }
+                }
+                    
+                $check_str = (string)$scta.$check_str;
+                $returned_formatted_account = (string)$scta.$returned_formatted_account;
+                
+
+            }else{
+                $returned_formatted_account = (string)$scta.$returned_formatted_account;
+            }
+
+        }
+
+        return $returned_formatted_account;
+    }
+
 
     public function balanzas()
     {
