@@ -1088,7 +1088,7 @@ class Comprobante extends Model
     {
         $periodo = Periodo::find($period_id);
         foreach ($cuentas as $cuenta) {
-            $this->recalcBalanza($cuenta, $periodo)
+            $this->recalcBalanza($cuenta, $periodo);
 
         }
     }
